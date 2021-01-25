@@ -1,0 +1,251 @@
+const FileUtils = require('../utils/FileUtils');
+const AoSConstants = require('../utils/AoSConstants');
+
+const {
+  readData,
+  readRAM,
+} = FileUtils;
+
+const {
+  DIR,
+  Zones,
+} = AoSConstants;
+
+/**
+ * Returns an object describing an entity starting at the given position.
+ * If the entity in question looks like the end-of-entity padding, returns null instead.
+ * @param  {byte[]} data - The AoS game file
+ * @param  {uint_32} address - The address where the entity begins
+ * @return {Object} - An object containing all the defining information about the entity, or null
+ */
+function parseEntity(data, address) {
+  let curAddress = address;
+  const xPos = readRAM(data, curAddress, 2);
+  curAddress += 2;
+  const yPos = readRAM(data, curAddress, 2);
+  curAddress += 2;
+  const uniqueId = readRAM(data, curAddress, 1);
+  curAddress += 1;
+  const type = readRAM(data, curAddress, 1);
+  curAddress += 1;
+  const subtype = readRAM(data, curAddress, 1);
+  curAddress += 1;
+  const instaload = readRAM(data, curAddress, 1);
+  curAddress += 1;
+  const varA = readRAM(data, curAddress, 2);
+  curAddress += 2;
+  const varB = readRAM(data, curAddress, 2);
+  if (xPos === 0x7FFF && yPos === 0x7FFF) {
+    // Probably end padding, but just check a bit more
+    if (type === 0 && subtype === 0) {
+      return null;
+    }
+  }
+  return {
+    address,
+    xPos,
+    yPos,
+    uniqueId,
+    type,
+    subtype,
+    instaload,
+    varA,
+    varB
+  };
+}
+
+/**
+ * Returns an object describing a door starting at the given position.
+ * If the door in question looks like the end-of-entity padding, returns null instead.
+ * @param  {byte[]} data - The AoS game file
+ * @param  {uint_32} address - The address where the door begins
+ * @return {Object} - An object containing all the defining information about the door, or null
+ */
+function parseDoor(data, address) {
+  let curAddress = address;
+  const destination = readRAM(data, curAddress, 4);
+
+  // Sometimes it's 0xFFFF1F00 and sometimes it's 0xFFFF1F01 and idk why it's different sometimes
+  if (destination === 0xFFFF1F00 || destination === 0xFFFF1F01) {
+    // Simple check to see if we've overstepped the door list by 1.
+    return null;
+  }
+
+  curAddress += 4;
+  const xPos = readRAM(data, curAddress, 1);
+  curAddress += 1;
+  const yPos = readRAM(data, curAddress, 1);
+  curAddress += 1;
+  const destXOffset = readRAM(data, curAddress, 2);
+  curAddress += 2;
+  const destYOffset = readRAM(data, curAddress, 2);
+  curAddress += 2;
+  const destXPos = readRAM(data, curAddress, 2);
+  curAddress += 2;
+  const destYPos = readRAM(data, curAddress, 2);
+
+  return {
+    address,
+    destination,
+    xPos,
+    yPos,
+    destXOffset,
+    destYOffset,
+    destXPos,
+    destYPos,
+  };
+}
+
+/**
+ * Parses the game data for information about the room at the given address
+ * and returns an object holding this information.
+ * @param  {byte[]} data - The AoS game file
+ * @param  {uint_32} address - The address where the room begins
+ * @param  {DOOR[]} allDoors - A list of all doors. If present, will populate door lists with
+ *   the complementary output door. Unfortunately effectively requires a second parsing pass to populate.
+ * @return {Object} - An object containing all of the defining information about a room
+ */
+function parseRoom(data, address, allDoors) {
+  let curAddress = address;
+  curAddress += 8; // Layer List
+  const layerList = readRAM(data, curAddress, 4);
+  curAddress += 4; // GFX Page List
+  const gfxList = readRAM(data, curAddress, 4);
+  curAddress += 4; // Palette Page List
+  const paletteList = readRAM(data, curAddress, 4);
+  curAddress += 4; // Entity List
+  const entityList = readRAM(data, curAddress, 4);
+  curAddress += 4; // Door list
+  const doorList = readRAM(data, curAddress, 4);
+  curAddress += 4;
+  curAddress += 6; // IDK what the next 6 bytes are so skip to Map X/Y
+  const mapX = readRAM(data, curAddress, 1);
+  curAddress += 1;
+  const mapY = readRAM(data, curAddress, 1);
+
+  // Parse layers to try to estimate room width/height
+  let mapWidth = -1;
+  let mapHeight = -1;
+  for (let curLayer = layerList; curLayer < gfxList; curLayer += 12) {
+    mapWidth = Math.max(mapWidth, readRAM(data, curLayer + 5, 1));
+    mapHeight = Math.max(mapHeight, readRAM(data, curLayer + 7, 1));
+  }
+
+  // Parse doors
+  let doors = [];
+
+  // For now, lazy door check by just checking the last 3 due to the 0xFFFF1F00/0xFFFF1F01 thing
+  for (let curDoor = doorList, doorId = 0; readRAM(data, curDoor + 1, 3) !== 0xFFFF1F; curDoor += 16, doorId++) {
+    const door = parseDoor(data, curDoor);
+    if (!door) {
+      break;
+    }
+
+    const doorContent = {
+      // Add an internal ID for which door this is
+      _door: doorId,
+      ...door,
+    };
+
+    // Guess direction door is going. It seems to be mostly reliable, but is still just a guess.
+    // Fails on special room transitions that happen partway through the room, like Graham boss door
+    if (door.xPos === 0xFF) {
+      doorContent['direction'] = DIR.LEFT;
+    }
+    else if (door.yPos === 0xFF) {
+      doorContent['direction'] = DIR.UP;
+    }
+    else if (door.xPos >= mapWidth) {
+      doorContent['direction'] = DIR.RIGHT;
+    }
+    else {
+      doorContent['direction'] = DIR.DOWN;
+    }
+
+    doorContent['sourceRoom'] = address;
+
+    if (allDoors) {
+      // Look for doors in the destination room that also lead back into this room
+      // Has issues on rooms with multiple exits leading to the same room (like in Floating Garden)
+      // and also when the output door doesn't lead back to the same room (like in Floating Garden)
+      const matchingComplements = allDoors.filter(d => d.sourceRoom === door.destination && d.destination === address);
+      if (matchingComplements.length === 1) {
+        // If there's only one matching door, use that as the complement
+        doorContent['complement'] = matchingComplements[0].address;
+      }
+      else {
+        // If there are multiple doors, leave it as a list to be manually corrected later
+        doorContent['complement'] = matchingComplements.map(d => d.address);
+      }
+    }
+
+    doors = doors.concat(doorContent);
+  }
+
+  // Parse items
+  let items = [];
+  for (let curEntity = entityList, entityId = 0; curEntity < 0x10000000; curEntity += 12) {
+    const entity = parseEntity(data, curEntity);
+    if (!entity) {
+      break;
+    }
+    if (entity.type === 4) {
+      // Normal item
+      const entityContent = {
+        _item: entityId++,
+        ...entity,
+      };
+      items = items.concat(entityContent);
+    }
+    else if (entity.type === 5) {
+      // Hard mode item
+      const entityContent = {
+        _item: entityId++,
+        ...entity,
+        isHardMode: true,
+      };
+      items = items.concat(entityContent);
+    }
+  }
+
+  return {
+    address,
+    mapX,
+    mapY,
+    mapWidth,
+    mapHeight,
+    doorList,
+    doors,
+    items
+  };
+}
+
+/**
+ * Given some Zone information, extracts a list of room addresses associated with that Zone.
+ * @param  {byte[]} data - The AoS game file
+ * @param  {Zone} zone - The Zone to query
+ * @return {Object} - An object chiefly containing the addresses of every room in the Zone
+ */
+function parseZone(data, zone) {
+  let rooms = [];
+
+  for (let curAddress = zone.first, roomId = 0; curAddress <= zone.last; curAddress += 4, roomId++) {
+    const room = readData(data, curAddress, 4);
+    rooms = rooms.concat(room);
+  }
+
+  return {
+    _name: zone._name,
+    _area: zone._area,
+    rooms: rooms,
+  };
+}
+
+const AoSParsingUtils = {
+  parseEntity,
+  parseDoor,
+  parseRoom,
+  parseZone,
+};
+
+module.exports = AoSParsingUtils;
