@@ -125,8 +125,8 @@ function FullRandom(areas, requirements, random, startingRoom) {
   Logger.log('Attempting to place items', DebugLevels.MARKER);
   let iterations = 0;
   while (!isSolvable(areas, requirements.progression, [], startingRoom.address)) {
-    if (iterations !== 0) {
-      Logger.log('Reattempting item randomization', DebugLevels.MARKER);
+    if (iterations % 10 === 1) {
+      Logger.log(`Attempt ${iterations}: Reattempting item randomization`, DebugLevels.MARKER);
     }
     // TODO: this doesn't handle hard mode items too well.
     // An alternate approach is to filter allItems for non-hard mode items,

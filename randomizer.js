@@ -123,7 +123,8 @@ function doRandomization(data, settings = {}) {
 
   // Sanity check to ensure the end is even accessible
   if (!isSolvable(shuffledMap, requirements, Object.values(Keys), startingRoom.address)) {
-    Logger.log('Current map orientation isn\'t solvable even with all progression items', DebugLevels.ERROR);
+    Logger.log('Current map orientation isn\'t solvable even with all progression items', DebugLevels.FATAL);
+    return;
   }
 
   // Place items around the map
@@ -133,7 +134,8 @@ function doRandomization(data, settings = {}) {
 
   // Sanity check to ensure the items were placed logically
   if (!isSolvable(itemedMap, requirements.progression, [], startingRoom.address)) {
-    Logger.log('Current item distribution doesn\'t work', DebugLevels.ERROR);
+    Logger.log('Current item distribution doesn\'t work', DebugLevels.FATAL);
+    return;
   }
 
   // Write shuffled doors and items to file
