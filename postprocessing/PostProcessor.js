@@ -3,6 +3,7 @@ const updateAncientBooks = require('./updateAncientBooks');
 const updateDraculaSouls = require('./updateDraculaSouls');
 const writeStartingRoom = require('./writeStartingRoom');
 const writeChronomageDestination = require('./writeChronomageDestination');
+const removeBreakableWalls = require('./removeBreakableWalls');
 
 /**
  * Provides additional enhancements outside of the basic randomization features.
@@ -28,6 +29,7 @@ class PostProcessor {
 
     this._startingRoomIndex = null;
     this._chronomageDestination = null;
+    this._removeBreakableWalls = false;
   }
 
   /**
@@ -88,6 +90,14 @@ class PostProcessor {
     return this;
   }
 
+  /**
+   * Zeroes out all the breakable wall entities.
+   */
+  removeBreakableWalls() {
+    this._removeBreakableWalls = true;
+    return this;
+  }
+
   execute() {
     if (this._addCutsceneSkip) {
       writeCutsceneSkip(this.data);
@@ -114,6 +124,10 @@ class PostProcessor {
 
     if (this._chronomageDestination) {
       writeChronomageDestination(this.data, this._chronomageDestination);
+    }
+
+    if (this._removeBreakableWalls) {
+      removeBreakableWalls(this.data);
     }
 
     return this.data;

@@ -77,7 +77,6 @@ function shuffleMap(areas, random, startingRoom) {
   //  (Chaos first room, door leading to that, and save room opposite Chaos)
   //shuffleCorridor(areas[0], random, startingRoom);
   EntranceRandomizer(areas, random, startingRoom);
-  return areas;
 }
 
 function placeItems(areas, requirements, random, startingRoom) {
@@ -91,7 +90,7 @@ function placeItems(areas, requirements, random, startingRoom) {
   //   pick a new location, weighing sphere 2 locations slightly heavier than sphere 1
   // repeat, continuously adding weight to higher spheres and lowering weight for lower spheres
   // exclude dracula books and souls from this, and place them all randomly after all progression has been placed
-  return ItemRandomizer(areas, requirements, random, startingRoom);
+  ItemRandomizer(areas, requirements, random, startingRoom);
 }
 
 function doRandomization(data, settings = {}) {
@@ -112,17 +111,22 @@ function doRandomization(data, settings = {}) {
   // with that of the starting room in the room list (around the 0x0050E9AC range)
   // The actual writing should probably occur in postprocessing
   // PRIORITY: DONE
-  const startingRoom = pickStartingRoom(areas, random);
+  let startingRoom = areas[0].rooms[0];
+  if (settings.randomizeRooms) {
+    startingRoom = pickStartingRoom(areas, random);
+  }
 
   // Shuffle doors
   // PRIORITY: DONE, improvable
   // DIFFICULTY: EXTREME
-  const shuffledMap = shuffleMap(areas, random, startingRoom);
+  if (settings.randomizeRooms) {
+    shuffleMap(areas, random, startingRoom);
+  }
 
   Logger.log(`Starting at ${startingRoom.address.toString(16)}`, DebugLevels.LOG);
 
   // Sanity check to ensure the end is even accessible
-  if (!isSolvable(shuffledMap, requirements, Object.values(Keys), startingRoom.address).isSolvable) {
+  if (!isSolvable(areas, requirements, Object.values(Keys), startingRoom.address).isSolvable) {
     Logger.log('Current map orientation isn\'t solvable even with all progression items', DebugLevels.FATAL);
     return;
   }
@@ -130,11 +134,13 @@ function doRandomization(data, settings = {}) {
   // Place items around the map
   // PRIORITY: DONE, improvable
   // DIFFICULTY: EXTREME
-  const itemedMap = placeItems(shuffledMap, requirements, random, startingRoom);
+  if (settings.randomizeItems) {
+    placeItems(areas, requirements, random, startingRoom);
+  }
 
   // Sanity check to ensure the items were placed logically
   const solvabilityInfo = isSolvable(
-    itemedMap,
+    areas,
     requirements.progression,
     [],
     startingRoom.address,
@@ -148,8 +154,7 @@ function doRandomization(data, settings = {}) {
 
   // Write shuffled doors and items to file
   // PRIORITY: DONE
-  'writeGameInfo(data, itemedMap);'
-  updateDataWithAreaInfo(data, itemedMap);
+  updateDataWithAreaInfo(data, areas);
 
   const postProcessor = new PostProcessor(data);
 
@@ -191,7 +196,9 @@ function doRandomization(data, settings = {}) {
   // If that doesn't work due to room coordinates, then change it to be the same room but on the
   // left/right side
   // PRIORITY: DONE
-  postProcessor.setChronomageDestination(solvabilityInfo.preChronomageRoom.address);
+  if (settings.randomizeRooms) {
+    postProcessor.setChronomageDestination(solvabilityInfo.preChronomageRoom.address);
+  }
 
   // If debugging, Add with Bat, Skula, Panther,  and Chaos Ring
   if ('settings.enableDebugDrops') {
@@ -201,12 +208,15 @@ function doRandomization(data, settings = {}) {
 
   // Actually register the starting room
   // PRIORITY: DONE
-  postProcessor.setStartingRoom(startingRoom);
+  if (settings.randomizeRooms) {
+    postProcessor.setStartingRoom(startingRoom);
+  }
 
   // Remove breakable walls. They might be added back later but for now they complicate logic too much
-  // PRIORITY: MEDIUM
-  // DIFFICULTY: LOW
-  'removeBreakableWalls(data);'
+  // PRIORITY: DONE
+  if (settings.randomizeRooms) {
+    postProcessor.removeBreakableWalls();
+  }
 
   // Remove one-way obstacles. Another logic simplification thing that might get added back later
   // PRIORITY: MEDIUM
@@ -257,6 +267,8 @@ function main() {
 
     const settings = {
       seed: 2,
+      randomizeRooms: true,
+      randomizeItems: true,
       writeFile: true,
     };
     doRandomization([...data], settings);
