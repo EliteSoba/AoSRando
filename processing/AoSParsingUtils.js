@@ -20,21 +20,19 @@ const {
  */
 function parseEntity(data, address) {
   let curAddress = address;
-  const xPos = readRAM(data, curAddress, 2);
-  curAddress += 2;
-  const yPos = readRAM(data, curAddress, 2);
-  curAddress += 2;
-  const uniqueId = readRAM(data, curAddress, 1);
-  curAddress += 1;
-  const type = readRAM(data, curAddress, 1);
-  curAddress += 1;
-  const subtype = readRAM(data, curAddress, 1);
-  curAddress += 1;
-  const instaload = readRAM(data, curAddress, 1);
-  curAddress += 1;
-  const varA = readRAM(data, curAddress, 2);
-  curAddress += 2;
-  const varB = readRAM(data, curAddress, 2);
+  const popData = (size) => {
+    const data = readRAM(data, curAddress, size);
+    curAddress += size;
+    return data;
+  }
+  const xPos = popData(2);
+  const yPos = popData(2);
+  const uniqueId = popData(1);
+  const type = popData(1);
+  const subtype = popData(1);
+  const instaload = popData(1);
+  const varA = popData(2);
+  const varB = popData(2);
   if (xPos === 0x7FFF && yPos === 0x7FFF) {
     // Probably end padding, but just check a bit more
     if (type === 0 && subtype === 0) {
@@ -55,6 +53,48 @@ function parseEntity(data, address) {
 }
 
 /**
+ * Returns an object describing the drops of an enemy starting at the given position.
+ *
+ * @param  {byte[]} data - The AoS game file
+ * @param  {uint_32} address - The address where the enemy begins
+ * @return {Object} - An object listing the address where the enemy info is stored, and the item/soul drops
+ */
+function parseEnemy(data, address) {
+  let curAddress = address;
+  const popData = (size) => {
+    const data = readRAM(data, curAddress, size);
+    curAddress += size;
+    return data;
+  }
+  const createCode = popData(4);
+  const updateCode = popData(4);
+  const item1 = popData(2);
+  const item2 = popData(2);
+  const HP = popData(2);
+  const MP = popData(2);
+  const exp = popData(2);
+  const soulRarity = popData(1);
+  const attack = popData(1);
+  const defense = popData(1);
+  const item1Rarity = popData(1);
+  const item2Rarity = popData(1);
+  const soulType = popData(1);
+  const soul = popData(1);
+  const unknown11 = popData(1);
+  const unknown12 = popData(2);
+  const unknown13 = popData(2);
+  const unknown14 = popData(2);
+
+  return {
+    address,
+    item1,
+    item2,
+    soulType,
+    soul
+  }
+}
+
+/**
  * Returns an object describing a door starting at the given position.
  * If the door in question looks like the end-of-entity padding, returns null instead.
  * @param  {byte[]} data - The AoS game file
@@ -63,7 +103,12 @@ function parseEntity(data, address) {
  */
 function parseDoor(data, address) {
   let curAddress = address;
-  const destination = readRAM(data, curAddress, 4);
+  const popData = (size) => {
+    const data = readRAM(data, curAddress, size);
+    curAddress += size;
+    return data;
+  }
+  const destination = popData(4);
 
   // Sometimes it's 0xFFFF1F00 and sometimes it's 0xFFFF1F01 and idk why it's different sometimes
   if (destination === 0xFFFF1F00 || destination === 0xFFFF1F01) {
@@ -71,18 +116,12 @@ function parseDoor(data, address) {
     return null;
   }
 
-  curAddress += 4;
-  const xPos = readRAM(data, curAddress, 1);
-  curAddress += 1;
-  const yPos = readRAM(data, curAddress, 1);
-  curAddress += 1;
-  const destXOffset = readRAM(data, curAddress, 2);
-  curAddress += 2;
-  const destYOffset = readRAM(data, curAddress, 2);
-  curAddress += 2;
-  const destXPos = readRAM(data, curAddress, 2);
-  curAddress += 2;
-  const destYPos = readRAM(data, curAddress, 2);
+  const xPos = popData(1);
+  const yPos = popData(1);
+  const destXOffset = popData(2);
+  const destYOffset = popData(2);
+  const destXPos = popData(2);
+  const destYPos = popData(2);
 
   return {
     address,
@@ -107,21 +146,20 @@ function parseDoor(data, address) {
  */
 function parseRoom(data, address, allDoors) {
   let curAddress = address;
-  curAddress += 8; // Layer List
-  const layerList = readRAM(data, curAddress, 4);
-  curAddress += 4; // GFX Page List
-  const gfxList = readRAM(data, curAddress, 4);
-  curAddress += 4; // Palette Page List
-  const paletteList = readRAM(data, curAddress, 4);
-  curAddress += 4; // Entity List
-  const entityList = readRAM(data, curAddress, 4);
-  curAddress += 4; // Door list
-  const doorList = readRAM(data, curAddress, 4);
-  curAddress += 4;
-  curAddress += 6; // IDK what the next 6 bytes are so skip to Map X/Y
-  const mapX = readRAM(data, curAddress, 1);
-  curAddress += 1;
-  const mapY = readRAM(data, curAddress, 1);
+  const popData = (size) => {
+    const data = readRAM(data, curAddress, size);
+    curAddress += size;
+    return data;
+  }
+  popData(8); // Nothing we want
+  const layerList = popData(4); // Layer List
+  const gfxList = popData(4); // GFX Page List
+  const paletteList = popData(4); // Palette Page List
+  const entityList = popData(4); // Entity List
+  const doorList = popData(4); // Door list
+  popData(6); // IDK what the next 6 bytes are so skip to Map X/Y
+  const mapX = popData(1);
+  const mapY = popData(1);
 
   // Parse layers to try to estimate room width/height
   let mapWidth = -1;
@@ -243,6 +281,7 @@ function parseZone(data, zone) {
 
 const AoSParsingUtils = {
   parseEntity,
+  parseEnemy,
   parseDoor,
   parseRoom,
   parseZone,

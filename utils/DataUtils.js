@@ -11,10 +11,16 @@ const {
  */
 function writeEndOfEntityList(data, address) {
   const correctedAddress = address - 0x08000000;
-  writeData(data, correctedAddress, 2, 0x7FFF);
-  writeData(data, correctedAddress + 2, 2, 0x7FFF);
-  writeData(data, correctedAddress + 4, 4, 0);
-  writeData(data, correctedAddress + 8, 4, 0);
+
+  let curAddress = correctedAddress;
+  const pushData = (size, content) => {
+    writeData(data, curAddress, size, content);
+    curAddress += size;
+  }
+  pushData(2, 0x7FFF);
+  pushData(2, 0x7FFF);
+  pushData(4, 0);
+  pushData(4, 0);
 }
 
 /**
@@ -26,18 +32,51 @@ function writeEndOfEntityList(data, address) {
 function writeEntity(data, entity) {
   const correctedAddress = entity.address - 0x08000000;
 
-  writeData(data, correctedAddress, 2, entity.xPos);
-  writeData(data, correctedAddress + 2, 2, entity.yPos);
+  let curAddress = correctedAddress;
+  const pushData = (size, content) => {
+    writeData(data, curAddress, size, content);
+    curAddress += size;
+  }
+  pushData(2, entity.xPos);
+  pushData(2, entity.yPos);
   if (entity.uniqueId) {
-    writeData(data, correctedAddress + 4, 1, entity.uniqueId);
+    pushData(1, entity.uniqueId);
   }
-  writeData(data, correctedAddress + 5, 1, entity.type);
-  writeData(data, correctedAddress + 6, 1, entity.subtype);
+  else {
+    curAddress += 1;
+  }
+  pushData(1, entity.type);
+  pushData(1, entity.subtype);
   if (entity.instaload) {
-    writeData(data, correctedAddress + 7, 1, entity.instaload);
+    pushData(1, entity.instaload);
   }
-  writeData(data, correctedAddress + 8, 2, entity.varA);
-  writeData(data, correctedAddress + 10, 2, entity.varB);
+  else {
+    curAddress += 1;
+  }
+  pushData(2, entity.varA);
+  pushData(2, entity.varB);
+}
+
+/**
+ * Helper function to update enemy DNA with new drops
+ * @param  {Byte[]} data - The game data to modify
+ * @param  {Enemy} enemy - The enemy (drop) data to write/update
+ */
+function writeEnemy(data, enemy) {
+  const correctedAddress = entity.address - 0x08000000;
+
+  let curAddress = correctedAddress;
+  const pushData = (size, content) => {
+    writeData(data, curAddress, size, content);
+    curAddress += size;
+  }
+
+  curAddress += 8; // Create/Update codes
+  pushData(2, enemy.item1);
+  pushData(2, enemy.item2);
+  curAddress += 12; // HP/MP/EXP/Soul Rarity/ATK/DEF/Item Rarity
+  pushData(1, enemy.soulType);
+  pushData(1, enemy.soul);
 }
 
 /**
@@ -48,13 +87,18 @@ function writeEntity(data, entity) {
 function writeDoor(data, door) {
   const correctedAddress = door.address - 0x08000000;
 
-  writeData(data, correctedAddress, 4, door.destination);
-  writeData(data, correctedAddress + 4, 1, door.xPos);
-  writeData(data, correctedAddress + 5, 1, door.yPos);
-  writeData(data, correctedAddress + 6, 2, door.destXOffset);
-  writeData(data, correctedAddress + 8, 2, door.destYOffset);
-  writeData(data, correctedAddress + 10, 2, door.destXPos);
-  writeData(data, correctedAddress + 12, 2, door.destYPos);
+  let curAddress = correctedAddress;
+  const pushData = (size, content) => {
+    writeData(data, curAddress, size, content);
+    curAddress += size;
+  }
+  pushData(4, door.destination);
+  pushData(1, door.xPos);
+  pushData(1, door.yPos);
+  pushData(2, door.destXOffset);
+  pushData(2, door.destYOffset);
+  pushData(2, door.destXPos);
+  pushData(2, door.destYPos);
 }
 
 function updateDataWithAreaInfo(data, areas) {
@@ -71,6 +115,7 @@ function updateDataWithAreaInfo(data, areas) {
 const DataUtils = {
   writeEndOfEntityList,
   writeEntity,
+  writeEnemy,
   writeDoor,
   updateDataWithAreaInfo,
 };
