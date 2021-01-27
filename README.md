@@ -49,6 +49,7 @@ For now there's no meaningful user interface. Usage involves downloading the sou
  *  Relocation of wooden doors to be next to area transitions
  *  Correction of Soma's positional offsets when going through doors
  *  More interesting text for the Ancient Books
+ *  Actually adding a UI
 
 ## Further down the line
  *  Relocate the pre-Julius shadow door to right before Chaos. This will allow Chaotic Realm to be more in logic
@@ -62,9 +63,9 @@ For now there's no meaningful user interface. Usage involves downloading the sou
 ## Quirks to note
  *  Right now the Ancient Books just list the name of the enemy. This is just for convenience while testing and will be changed later.
  *  There are a few connections that aren't changed for logical reasons:
-   *  Doors leading in and out of the Graham boss room aren't changed to avoid trapping the player in a boss fight without the correct Souls
-   *  Doors leading in and out of the Julius boss room aren't changed to ensure at the very least Graham must be defeated before entering the Chaotic Realm
-   *  The room right before the Chaos boss fight has its left and right doors unchanged, leading to the Chaos boss fight and a save room respectively
-   *  The save room in the pre-Julius fight area is unchanged because it's a weird room transition that's in the middle of a room instead of at the edges
+    *  Doors leading in and out of the Graham boss room aren't changed to avoid trapping the player in a boss fight without the correct Souls
+    *  Doors leading in and out of the Julius boss room aren't changed to ensure at the very least Graham must be defeated before entering the Chaotic Realm
+    *  The room right before the Chaos boss fight has its left and right doors unchanged, leading to the Chaos boss fight and a save room respectively
+    *  The save room in the pre-Julius fight area is unchanged because it's a weird room transition that's in the middle of a room instead of at the edges
  * A decent number of jumps can be made with Black Panther alone. I'm not sure how much I like this, so I'm not sure if I'll keep it in logic.
  * The starting room is always a save room to allow for immediate access to suspends. This means the beginning cutscene doesn't activate until you find the correct room, so Soma doesn't "start" with the Winged Skeleton Soul. This is because save points don't work well in rooms larger than 1x1.
