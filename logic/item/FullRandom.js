@@ -124,7 +124,7 @@ function FullRandom(areas, requirements, random, startingRoom) {
 
   Logger.log('Attempting to place items', DebugLevels.MARKER);
   let iterations = 0;
-  while (!isSolvable(areas, requirements.progression, [], startingRoom.address)) {
+  while (!isSolvable(areas, requirements.progression, [], startingRoom.address).isSolvable) {
     if (iterations % 10 === 1) {
       Logger.log(`Attempt ${iterations}: Reattempting item randomization`, DebugLevels.MARKER);
     }

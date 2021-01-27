@@ -2,6 +2,9 @@ const Locks = require('../progression/Locks');
 const getFreshProgressionDrops = require('../progression/ProgressionDrops');
 const determineAccess = require('../progression/determineAccess');
 
+const Logger = require('../debug/Logger');
+const DebugLevels = require('../debug/DebugLevels');
+
 const SPECIAL_DOOR_LOCKS = [
   {
     key: "isJuliusDoor",
@@ -150,19 +153,27 @@ const DEFAULT_PROGRESSION = getFreshProgressionDrops();
  *   Most notably used with a full inventory to see if a map randomization is reasonable.
  * @param  {uint_32} [startRoom=0x0850EF9C] - The room to start from, defaulting to the normal AoS starting room
  * @param  {uint_32} [endRoom=0x0852253C] - The room to end at, defaulting to the first room of the Chaos boss fight
- * @return {Boolean} - If the current room configuration provides a path from the start room to the end
+ * @param  {Boolean} [fullSearch=false] - If the search should go through every room, or just find the end
+ * @return {Object} - An object containing information about solvability and various key locations.
+ *   {Boolean} Object.isSolvable - If the current room configuration provides a path from the start room to the end
+ *   {Object[]} Object.solution - A list of the intended order of obtaining progression items and in what rooms. TODO, gotta figure out how I wanna do it nicely
+ *   {uint_32} Object.preChronomageRoom - The address of the room leading into the Chronomage hall
  */
 function isSolvable(
   areas,
   progression = DEFAULT_PROGRESSION,
   startingInventory = [],
   startRoom = STARTING_ROOM_ADDRESS,
-  endRoom = ENDING_ROOM_ADDRESS
+  endRoom = ENDING_ROOM_ADDRESS,
+  fullSearch = false,
 ) {
   // Some preliminary setup. Get a list of all the rooms and subsequently all the door
   const rooms = areas.map(a => a.rooms);
   const flattenedRooms = [].concat(...rooms);
   const allDoors = [].concat(...flattenedRooms.map(r => r.doors));
+  const solution = [];
+  let preChronomageRoom = null;
+  let isSolvable = false;
 
   // Get a starting room and starting door to start the search with.
     // TODO: consider a fake entry door here too?
@@ -201,8 +212,14 @@ function isSolvable(
     const curDoor = curRoomInfo.door;
 
     if (curRoom.address === endRoom) {
+      isSolvable = true;
+
       // If the current room is the destination, then there's a path from the start to the end
-      return true;
+      if (!fullSearch) {
+        return {
+          isSolvable: true,
+        };
+      }
     }
 
     // Skip doors we've already gone through
@@ -239,8 +256,6 @@ function isSolvable(
 
         newItems = [];
         if (newKeys.length > 0) {
-          // console.log(curDoor.address.toString(16));
-          // console.log(newKeys);
           // If new keys were gotten, find what we unlock
           newKeys.forEach(key => heldKeys.add(key));
           curAccess = determineAccess([...heldKeys]);
@@ -277,11 +292,18 @@ function isSolvable(
         .forEach(door => {
           const destRoom = flattenedRooms.find(room => room.address === door.destination);
           if (!destRoom) {
-            console.log(door);
+            Logger.log(`Couldn't find destination room from door ${JSON.stringify(door)}`, DebugLevels.WARN);
           }
           const destDoor = destRoom.doors.find(d => d.address === door.complement);
           if (destRoom && destDoor) {
             visitQueue.push({ room: destRoom, door: destDoor });
+            if (destRoom.address === 0x08515C30 && !preChronomageRoom) {
+              // If the destination is the Chronomage room, take note of it.
+              // Make sure we only use the first time we find it, because the second one
+              // is probably looking at going back.
+              Logger.log(`Pre-Chronomage here: ${curRoom.address.toString(16)}`, DebugLevels.MARKER);
+              preChronomageRoom = curRoom;
+            }
           }
         });
       visitedDoors.add(curDoor.address);
@@ -289,7 +311,11 @@ function isSolvable(
   }
 
   // If we're out of visitable rooms, then we couldn't reach the destination.
-  return false;
+  return {
+    isSolvable,
+    solution,
+    preChronomageRoom,
+  };
 }
 
 const SolvabilityUtils = {

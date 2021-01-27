@@ -122,7 +122,7 @@ function doRandomization(data, settings = {}) {
   Logger.log(`Starting at ${startingRoom.address.toString(16)}`, DebugLevels.LOG);
 
   // Sanity check to ensure the end is even accessible
-  if (!isSolvable(shuffledMap, requirements, Object.values(Keys), startingRoom.address)) {
+  if (!isSolvable(shuffledMap, requirements, Object.values(Keys), startingRoom.address).isSolvable) {
     Logger.log('Current map orientation isn\'t solvable even with all progression items', DebugLevels.FATAL);
     return;
   }
@@ -133,7 +133,15 @@ function doRandomization(data, settings = {}) {
   const itemedMap = placeItems(shuffledMap, requirements, random, startingRoom);
 
   // Sanity check to ensure the items were placed logically
-  if (!isSolvable(itemedMap, requirements.progression, [], startingRoom.address)) {
+  const solvabilityInfo = isSolvable(
+    itemedMap,
+    requirements.progression,
+    [],
+    startingRoom.address,
+    0x0852253C,
+    true
+  );
+  if (!solvabilityInfo.isSolvable) {
     Logger.log('Current item distribution doesn\'t work', DebugLevels.FATAL);
     return;
   }
@@ -182,9 +190,8 @@ function doRandomization(data, settings = {}) {
   // Chronomage destination room is hardcoded so update that to the preceeding room in logic
   // If that doesn't work due to room coordinates, then change it to be the same room but on the
   // left/right side
-  // PRIORITY: HIGH
-  // DIFFICULTY: MEDIUM
-  'changeChronomageDestination(data);'
+  // PRIORITY: DONE
+  postProcessor.setChronomageDestination(solvabilityInfo.preChronomageRoom.address);
 
   // If debugging, Add with Bat, Skula, Panther,  and Chaos Ring
   if ('settings.enableDebugDrops') {
@@ -232,8 +239,10 @@ function doRandomization(data, settings = {}) {
   const filename = 'test.gba';'determineFilename(settings)';
   if (settings.writeFile) {
     fs.writeFile(filename, Buffer.from(data), err => {
-      Logger.log('Error writing file:', DebugLevels.ERROR);
-      Logger.log(err, DebugLevels.ERROR);
+      if (err) {
+        Logger.log('Error writing file:', DebugLevels.ERROR);
+        Logger.log(err, DebugLevels.ERROR);
+      }
     });
   }
 }
@@ -246,7 +255,11 @@ function main() {
       return;
     }
 
-    doRandomization([...data]);
+    const settings = {
+      seed: 2,
+      writeFile: true,
+    };
+    doRandomization([...data], settings);
   });
 }
 

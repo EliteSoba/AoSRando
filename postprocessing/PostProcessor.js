@@ -2,6 +2,7 @@ const writeCutsceneSkip = require('./writeCutsceneSkip');
 const updateAncientBooks = require('./updateAncientBooks');
 const updateDraculaSouls = require('./updateDraculaSouls');
 const writeStartingRoom = require('./writeStartingRoom');
+const writeChronomageDestination = require('./writeChronomageDestination');
 
 /**
  * Provides additional enhancements outside of the basic randomization features.
@@ -26,6 +27,7 @@ class PostProcessor {
     this._addDebugItems = false;
 
     this._startingRoomIndex = null;
+    this._chronomageDestination = null;
   }
 
   /**
@@ -77,6 +79,15 @@ class PostProcessor {
     return this;
   }
 
+  /**
+   * Changes the location of the room where Chronomage sends you
+   * @param {uint_32} destination - The address of where Chronomage sends you
+   */
+  setChronomageDestination(destination) {
+    this._chronomageDestination = destination;
+    return this;
+  }
+
   execute() {
     if (this._addCutsceneSkip) {
       writeCutsceneSkip(this.data);
@@ -99,6 +110,10 @@ class PostProcessor {
 
     if (this._startingRoom) {
       writeStartingRoom(this.data, this._startingRoom);
+    }
+
+    if (this._chronomageDestination) {
+      writeChronomageDestination(this.data, this._chronomageDestination);
     }
 
     return this.data;

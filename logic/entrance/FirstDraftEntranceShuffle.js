@@ -165,6 +165,7 @@ function randomizeArea(area, random, doorsToSkip) {
       if (unmatchedDoors.length === 1) {
         // This only happens in garden. Send them back to the pre-Julius area.
         Logger.log('Doing the Garden-only one-way door assignment', DebugLevels.LOG);
+        Logger.log(`The door is ${JSON.stringify(unmatchedDoors[0])}`, DebugLevels.LOG);
         const partnerDoor = {
           "_door": 0,
           "address": 139556384,
@@ -190,9 +191,14 @@ function randomizeArea(area, random, doorsToSkip) {
         const oppositeDirection = getOppositeDirection(randomDoor.direction);
         const validDoorPartners = unmatchedDoors.filter(door => door.direction === oppositeDirection);
         const partnerDoor = random.pickFromArray(validDoorPartners).value;
-        pairings.push({ source: randomDoor, destination: partnerDoor });
-        pairings.push({ source: partnerDoor, destination: randomDoor });
-        unmatchedDoors = unmatchedDoors.filter(door => door.address !== randomDoor.address && door.address !== partnerDoor.address);
+        if (partnerDoor) {
+          pairings.push({ source: randomDoor, destination: partnerDoor });
+          pairings.push({ source: partnerDoor, destination: randomDoor });
+          unmatchedDoors = unmatchedDoors.filter(door => door.address !== randomDoor.address && door.address !== partnerDoor.address);
+        }
+        else {
+          Logger.log(`Couldn't find a matching door for ${randomDoor.address.toString(16)}`, Logger.WARN);
+        }
       }
     }
   }
