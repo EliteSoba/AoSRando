@@ -5,8 +5,7 @@ const DIR = {
   RIGHT: 6,
   UP: 8,
   DOWN: 2,
-}
-
+};
 
 const CORRIDOR = {
   _name: 'Castle Corridor',
@@ -79,7 +78,7 @@ const CHAOTIC = {
   _area: 0xB,
   first: 0x0050EE64,
   last: 0x0050EF04,
-}
+};
 
 const Zones = [
   CORRIDOR,
@@ -96,9 +95,15 @@ const Zones = [
   CHAOTIC, // Note: pay special attention because a lot of chaotic realm rooms are special
 ];
 
+const ENEMY_DNA = {
+  first: 0x000E9644,
+  last: 0x000EA604,
+}
+
 const AoSConstants = {
   DIR,
   Zones,
+  ENEMY_DNA
 };
 
 module.exports = AoSConstants;
