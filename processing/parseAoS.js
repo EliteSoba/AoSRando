@@ -12,11 +12,14 @@ const {
 const {
   DIR,
   Zones,
+  ENEMY_DNA,
+  ENEMY_NAMES,
 } = AoSConstants;
 
 const {
   parseRoom,
   parseZone,
+  parseEnemy,
 } = AoSParsingUtils;
 
 
@@ -197,7 +200,7 @@ function main() {
     }
     const content = [];
     let allDoors = [];
-    Zones.forEach((zone) => {
+    /*Zones*/[].forEach((zone) => {
       const zoneData = parseZone(data, zone);
       const rooms = zoneData.rooms.map((room, i) => {
         const roomData = {
@@ -240,20 +243,25 @@ function main() {
       // });
     });
 
-    console.log(222222);
-    allDoors.forEach((door, i) => door.i = i);
-    Zones.forEach((zone) => {
-      const zoneData = parseZone(data, zone);
-      const rooms = zoneData.rooms.map((room, i) => {
-        const roomData = {
-          _area: zone._area,
-          _room: i,
-          ...parseRoom(data, room, allDoors)
-        };
-        return roomData;
-      });
-      content.push({area: zone._name, rooms: rooms});
-    });
+    for (let i = ENEMY_DNA.first; i <= ENEMY_DNA.last; i += 36) {
+      const id = (i - ENEMY_DNA.first) / 36;
+      content.push({id, name: ENEMY_NAMES[id], ...parseEnemy(data, i)});
+    }
+
+    // console.log(222222);
+    // allDoors.forEach((door, i) => door.i = i);
+    // Zones.forEach((zone) => {
+    //   const zoneData = parseZone(data, zone);
+    //   const rooms = zoneData.rooms.map((room, i) => {
+    //     const roomData = {
+    //       _area: zone._area,
+    //       _room: i,
+    //       ...parseRoom(data, room, allDoors)
+    //     };
+    //     return roomData;
+    //   });
+    //   content.push({area: zone._name, rooms: rooms});
+    // });
 
     /*
     const corridor = parseArea(data, CORRIDOR);
@@ -287,7 +295,7 @@ function main() {
     writeCutsceneSkip(data);
     writeDebugDrops(data);
     writeSafetyZips(data);
-    //fs.writeFile('rooms2.json', JSON.stringify(content), err => {console.log(err);});
+    fs.writeFile('enemies.json', JSON.stringify(content), err => {console.log(err);});
     //fs.writeFile('aos2.gba', data, err => {console.log(err);});
   });
 }

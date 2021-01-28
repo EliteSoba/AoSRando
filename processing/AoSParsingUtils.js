@@ -21,9 +21,9 @@ const {
 function parseEntity(data, address) {
   let curAddress = address;
   const popData = (size) => {
-    const data = readRAM(data, curAddress, size);
+    const content = readRAM(data, curAddress, size);
     curAddress += size;
-    return data;
+    return content;
   }
   const xPos = popData(2);
   const yPos = popData(2);
@@ -62,9 +62,9 @@ function parseEntity(data, address) {
 function parseEnemy(data, address) {
   let curAddress = address;
   const popData = (size) => {
-    const data = readRAM(data, curAddress, size);
+    const content = readData(data, curAddress, size);
     curAddress += size;
-    return data;
+    return content;
   }
   const createCode = popData(4);
   const updateCode = popData(4);
@@ -82,6 +82,8 @@ function parseEnemy(data, address) {
   const soul = popData(1);
   const unknown11 = popData(1);
   const unknown12 = popData(2);
+  const weaknesses = popData(2);
+  const resistances = popData(2);
   const unknown13 = popData(2);
   const unknown14 = popData(2);
 
@@ -90,8 +92,14 @@ function parseEnemy(data, address) {
     item1,
     item2,
     soulType,
-    soul
-  }
+    soul,
+    HP,
+    exp,
+    attack,
+    defense,
+    weaknesses,
+    resistances
+  };
 }
 
 /**
@@ -104,9 +112,9 @@ function parseEnemy(data, address) {
 function parseDoor(data, address) {
   let curAddress = address;
   const popData = (size) => {
-    const data = readRAM(data, curAddress, size);
+    const content = readRAM(data, curAddress, size);
     curAddress += size;
-    return data;
+    return content;
   }
   const destination = popData(4);
 
@@ -147,9 +155,9 @@ function parseDoor(data, address) {
 function parseRoom(data, address, allDoors) {
   let curAddress = address;
   const popData = (size) => {
-    const data = readRAM(data, curAddress, size);
+    const content = readRAM(data, curAddress, size);
     curAddress += size;
-    return data;
+    return content;
   }
   popData(8); // Nothing we want
   const layerList = popData(4); // Layer List
