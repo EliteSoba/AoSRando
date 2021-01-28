@@ -1,6 +1,7 @@
 const Weapons = [
   {
     id: 0,
+    itemId: 32,
     subtype: 3,
     name: "Knife",
     description: "Cheap pocketknife",
@@ -8,6 +9,7 @@ const Weapons = [
   },
   {
     id: 1,
+    itemId: 33,
     subtype: 3,
     name: "Baselard",
     description: "Your standard dagger.",
@@ -15,6 +17,7 @@ const Weapons = [
   },
   {
     id: 2,
+    itemId: 34,
     subtype: 3,
     name: "Combat Knife",
     description: "Knife designed for hand-to-hand combat.",
@@ -22,6 +25,7 @@ const Weapons = [
   },
   {
     id: 3,
+    itemId: 35,
     subtype: 3,
     name: "Short Sword",
     description: "Short sword.",
@@ -29,6 +33,7 @@ const Weapons = [
   },
   {
     id: 4,
+    itemId: 36,
     subtype: 3,
     name: "Bastard Sword",
     description: "Long sword with a broad blade and hilt.",
@@ -36,6 +41,7 @@ const Weapons = [
   },
   {
     id: 5,
+    itemId: 37,
     subtype: 3,
     name: "Whip Sword",
     description: "Extendable sword.",
@@ -43,6 +49,7 @@ const Weapons = [
   },
   {
     id: 6,
+    itemId: 38,
     subtype: 3,
     name: "Gladius",
     description: "Ancient Roman sword.",
@@ -50,6 +57,7 @@ const Weapons = [
   },
   {
     id: 7,
+    itemId: 39,
     subtype: 3,
     name: "Gram",
     description: "Famous blade known as \"Gram.\"",
@@ -57,6 +65,7 @@ const Weapons = [
   },
   {
     id: 8,
+    itemId: 40,
     subtype: 3,
     name: "Milican's Sword",
     description: "Can turn enemies to stone.",
@@ -64,6 +73,7 @@ const Weapons = [
   },
   {
     id: 9,
+    itemId: 41,
     subtype: 3,
     name: "Hrunting",
     description: "Poison-secreting sword.",
@@ -71,6 +81,7 @@ const Weapons = [
   },
   {
     id: 10,
+    itemId: 42,
     subtype: 3,
     name: "Mystletain",
     description: "Sword carved from a sacred tree.",
@@ -78,6 +89,7 @@ const Weapons = [
   },
   {
     id: 11,
+    itemId: 43,
     subtype: 3,
     name: "Rahab's Sword",
     description: "Enchanted sword of ice.",
@@ -85,6 +97,7 @@ const Weapons = [
   },
   {
     id: 12,
+    itemId: 44,
     subtype: 3,
     name: "Durandal",
     description: "Sword forged by the hands of giants.",
@@ -92,6 +105,7 @@ const Weapons = [
   },
   {
     id: 13,
+    itemId: 45,
     subtype: 3,
     name: "Laevatain",
     description: "Enchanted sword of fire.",
@@ -99,6 +113,7 @@ const Weapons = [
   },
   {
     id: 14,
+    itemId: 46,
     subtype: 3,
     name: "Burtgang",
     description: "Mystical sword of protection.",
@@ -106,6 +121,7 @@ const Weapons = [
   },
   {
     id: 15,
+    itemId: 47,
     subtype: 3,
     name: "Kaladbolg",
     description: "Sword of darkness.",
@@ -113,6 +129,7 @@ const Weapons = [
   },
   {
     id: 16,
+    itemId: 48,
     subtype: 3,
     name: "Vjaya",
     description: "Wrought by the lightning of Indra.",
@@ -120,6 +137,7 @@ const Weapons = [
   },
   {
     id: 17,
+    itemId: 49,
     subtype: 3,
     name: "Balmung",
     description: "Legendary sword of the dragon slayers.",
@@ -127,6 +145,7 @@ const Weapons = [
   },
   {
     id: 18,
+    itemId: 50,
     subtype: 3,
     name: "Broadsword",
     description: "Wide-bladed sword.",
@@ -134,6 +153,7 @@ const Weapons = [
   },
   {
     id: 19,
+    itemId: 51,
     subtype: 3,
     name: "Scimitar",
     description: "Curved blade with a sharp edge.",
@@ -141,6 +161,7 @@ const Weapons = [
   },
   {
     id: 20,
+    itemId: 52,
     subtype: 3,
     name: "Claymore",
     description: "Well-balanced longsword.",
@@ -148,6 +169,7 @@ const Weapons = [
   },
   {
     id: 21,
+    itemId: 53,
     subtype: 3,
     name: "Great Sword",
     description: "Heavy longsword.",
@@ -155,6 +177,7 @@ const Weapons = [
   },
   {
     id: 22,
+    itemId: 54,
     subtype: 3,
     name: "Joyeuse",
     description: "Beautiful sword made out of gold.",
@@ -162,6 +185,7 @@ const Weapons = [
   },
   {
     id: 23,
+    itemId: 55,
     subtype: 3,
     name: "Dainslef",
     description: "Ultimate magical sword.",
@@ -169,6 +193,7 @@ const Weapons = [
   },
   {
     id: 24,
+    itemId: 56,
     subtype: 3,
     name: "Ascalon",
     description: "Famous sword of the dragon slayers.",
@@ -176,6 +201,7 @@ const Weapons = [
   },
   {
     id: 25,
+    itemId: 57,
     subtype: 3,
     name: "Claimh Solais",
     description: "Sword with a sparkling blade.",
@@ -183,6 +209,7 @@ const Weapons = [
   },
   {
     id: 26,
+    itemId: 58,
     subtype: 3,
     name: "Final Sword",
     description: "Sword carried by the Final Guard.",
@@ -190,6 +217,7 @@ const Weapons = [
   },
   {
     id: 27,
+    itemId: 59,
     subtype: 3,
     name: "Bamboo Sword",
     description: "Sword fashioned from bamboo.",
@@ -197,6 +225,7 @@ const Weapons = [
   },
   {
     id: 28,
+    itemId: 60,
     subtype: 3,
     name: "Katana",
     description: "No-descript sword.",
@@ -204,6 +233,7 @@ const Weapons = [
   },
   {
     id: 29,
+    itemId: 61,
     subtype: 3,
     name: "Osafune",
     description: "Sword with a very long blade.",
@@ -211,6 +241,7 @@ const Weapons = [
   },
   {
     id: 30,
+    itemId: 62,
     subtype: 3,
     name: "Onikiri",
     description: "Said to have killed a demon.",
@@ -218,6 +249,7 @@ const Weapons = [
   },
   {
     id: 31,
+    itemId: 63,
     subtype: 3,
     name: "Kunitsuna",
     description: "Said to have killed a demon.",
@@ -225,6 +257,7 @@ const Weapons = [
   },
   {
     id: 32,
+    itemId: 64,
     subtype: 3,
     name: "Yasutsuna",
     description: "Said to have killed a demon.",
@@ -232,6 +265,7 @@ const Weapons = [
   },
   {
     id: 33,
+    itemId: 65,
     subtype: 3,
     name: "Muramasa",
     description: "Its blade is hungry for blood.",
@@ -239,6 +273,7 @@ const Weapons = [
   },
   {
     id: 34,
+    itemId: 66,
     subtype: 3,
     name: "Hammer",
     description: "Your standard hammer.",
@@ -246,6 +281,7 @@ const Weapons = [
   },
   {
     id: 35,
+    itemId: 67,
     subtype: 3,
     name: "Warhammer",
     description: "Hammer designed for hand-to-hand combat.",
@@ -253,6 +289,7 @@ const Weapons = [
   },
   {
     id: 36,
+    itemId: 68,
     subtype: 3,
     name: "Excalibur",
     description: "Legendary sword in the stone.",
@@ -260,6 +297,7 @@ const Weapons = [
   },
   {
     id: 37,
+    itemId: 69,
     subtype: 3,
     name: "Tallhammer",
     description: "Lightning-summoning hammer.",
@@ -267,6 +305,7 @@ const Weapons = [
   },
   {
     id: 38,
+    itemId: 70,
     subtype: 3,
     name: "Battle Axe",
     description: "Axe designed for hand-to-hand combat.",
@@ -274,6 +313,7 @@ const Weapons = [
   },
   {
     id: 39,
+    itemId: 71,
     subtype: 3,
     name: "Death's Sickle",
     description: "Soul-hunting scythe of Death.",
@@ -281,6 +321,7 @@ const Weapons = [
   },
   {
     id: 40,
+    itemId: 72,
     subtype: 3,
     name: "Rapier",
     description: "Sword made for stabbing.",
@@ -288,6 +329,7 @@ const Weapons = [
   },
   {
     id: 41,
+    itemId: 73,
     subtype: 3,
     name: "Estoc",
     description: "Sword with a thin, needle-like blade.",
@@ -295,6 +337,7 @@ const Weapons = [
   },
   {
     id: 42,
+    itemId: 74,
     subtype: 3,
     name: "Cutall",
     description: "Short sword for stabbing.",
@@ -302,6 +345,7 @@ const Weapons = [
   },
   {
     id: 43,
+    itemId: 75,
     subtype: 3,
     name: "Spear",
     description: "Standard spear.",
@@ -309,6 +353,7 @@ const Weapons = [
   },
   {
     id: 44,
+    itemId: 76,
     subtype: 3,
     name: "Trident",
     description: "Spear with a three-pronged tip.",
@@ -316,6 +361,7 @@ const Weapons = [
   },
   {
     id: 45,
+    itemId: 77,
     subtype: 3,
     name: "Lance",
     description: "Long spear used by cavalry soldiers.",
@@ -323,6 +369,7 @@ const Weapons = [
   },
   {
     id: 46,
+    itemId: 78,
     subtype: 3,
     name: "Partizan",
     description: "Spear with an extra-wide tip.",
@@ -330,6 +377,7 @@ const Weapons = [
   },
   {
     id: 47,
+    itemId: 79,
     subtype: 3,
     name: "Gabolg",
     description: "Spear forged by witches.",
@@ -337,6 +385,7 @@ const Weapons = [
   },
   {
     id: 48,
+    itemId: 80,
     subtype: 3,
     name: "Gungner",
     description: "Lightning-infused spear.",
@@ -344,6 +393,7 @@ const Weapons = [
   },
   {
     id: 49,
+    itemId: 81,
     subtype: 3,
     name: "Ronginus' Spear",
     description: "Holy spear.",
@@ -351,6 +401,7 @@ const Weapons = [
   },
   {
     id: 50,
+    itemId: 82,
     subtype: 3,
     name: "Cestus",
     description: "Fist attachment used for punching.",
@@ -358,6 +409,7 @@ const Weapons = [
   },
   {
     id: 51,
+    itemId: 83,
     subtype: 3,
     name: "Kaiser Knuckle",
     description: "Your fist becomes as strong as an angry god's.",
@@ -365,6 +417,7 @@ const Weapons = [
   },
   {
     id: 52,
+    itemId: 84,
     subtype: 3,
     name: "Mach Punch",
     description: "Throws punches faster than the eye can see.",
@@ -372,6 +425,7 @@ const Weapons = [
   },
   {
     id: 53,
+    itemId: 85,
     subtype: 3,
     name: "Whip Knuckle",
     description: "Allows you to throw whip-like punches.",
@@ -379,6 +433,7 @@ const Weapons = [
   },
   {
     id: 54,
+    itemId: 86,
     subtype: 3,
     name: "Poison Fist",
     description: "Adds poison to your punches.",
@@ -386,6 +441,7 @@ const Weapons = [
   },
   {
     id: 55,
+    itemId: 87,
     subtype: 3,
     name: "Handgun",
     description: "Uses 9mm Parabellum rounds.",
@@ -393,6 +449,7 @@ const Weapons = [
   },
   {
     id: 56,
+    itemId: 88,
     subtype: 3,
     name: "Silver Gun",
     description: "Fires sterling silver bullets.",
@@ -400,6 +457,7 @@ const Weapons = [
   },
   {
     id: 57,
+    itemId: 89,
     subtype: 3,
     name: "Positron Rifle",
     description: "Fires positive electrons.",
@@ -407,6 +465,7 @@ const Weapons = [
   },
   {
     id: 58,
+    itemId: 90,
     subtype: 3,
     name: "Valmanway",
     description: "Creates a bladed vortex that slices enemies to pieces.",
@@ -417,6 +476,7 @@ const Weapons = [
 const Armor = [
   {
     id: 0,
+    itemId: 91,
     subtype: 4,
     name: "Casual Clothes",
     description: "Normal, casual clothing.",
@@ -424,6 +484,7 @@ const Armor = [
   },
   {
     id: 1,
+    itemId: 92,
     subtype: 4,
     name: "Cloth Tunic",
     description: "Tunic sewn from cloth.",
@@ -431,6 +492,7 @@ const Armor = [
   },
   {
     id: 2,
+    itemId: 93,
     subtype: 4,
     name: "Gym Clothes",
     description: "Clothing worn when practicing a sport or martial arts.",
@@ -438,6 +500,7 @@ const Armor = [
   },
   {
     id: 3,
+    itemId: 94,
     subtype: 4,
     name: "War Fatigues",
     description: "Sturdy clothing made specially for the battlefield.",
@@ -445,6 +508,7 @@ const Armor = [
   },
   {
     id: 4,
+    itemId: 95,
     subtype: 4,
     name: "Ninja Suit",
     description: "Loose-fitting garb of ninjas.",
@@ -452,6 +516,7 @@ const Armor = [
   },
   {
     id: 5,
+    itemId: 96,
     subtype: 4,
     name: "Soldier Uniform",
     description: "Uniform worn by a soldier who fought in the Demon Castle War.",
@@ -459,6 +524,7 @@ const Armor = [
   },
   {
     id: 6,
+    itemId: 97,
     subtype: 4,
     name: "Pitch Black Suit",
     description: "Black suit as dark as the night sky.",
@@ -466,6 +532,7 @@ const Armor = [
   },
   {
     id: 7,
+    itemId: 98,
     subtype: 4,
     name: "Olrox's Suit",
     description: "Armored suit once worn by Olrox.",
@@ -473,6 +540,7 @@ const Armor = [
   },
   {
     id: 8,
+    itemId: 99,
     subtype: 4,
     name: "Dracula's Tunic",
     description: "Tunic possessing the powers of Dracula.",
@@ -480,6 +548,7 @@ const Armor = [
   },
   {
     id: 9,
+    itemId: 100,
     subtype: 4,
     name: "Leather Plate",
     description: "Breastplate made of leather.",
@@ -487,6 +556,7 @@ const Armor = [
   },
   {
     id: 10,
+    itemId: 101,
     subtype: 4,
     name: "Copper Plate",
     description: "Breastplate of hammered copper.",
@@ -494,6 +564,7 @@ const Armor = [
   },
   {
     id: 11,
+    itemId: 102,
     subtype: 4,
     name: "Iron Plate",
     description: "Breastplate of iron.",
@@ -501,6 +572,7 @@ const Armor = [
   },
   {
     id: 12,
+    itemId: 103,
     subtype: 4,
     name: "Steel Plate",
     description: "Breastplate forged from steel.",
@@ -508,6 +580,7 @@ const Armor = [
   },
   {
     id: 13,
+    itemId: 104,
     subtype: 4,
     name: "Silver Plate",
     description: "Breastplate of pure silver.",
@@ -515,6 +588,7 @@ const Armor = [
   },
   {
     id: 14,
+    itemId: 105,
     subtype: 4,
     name: "Gold Plate",
     description: "Breastplate of pure gold.",
@@ -522,6 +596,7 @@ const Armor = [
   },
   {
     id: 15,
+    itemId: 106,
     subtype: 4,
     name: "Eversing",
     description: "Fine suit of armor guaranteed to last forever.",
@@ -529,6 +604,7 @@ const Armor = [
   },
   {
     id: 16,
+    itemId: 107,
     subtype: 4,
     name: "Samurai Armor",
     description: "Red body armor used by samurai warriors.",
@@ -536,6 +612,7 @@ const Armor = [
   },
   {
     id: 17,
+    itemId: 108,
     subtype: 4,
     name: "Silk Robe",
     description: "Tunic sewn from silk. ",
@@ -543,6 +620,7 @@ const Armor = [
   },
   {
     id: 18,
+    itemId: 109,
     subtype: 4,
     name: "Elfin Robe",
     description: "Clothing woven by an elf.",
@@ -550,6 +628,7 @@ const Armor = [
   },
   {
     id: 19,
+    itemId: 110,
     subtype: 4,
     name: "Death's Robe",
     description: "Robe once worn by Death himself.",
@@ -557,6 +636,7 @@ const Armor = [
   },
   {
     id: 20,
+    itemId: 111,
     subtype: 4,
     name: "Demon's Mail",
     description: "Stronger against darkness-attributed attacks.",
@@ -564,6 +644,7 @@ const Armor = [
   },
   {
     id: 21,
+    itemId: 112,
     subtype: 4,
     name: "Armor of Fire",
     description: "Stronger against fire-attributed attacks.",
@@ -571,6 +652,7 @@ const Armor = [
   },
   {
     id: 22,
+    itemId: 113,
     subtype: 4,
     name: "Armor of Water",
     description: "Stronger against water-attributed attacks.",
@@ -578,6 +660,7 @@ const Armor = [
   },
   {
     id: 23,
+    itemId: 114,
     subtype: 4,
     name: "Blocking Mail",
     description: "Parries attacks on occasion.",
@@ -585,6 +668,7 @@ const Armor = [
   },
   {
     id: 24,
+    itemId: 115,
     subtype: 4,
     name: "Army Jacket",
     description: "Jacket woven from a special fiber that is difficult to cut.",
@@ -595,6 +679,7 @@ const Armor = [
 const Accessories = [
   {
     id: 25,
+    itemId: 116,
     subtype: 4,
     name: "Cape",
     description: "Unexceptional cloth cloak.",
@@ -602,6 +687,7 @@ const Accessories = [
   },
   {
     id: 26,
+    itemId: 117,
     subtype: 4,
     name: "Crimson Cloak",
     description: "Blood-red cloak.",
@@ -609,6 +695,7 @@ const Accessories = [
   },
   {
     id: 27,
+    itemId: 118,
     subtype: 4,
     name: "Black Cloak",
     description: "Pitch black cloak reminiscent of the night sky.",
@@ -616,6 +703,7 @@ const Accessories = [
   },
   {
     id: 28,
+    itemId: 119,
     subtype: 4,
     name: "Pendant",
     description: "Ordinary pendant.",
@@ -623,6 +711,7 @@ const Accessories = [
   },
   {
     id: 29,
+    itemId: 120,
     subtype: 4,
     name: "Heart Pendant",
     description: "Heart-shaped pendant.",
@@ -630,6 +719,7 @@ const Accessories = [
   },
   {
     id: 30,
+    itemId: 121,
     subtype: 4,
     name: "Scarf",
     description: "Warm and cozy.",
@@ -637,6 +727,7 @@ const Accessories = [
   },
   {
     id: 31,
+    itemId: 122,
     subtype: 4,
     name: "Red Scarf",
     description: "A bright red scarf.",
@@ -644,6 +735,7 @@ const Accessories = [
   },
   {
     id: 32,
+    itemId: 123,
     subtype: 4,
     name: "Ancient Belt",
     description: "Belt that lends its wearer a positive attitude.",
@@ -651,6 +743,7 @@ const Accessories = [
   },
   {
     id: 33,
+    itemId: 124,
     subtype: 4,
     name: "Black Belt",
     description: "Proof of excellence in martial arts.",
@@ -658,6 +751,7 @@ const Accessories = [
   },
   {
     id: 34,
+    itemId: 125,
     subtype: 4,
     name: "Skull Necklace",
     description: "Eerie-looking necklace.",
@@ -665,6 +759,7 @@ const Accessories = [
   },
   {
     id: 35,
+    itemId: 126,
     subtype: 4,
     name: "Flame Necklace",
     description: "Necklace adorned with a fire symbol.",
@@ -672,6 +767,7 @@ const Accessories = [
   },
   {
     id: 36,
+    itemId: 127,
     subtype: 4,
     name: "Satan's Ring",
     description: "Satan himself once wore this ring.",
@@ -679,6 +775,7 @@ const Accessories = [
   },
   {
     id: 37,
+    itemId: 128,
     subtype: 4,
     name: "Tear Of Blood",
     description: "Precious stone as red as blood.",
@@ -686,6 +783,7 @@ const Accessories = [
   },
   {
     id: 38,
+    itemId: 129,
     subtype: 4,
     name: "Lucky Charm",
     description: "Lucky Charm sold in Hakuba Shrine.",
@@ -693,6 +791,7 @@ const Accessories = [
   },
   {
     id: 39,
+    itemId: 130,
     subtype: 4,
     name: "Rare Ring",
     description: "Increases the appearance rate of rare items.",
@@ -700,6 +799,7 @@ const Accessories = [
   },
   {
     id: 40,
+    itemId: 131,
     subtype: 4,
     name: "Soul Eater Ring",
     description: "Increases the appearance rate of spirits.",
@@ -707,6 +807,7 @@ const Accessories = [
   },
   {
     id: 41,
+    itemId: 132,
     subtype: 4,
     name: "Rune Ring",
     description: "Increases the rate at which MP is restored.",
@@ -714,6 +815,7 @@ const Accessories = [
   },
   {
     id: 42,
+    itemId: 133,
     subtype: 4,
     name: "Sherman Ring",
     description: "Increases experience points when you walk wearing this ring.",
@@ -721,6 +823,7 @@ const Accessories = [
   },
   {
     id: 43,
+    itemId: 134,
     subtype: 4,
     name: "Gold Ring",
     description: "Makes enemies leave behind more money when you wear this ring.",
@@ -728,6 +831,7 @@ const Accessories = [
   },
   {
     id: 44,
+    itemId: 135,
     subtype: 4,
     name: "Chaos Ring",
     description: "Contains the powers of chaos.",

@@ -2,6 +2,7 @@
 const HP = [
   {
     id: 0,
+    itemId: 0,
     subtype: 2,
     name: "Potion",
     description: "Restores 100 HP.",
@@ -9,6 +10,7 @@ const HP = [
   },
   {
     id: 1,
+    itemId: 1,
     subtype: 2,
     name: "High Potion",
     description: "Restores 400 HP.",
@@ -16,6 +18,7 @@ const HP = [
   },
   {
     id: 2,
+    itemId: 2,
     subtype: 2,
     name: "Super Potion",
     description: "Restores ALL HP.",
@@ -23,6 +26,7 @@ const HP = [
   },
   {
     id: 3,
+    itemId: 3,
     subtype: 2,
     name: "Meat Strip",
     description: "Restores 29 HP.",
@@ -30,6 +34,7 @@ const HP = [
   },
   {
     id: 4,
+    itemId: 4,
     subtype: 2,
     name: "Tasty Meat",
     description: "Restores 290 HP.",
@@ -37,6 +42,7 @@ const HP = [
   },
   {
     id: 10,
+    itemId: 10,
     subtype: 2,
     name: "Potato Pancake",
     description: "The burnt edges are the best part.",
@@ -44,6 +50,7 @@ const HP = [
   },
   {
     id: 11,
+    itemId: 11,
     subtype: 2,
     name: "Beef Curry",
     description: "Quite an addictive flavor.",
@@ -51,6 +58,7 @@ const HP = [
   },
   {
     id: 12,
+    itemId: 12,
     subtype: 2,
     name: "Ramen",
     description: "Noodles floating in a broth made from pork bones.",
@@ -58,6 +66,7 @@ const HP = [
   },
   {
     id: 13,
+    itemId: 13,
     subtype: 2,
     name: "Cream Soda",
     description: "Has a cherry on top.",
@@ -65,6 +74,7 @@ const HP = [
   },
   {
     id: 14,
+    itemId: 14,
     subtype: 2,
     name: "Cream Puff",
     description: "Soft, fluffy, and sweet.",
@@ -72,6 +82,7 @@ const HP = [
   },
   {
     id: 15,
+    itemId: 15,
     subtype: 2,
     name: "Milk",
     description: "Low-fat milk.",
@@ -79,6 +90,7 @@ const HP = [
   },
   {
     id: 16,
+    itemId: 16,
     subtype: 2,
     name: "Coffee",
     description: "Decaffeinated coffee.",
@@ -86,6 +98,7 @@ const HP = [
   },
   {
     id: 17,
+    itemId: 17,
     subtype: 2,
     name: "Tea",
     description: "Sip it slowly and relax.",
@@ -93,6 +106,7 @@ const HP = [
   },
   {
     id: 18,
+    itemId: 18,
     subtype: 2,
     name: "Pudding",
     description: "It wiggles and jiggles.",
@@ -100,6 +114,7 @@ const HP = [
   },
   {
     id: 19,
+    itemId: 19,
     subtype: 2,
     name: "Strawberry",
     description: "A plump, sweet strawberry.",
@@ -107,6 +122,7 @@ const HP = [
   },
   {
     id: 20,
+    itemId: 20,
     subtype: 2,
     name: "Melon",
     description: "A melon of the finest quality.",
@@ -114,6 +130,7 @@ const HP = [
   },
   {
     id: 21,
+    itemId: 21,
     subtype: 2,
     name: "Grapes",
     description: "Fresh and juicy.",
@@ -121,6 +138,7 @@ const HP = [
   },
   {
     id: 22,
+    itemId: 22,
     subtype: 2,
     name: "Persimmon",
     description: "A bitter fruit.",
@@ -132,6 +150,7 @@ const HP = [
 const MP = [
   {
     id: 5,
+    itemId: 5,
     subtype: 2,
     name: "Mind Up",
     description: "Restores 20% of your MP.",
@@ -139,6 +158,7 @@ const MP = [
   },
   {
     id: 6,
+    itemId: 6,
     subtype: 2,
     name: "High Mind Up",
     description: "Restores 50% of your MP.",
@@ -146,6 +166,7 @@ const MP = [
   },
   {
     id: 7,
+    itemId: 7,
     subtype: 2,
     name: "Mana Prism",
     description: "Restores ALL of your MP.",
@@ -157,6 +178,7 @@ const MP = [
 const Status = [
   {
     id: 8,
+    itemId: 8,
     subtype: 2,
     name: "Anti-Venom",
     description: "Counteracts the effects of poison.",
@@ -164,6 +186,7 @@ const Status = [
   },
   {
     id: 9,
+    itemId: 9,
     subtype: 2,
     name: "Uncure Potion",
     description: "Nullifies the effects of curses.",
@@ -175,6 +198,7 @@ const Status = [
 const Damage = [
   {
     id: 23,
+    itemId: 23,
     subtype: 2,
     name: "Rotten Meat",
     description: "A slab of rotting beef.",
@@ -182,6 +206,7 @@ const Damage = [
   },
   {
     id: 24,
+    itemId: 24,
     subtype: 2,
     name: "Spoiled Milk",
     description: "It expired three years ago.",
@@ -193,6 +218,7 @@ const Damage = [
 const Unusable = [
   {
     id: 25,
+    itemId: 25,
     subtype: 2,
     name: "Skull Key",
     description: "Opens doors marked with a skull design.",
@@ -201,6 +227,7 @@ const Unusable = [
   },
   {
     id: 26,
+    itemId: 26,
     subtype: 2,
     name: "Ancient Book 1",
     description: "The first spirit is a demon from hell fires.",
@@ -209,6 +236,7 @@ const Unusable = [
   },
   {
     id: 27,
+    itemId: 27,
     subtype: 2,
     name: "Ancient Book 2",
     description: "The second spirit is the King of Bats.",
@@ -217,6 +245,7 @@ const Unusable = [
   },
   {
     id: 28,
+    itemId: 28,
     subtype: 2,
     name: "Ancient Book 3",
     description: "The third spirit is a beautiful nightmare.",
@@ -225,6 +254,7 @@ const Unusable = [
   },
   {
     id: 29,
+    itemId: 29,
     subtype: 2,
     name: "CASTLE MAP 1",
     description: "One portion of the castle's floor plan is written on it.",
@@ -232,6 +262,7 @@ const Unusable = [
   },
   {
     id: 30,
+    itemId: 30,
     subtype: 2,
     name: "CASTLE MAP 2",
     description: "One portion of the castle's floor plan is written on it.",
@@ -239,6 +270,7 @@ const Unusable = [
   },
   {
     id: 31,
+    itemId: 31,
     subtype: 2,
     name: "CASTLE MAP 3",
     description: "One portion of the castle's floor plan is written on it.",
