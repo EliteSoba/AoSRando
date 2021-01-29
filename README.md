@@ -38,11 +38,12 @@ For now there's no meaningful user interface. Usage involves downloading the sou
  *  Randomization of required souls to achieve the true ending
  *  Also corrects Chronomage's send destination to be the room right before the Chronomage room in logic. Kinda works okay.
  *  Removes all weird/breakable walls when randomizing entrances.
+ *  Shuffles enemy item drops/souls.
 
 ## Up Next
  *  Randomization of Shop items
- *  Randomization of Enemy Souls
- *  Randomization of Enemy item drops
+ *  ~~Randomization of Enemy Souls~~
+ *  ~~Randomization of Enemy item drops~~
  *  ~~Correction of Chronomage's teleport destination to the room right before the Chronomage room in logic~~
  *  ~~Removal of breakable walls~~
  *  Relocation of boss doors to more accurate locations

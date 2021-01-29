@@ -166,7 +166,7 @@ function doRandomization(data, settings = {}) {
   // Minimal logic here. Change drops and make sure to exclude books/skull key
   // PRIORITY: HIGH
   // DIFFICULTY: MEDIUM
-  'randomizeEnemyDrops(data);'
+  enemyProcessor.shuffleDrops();
 
   enemyProcessor.execute();
 

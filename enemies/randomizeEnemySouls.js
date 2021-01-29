@@ -22,7 +22,7 @@ function randomizeEnemySouls(enemies, random) {
     // soulType is 0-2 for Red, Blue, Yellow, which is exactly 5 off from the respective subtype
     enemy.soulType = chosenSoul.subtype - 5;
     enemy.soul = chosenSoul.id;
-    Logger.log(`Assigning soul of ${chosenSoul.name} to ${enemy.name}`, DebugLevels.MARKER);
+    Logger.log(`Assigning soul of ${chosenSoul.name} to ${enemy.name}`, DebugLevels.LOG);
   });
 }
 

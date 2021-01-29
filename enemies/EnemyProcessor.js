@@ -1,6 +1,9 @@
 const getFreshEnemies = require('./Enemies');
 const randomizeEnemySouls = require('./randomizeEnemySouls');
+const shuffleEnemyDrops = require('./shuffleEnemyDrops');
 const DataUtils = require('../utils/DataUtils');
+const DebugLevels = require('../debug/DebugLevels');
+const Logger = require('../debug/Logger');
 const {
   writeEnemy,
 } = DataUtils;
@@ -16,14 +19,27 @@ class EnemyProcessor {
     this._enemies = getFreshEnemies();
 
     this._randomizeDrops = false;
+    this._shuffleDrops = false;
     this._randomizeSouls = false;
   }
 
   /**
-   * If enemy item drops should be randomized. Does not affect drop rates (for now?)
+   * If enemy item drops should be randomized. Does not affect drop rates (for now?).
+   * Key distinction between this and shuffleDrops is the opportunity to drop items
+   * that normally aren't dropped by enemies.
+   * Should not be true at the same time as shuffleDrops
    */
   randomizeDrops() {
     this._randomizeDrops = true;
+    return this;
+  }
+
+  /**
+   * If enemy item drops should be shuffled amongst themselves.
+   * Should not be true at the same time as randomizeDrops
+   */
+  shuffleDrops() {
+    this._shuffleDrops = true;
     return this;
   }
 
@@ -36,7 +52,13 @@ class EnemyProcessor {
   }
 
   execute() {
-    if (this._randomizeDrops) {
+    if (this._randomizeDrops && this._shuffleDrops) {
+      Logger.log('Only one of randomizeDrops and shuffleDrops should be set. Prioritizing shuffle', DebugLevels.WARN);
+    }
+    if (this._shuffleDrops) {
+      shuffleEnemyDrops(this._enemies, this._random);
+    }
+    else if (this._randomizeDrops) {
       // noop
     }
     if (this._randomizeSouls) {
