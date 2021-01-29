@@ -12,10 +12,11 @@ const DebugLevels = require('./debug/DebugLevels');
 
 const DataUtils = require('./utils/DataUtils');
 
-const PostProcessor = require('./postprocessing/PostProcessor');
-
 const ItemRandomizer = require('./logic/item/FullRandom');
 const EntranceRandomizer = require('./logic/entrance/FirstDraftEntranceShuffle');
+
+const PostProcessor = require('./postprocessing/PostProcessor');
+const EnemyProcessor = require('./enemies/EnemyProcessor');
 
 const Areas = getFreshAreas();
 
@@ -156,6 +157,19 @@ function doRandomization(data, settings = {}) {
   // PRIORITY: DONE
   updateDataWithAreaInfo(data, areas);
 
+  const enemyProcessor = new EnemyProcessor(data, random);
+
+  // No logic necessary here, just shuffle all the enemy souls
+  // PRIORITY: DONE
+  enemyProcessor.randomizeSouls();
+
+  // Minimal logic here. Change drops and make sure to exclude books/skull key
+  // PRIORITY: HIGH
+  // DIFFICULTY: MEDIUM
+  'randomizeEnemyDrops(data);'
+
+  enemyProcessor.execute();
+
   const postProcessor = new PostProcessor(data);
 
   // Update books
@@ -166,16 +180,6 @@ function doRandomization(data, settings = {}) {
   // PRIORITY: HIGH
   // DIFFICULTY: MEDIUM
   'updateShop(data)';
-
-  // No logic necessary here, just shuffle all the enemy souls
-  // PRIORITY: HIGH
-  // DIFFICULTY: MEDIUM
-  'shuffleEnemySouls(data);'
-
-  // Minimal logic here. Change drops and make sure to exclude books/skull key
-  // PRIORITY: HIGH
-  // DIFFICULTY: MEDIUM
-  'randomizeEnemyDrops(data);'
 
   // OPTIONAL: Relocate doors and add safety zips
   // PRIORITY: DONE

@@ -1,5 +1,5 @@
 /** Returns a fresh list of enemies so that modification isn't as committal. */
-function getCleanEnemies() {
+function getFreshEnemies() {
   return [
     {
       "id": 0,

@@ -63,9 +63,7 @@ function writeEntity(data, entity) {
  * @param  {Enemy} enemy - The enemy (drop) data to write/update
  */
 function writeEnemy(data, enemy) {
-  const correctedAddress = entity.address - 0x08000000;
-
-  let curAddress = correctedAddress;
+  let curAddress = enemy.address;
   const pushData = (size, content) => {
     writeData(data, curAddress, size, content);
     curAddress += size;
@@ -74,7 +72,7 @@ function writeEnemy(data, enemy) {
   curAddress += 8; // Create/Update codes
   pushData(2, enemy.item1);
   pushData(2, enemy.item2);
-  curAddress += 12; // HP/MP/EXP/Soul Rarity/ATK/DEF/Item Rarity
+  curAddress += 11; // HP/MP/EXP/Soul Rarity/ATK/DEF/Item Rarity
   pushData(1, enemy.soulType);
   pushData(1, enemy.soul);
 }

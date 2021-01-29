@@ -12,11 +12,11 @@ const removeBreakableWalls = require('./removeBreakableWalls');
  */
 class PostProcessor {
   constructor(data) {
-    this.freeSpaceStart = 0x00651170;
-    this.data = data;
-    this.red;
-    this.blue;
-    this.yellow;
+    this._freeSpaceStart = 0x00651170;
+    this._data = data;
+    this._red;
+    this._blue;
+    this._yellow;
 
     this._addCutsceneSkip = false;
 
@@ -66,9 +66,9 @@ class PostProcessor {
    * @param  {Soul} yellow - The enchanted soul to use
    */
   updateRequiredSouls(red, blue, yellow) {
-    this.red = red;
-    this.blue = blue;
-    this.yellow = yellow;
+    this._red = red;
+    this._blue = blue;
+    this._yellow = yellow;
     return this;
   }
 
@@ -100,7 +100,7 @@ class PostProcessor {
 
   execute() {
     if (this._addCutsceneSkip) {
-      writeCutsceneSkip(this.data);
+      writeCutsceneSkip(this._data);
     }
     if (this._relocateDoorLists) {
       // etc.
@@ -113,24 +113,24 @@ class PostProcessor {
       // write all the entities to free space
     }
 
-    if (this.red && this.blue && this.yellow) {
-      updateDraculaSouls(this.data, this.red, this.blue, this.yellow);
-      updateAncientBooks(this.data, this.red, this.blue, this.yellow);
+    if (this._red && this._blue && this._yellow) {
+      updateDraculaSouls(this._data, this._red, this._blue, this._yellow);
+      updateAncientBooks(this._data, this._red, this._blue, this._yellow);
     }
 
     if (this._startingRoom) {
-      writeStartingRoom(this.data, this._startingRoom);
+      writeStartingRoom(this._data, this._startingRoom);
     }
 
     if (this._chronomageDestination) {
-      writeChronomageDestination(this.data, this._chronomageDestination);
+      writeChronomageDestination(this._data, this._chronomageDestination);
     }
 
     if (this._removeBreakableWalls) {
-      removeBreakableWalls(this.data);
+      removeBreakableWalls(this._data);
     }
 
-    return this.data;
+    return this._data;
   }
 }
 
