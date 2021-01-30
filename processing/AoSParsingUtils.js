@@ -144,6 +144,42 @@ function parseDoor(data, address) {
 }
 
 /**
+ * Helper function to get the entity list address
+ * @param  {byte[]} data - The AoS game file
+ * @param  {uint_32} roomAddress - The address where the door begins
+ * @return {uint_32} The addres in RAM where the entity list is stored
+ */
+function getEntityListAddress(data, roomAddress) {
+  return readRAM(data, roomAddress + 20, 4);
+}
+
+/**
+ * Helper function to get all the entities in a room
+ * @param  {byte[]} data - The AoS game file
+ * @param  {uint_32} entityList - The address where the entity list begins
+ * @return {Entity[]} A list of all entities in the room
+ */
+function getEntityList(data, entityList) {
+  // Really regretting not storing more room info but there can be like
+  // dozens of entities in a room that shouldn't be touched like water effects.
+  const entities = [];
+
+  for (let curEntity = entityList, entityId = 0; curEntity < 0x10000000; curEntity += 12) {
+    const entity = parseEntity(data, curEntity);
+    if (!entity) {
+      break;
+    }
+    const entityContent = {
+      _id: entityId++,
+      ...entity,
+    };
+    entities.push(entityContent);
+  }
+
+  return entities;
+}
+
+/**
  * Parses the game data for information about the room at the given address
  * and returns an object holding this information.
  * @param  {byte[]} data - The AoS game file
@@ -229,30 +265,24 @@ function parseRoom(data, address, allDoors) {
   }
 
   // Parse items
-  let items = [];
-  for (let curEntity = entityList, entityId = 0; curEntity < 0x10000000; curEntity += 12) {
-    const entity = parseEntity(data, curEntity);
-    if (!entity) {
-      break;
-    }
-    if (entity.type === 4) {
-      // Normal item
-      const entityContent = {
-        _item: entityId++,
-        ...entity,
-      };
-      items = items.concat(entityContent);
-    }
-    else if (entity.type === 5) {
-      // Hard mode item
-      const entityContent = {
-        _item: entityId++,
-        ...entity,
-        isHardMode: true,
-      };
-      items = items.concat(entityContent);
-    }
-  }
+  const items = getEntityList(data, entityList)
+    .filter (entity => entity.type === 4 || entity.type === 5)
+    .map((entity, i) => {
+      if (entity.type === 4) {
+        return {
+          _item: i,
+          ...entity,
+        };
+      }
+      else {
+        // entity.type === 5. Hard mode item
+        return {
+          _item: i,
+          ...entity,
+          isHardMode: true,
+        };
+      }
+    });
 
   return {
     address,
@@ -291,6 +321,8 @@ const AoSParsingUtils = {
   parseEntity,
   parseEnemy,
   parseDoor,
+  getEntityListAddress,
+  getEntityList,
   parseRoom,
   parseZone,
 };

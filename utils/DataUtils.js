@@ -1,17 +1,12 @@
-const FileUtils = require('../utils/FileUtils');
+const FileUtils = require('./FileUtils');
+const AoSParsingUtils = require('../processing/AoSParsingUtils');
+
 const {
   writeData,
 } = FileUtils;
-
-const EMPTY_ENTITY = {
-  "address": 0,
-  "xPos": 0,
-  "yPos": 0,
-  "type": 0,
-  "subtype": 0,
-  "varA": 0,
-  "varB": 0
-};
+const {
+  getEntityList,
+} = AoSParsingUtils;
 
 /**
  * Helper function to write an entity into data at the correct address.
@@ -48,21 +43,6 @@ function writeEntity(data, entity) {
 }
 
 /**
- * Helper function to write a zeroed out entity to a given address.
- * Effectively deletes an entity
- * @param  {Byte[]} data - The game data to modify
- * @param  {uint_32} address - The address to write the entity to
- * @return {[type]}
- */
-function writeEmptyEntity(data, address) {
-  const emptyEntity = {
-    ...EMPTY_ENTITY,
-    address
-  }
-  writeEntity(data, emptyEntity);
-}
-
-/**
  * Helper function that writes the 0xFF7FFF7F0000000000000000 entity list indicator
  * to the given address
  * @param  {Byte[]} data - The game data to modify
@@ -80,6 +60,45 @@ function writeEndOfEntityList(data, address) {
   pushData(2, 0x7FFF);
   pushData(4, 0);
   pushData(4, 0);
+}
+
+/**
+ * Helper function to write a full entity list.
+ * Note that this can also be used to write any contiguous block of an entity list
+ * spanning from an arbitrary index in the entity list to the end.
+ * Returns the total length of content written
+ * @param  {Byte[]} data - The game data to modify
+ * @param  {uint_32} address - The address to start writing at
+ * @param  {Entity[]} entities - All the entities to write
+ * @return {uint_32} - The total length of content added (address + this value points to the spot right after this list)
+ */
+function writeEntityList(data, address, entities) {
+  let curOffset = 0;
+  entities.forEach((entity) => {
+    const addressCorrectedEntity = {
+      ...entity,
+      address: address + curOffset,
+    };
+
+    writeEntity(data, addressCorrectedEntity);
+    curOffset += 12;
+  });
+  writeEndOfEntityList(data, address + curOffset);
+  return curOffset + 12;
+}
+
+/**
+ * Helper function to delete an entity by shifting all the entries in the entity list
+ * up by one index and writing the end of list marker one space earlier.
+ * @param  {Byte[]} data - The game data to modify
+ * @param  {Entity} entity - The entity to delete
+ */
+function deleteEntity(data, entity) {
+  // Get all the entities in the list after this one
+  const entities = getEntityList(data, entity.address).slice(1);
+
+  // Write all these entities one space earlier in the ist
+  writeEntityList(data, entity.address, entities);
 }
 
 /**
@@ -137,8 +156,9 @@ function updateDataWithAreaInfo(data, areas) {
 
 const DataUtils = {
   writeEntity,
-  writeEmptyEntity,
   writeEndOfEntityList,
+  writeEntityList,
+  deleteEntity,
   writeEnemy,
   writeDoor,
   updateDataWithAreaInfo,

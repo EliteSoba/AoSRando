@@ -1,7 +1,12 @@
+const AoSParsingUtils = require('../processing/AoSParsingUtils');
 const DataUtils = require('../utils/DataUtils');
 
 const {
-  writeEmptyEntity,
+  parseEntity,
+} = AoSParsingUtils;
+
+const {
+  deleteEntity,
 } = DataUtils;
 
 // Walls that are breakable by attacks
@@ -32,7 +37,8 @@ const IRREGULAR_WALL_ADDRESSES = [
  */
 function removeBreakableWalls(data) {
   [...BREAKABLE_WALL_ADDRESSES, ...IRREGULAR_WALL_ADDRESSES]
-    .forEach(address => writeEmptyEntity(data, address));
+    .map(address => parseEntity(data, address))
+    .forEach(entity => deleteEntity(data, entity));
 }
 
 module.exports = removeBreakableWalls;

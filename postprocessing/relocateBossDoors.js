@@ -7,13 +7,14 @@ const Logger = require('../debug/Logger');
 const DebugLevels = require('../debug/DebugLevels');
 
 const {
+  getEntityListAddress,
+  getEntityList,
   parseEntity,
 } = AoSParsingUtils;
 
 const {
-  writeEntity,
-  writeEmptyEntity,
-  writeEndOfEntityList,
+  deleteEntity,
+  writeEntityList,
 } = DataUtils;
 
 const {
@@ -110,33 +111,6 @@ const BOSS_ROOMS = [
 ];
 
 /**
- * Helper function to get all the entities in a room
- * @param  {byte[]} data - The AoS game file
- * @param  {uint_32} roomAddress - The address where the door begins
- * @return {Entity[]} A list of all entities in the room
- */
-function getEntityList(data, roomAddress) {
-  // Really regretting not storing more room info but there can be like
-  // dozens of entities in a room that shouldn't be touched like water effects.
-  const entityList = readRAM(data, roomAddress + 20, 4);
-  const entities = [];
-
-  for (let curEntity = entityList, entityId = 0; curEntity < 0x10000000; curEntity += 12) {
-    const entity = parseEntity(data, curEntity);
-    if (!entity) {
-      break;
-    }
-    const entityContent = {
-      _id: entityId++,
-      ...entity,
-    };
-    entities.push(entityContent);
-  }
-
-  return entities;
-}
-
-/**
  * Helper function to generate a boss door entity to add.
  * Doesn't have an address or uniqueId tied to it so those need to be set when writing
  * @param  {uint_8} bossFlag - The id of the boss flag that determines if this door should render
@@ -150,7 +124,7 @@ function generateBossDoorEntity(bossFlag, door) {
     direction,
   } = door;
 
-  const xPos = direction === DIR.LEFT ? 0x08 : (doorX - 1) * 0x100 + 0xF8;
+  const xPos = direction === DIR.LEFT ? 0x08 : (doorX - 1) * 0x100 + 0xE8;
   const yPos = doorY * 0x100 + 0xA0;
 
   return {
@@ -158,7 +132,7 @@ function generateBossDoorEntity(bossFlag, door) {
     yPos,
     type: 2,
     subtype: 2,
-    instaload: 0,
+    instaload: 1,
     varA: 0,
     varB: bossFlag
   };
@@ -184,75 +158,85 @@ function relocateBossDoors(data, areas, freeSpaceStart) {
     rooms.forEach(room => allRoomsByAddress[room.address] = room);
   });
 
-  Logger.log('Beginning relocation of boss doors', DebugLevels.MARKER);
+  Logger.log('Adding new boss doors', DebugLevels.MARKER);
+
+  // For all relevant boss rooms, find the neighboring rooms,
+  // and add boss doors to them, moving the entity lists farther down in memory
+  BOSS_ROOMS.filter(({ skipThisBoss }) => !skipThisBoss)
+    .map(bossRoom => ({ bossRoomInfo: bossRoom, room: allRoomsByAddress[bossRoom.address] }))
+    .forEach(({ bossRoomInfo, room }) => {
+      Logger.log(`Adding boss doors for boss ${bossRoomInfo.boss}`, DebugLevels.MARKER);
+
+      // Find the rooms that lead into this boss room
+      const neighboringRooms = room.doors.map(door => ({
+        room: allRoomsByAddress[door.destination], door: door.complement
+      }));
+      neighboringRooms.forEach((neighboringRoom) => {
+        const {
+          room: curRoom,
+          door: curDoor,
+        } = neighboringRoom;
+
+        // For each neighboring room, find which door should be the one to have a boss door added
+        let relevantDoor = curRoom.doors.find(door => door.address === curDoor);
+        if (!relevantDoor) {
+          Logger.log(`Door complements don't seem to have been set properly`, DebugLevels.WARN);
+          relevantDoor = curRoom.doors.find(door => door.destination === room.address);
+          if (!relevantDoor) {
+            Logger.log(`Couldn't find a complement boss door for boss ${bossRoomInfo.boss} in neighboring room ${curRoom.address.toString(16)}`, DebugLevels.ERROR);
+            return;
+          }
+        }
+
+        if (relevantDoor.isBossDoor) {
+          // Because there's only one boss per area, we don't need to worry about
+          // if it's the boss door for the right boss for now
+          Logger.log(`Room ${curRoom.address.toString(16)} already has a boss door in the correct location`, DebugLevels.MARKER);
+          return;
+        }
+
+        Logger.log(`Adding new boss door to room ${curRoom.address.toString(16)} for door ${JSON.stringify(relevantDoor)}`, DebugLevels.MARKER);
+        const newBossDoorEntity = generateBossDoorEntity(bossRoomInfo.bossFlag, relevantDoor);
+
+        // Relocate all entities to free space to ensure we can fit the new door in
+        // Note that this isn't strictly necessary if we're also removing a boss door from
+        // the room (if the room is still a boss door neighbor but via a different door)
+        // but this simplifies the logic a bit.
+        const allRoomEntities = getEntityList(data, getEntityListAddress(data, curRoom.address));
+        let freeId;
+        for (freeId = 0; freeId < allRoomEntities.length; freeId++) {
+          if (!allRoomEntities.some(({ uniqueId }) => uniqueId === freeId)) {
+            break;
+          }
+        }
+        allRoomEntities.push({ ...newBossDoorEntity, uniqueId: freeId });
+
+        writeData(data, curRoom.address + 20 - 0x08000000, 4, freeSpace);
+
+        freeSpace += writeEntityList(data, freeSpace, allRoomEntities);
+      });
+    });
+
+  Logger.log('Removing unused boss doors', DebugLevels.MARKER);
+
+  // Find every boss door that doesn't lead to a boss room, and delete it
+  // Note that this involves reparsing the entity list which can somewhat
+  // double dip the work of the previous step, but that's okay for now.
   areas.forEach(({ rooms }) => {
     rooms.forEach((room) => {
       room.doors.forEach((door) => {
         if (door.isBossDoor && !BOSS_ROOMS.find(({ address }) => address === door.destination)) {
           // Delete boss doors that don't lead to boss rooms
-          const roomEntities = getEntityList(data, room.address);
+          const roomEntities = getEntityList(data, getEntityListAddress(data, room.address));
           roomEntities.forEach((entity) => {
             // Thankfully max one boss per area
             if (entity.type === 2 && entity.subtype === 2) {
               Logger.log(`Removing excessive boss door from room ${room.address.toString(16)}`, DebugLevels.MARKER);
-              writeEmptyEntity(data, entity.address);
+              deleteEntity(data, entity);
             }
           });
         }
       });
-
-      const bossRoomInfo = BOSS_ROOMS
-        .filter(({ skipThisBoss }) => !skipThisBoss)
-        .find(({ address }) => address === room.address);
-      if (bossRoomInfo) {
-        Logger.log(`Adding boss doors for boss ${bossRoomInfo.boss}`, DebugLevels.MARKER);
-        // If this is a boss room
-        //
-        // AAA THREE CASES TO CONSIDER:
-        //   NEWLY DISCONNECTED BOSS DOORS (SEE BELOW)
-        //   ADD BOSS DOORS TO ADJACENT ROOMS (THIS)
-        //   IF THE BOSS ROOM IS ADJACENT TO A ROOM THAT WAS PREVIOUSLY ADJACENT BUT THROUGH A DIFFERENT EXIT
-        //   ALSO: WORKS WEIRD WITH WOODEN DOORS, BUT I THINK IT'S ACCEPTABLE/UNDERSTANDABLE AT LEAST
-        const neighboringRooms = room.doors.map(door => ({ room: allRoomsByAddress[door.destination], door: door.complement }));
-        neighboringRooms.forEach((neighboringRoom) => {
-          const {
-            room: curRoom,
-            door: curDoor,
-          } = neighboringRoom;
-          let relevantDoor = curRoom.doors.find(door => door.address === curDoor);
-          if (!relevantDoor) {
-            Logger.log(`Door complements don't seem to have been set properly`, DebugLevels.WARN);
-            relevantDoor = curRoom.doors.find(door => door.destination === room.address);
-            if (!relevantDoor) {
-              Logger.log(`Couldn't find a complement boss door for boss ${bossRoomInfo.boss} in neighboring room ${curRoom.address.toString(16)}`, DebugLevels.ERROR);
-              return;
-            }
-          }
-
-          Logger.log(`Adding new boss door to room ${curRoom.address.toString(16)} for door ${JSON.stringify(relevantDoor)}`, DebugLevels.MARKER);
-          const newBossDoorEntity = generateBossDoorEntity(bossRoomInfo.bossFlag, relevantDoor);
-
-          // Relocate all entities to free space to ensure we can fit the new door in
-          // Note that this isn't strictly necessary if we're also removing a boss door from
-          // the room (if the room is still a boss door neighbor but via a different door)
-          // but this simplifies the logic a bit.
-          const allRoomEntities = getEntityList(data, curRoom.address);
-          allRoomEntities.push({ ...newBossDoorEntity, uniqueId: allRoomEntities.length });
-
-          writeData(data, curRoom.address + 20 - 0x08000000, 4, freeSpace);
-
-          allRoomEntities.forEach((entity) => {
-            const addressCorrectedEntity = {
-              ...entity,
-              address: freeSpace,
-            };
-            writeEntity(data, addressCorrectedEntity);
-            freeSpace += 12;
-          });
-          writeEndOfEntityList(data, freeSpace);
-          freeSpace += 12;
-        });
-      }
     });
   });
 
