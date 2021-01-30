@@ -17,6 +17,7 @@ const EntranceRandomizer = require('./logic/entrance/FirstDraftEntranceShuffle')
 
 const PostProcessor = require('./postprocessing/PostProcessor');
 const EnemyProcessor = require('./enemies/EnemyProcessor');
+const randomizeShop = require('./shop/randomizeShop');
 
 const Areas = getFreshAreas();
 
@@ -170,16 +171,15 @@ function doRandomization(data, settings = {}) {
 
   enemyProcessor.execute();
 
+  // Updates the shop to sell different things
+  // PRIORITY: DONE, improvable
+  randomizeShop(data, random);
+
   const postProcessor = new PostProcessor(data);
 
   // Update books
   // PRIORITY: DONE
   postProcessor.updateRequiredSouls(requirements.red, requirements.blue, requirements.yellow);
-
-  // Updates the shop to sell different things
-  // PRIORITY: HIGH
-  // DIFFICULTY: MEDIUM
-  'updateShop(data)';
 
   // OPTIONAL: Relocate doors and add safety zips
   // PRIORITY: DONE

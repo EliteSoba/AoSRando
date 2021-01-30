@@ -39,9 +39,10 @@ For now there's no meaningful user interface. Usage involves downloading the sou
  *  Also corrects Chronomage's send destination to be the room right before the Chronomage room in logic. Kinda works okay.
  *  Removes all weird/breakable walls when randomizing entrances.
  *  Shuffles enemy item drops/souls.
+ *  Randomizes Hammer's shop offerings. For now doesn't guarantee healing or breakable wall progression.
 
 ## Up Next
- *  Randomization of Shop items
+ *  ~~Randomization of Shop items~~
  *  ~~Randomization of Enemy Souls~~
  *  ~~Randomization of Enemy item drops~~
  *  ~~Correction of Chronomage's teleport destination to the room right before the Chronomage room in logic~~
@@ -60,6 +61,9 @@ For now there's no meaningful user interface. Usage involves downloading the sou
  *  Rescaling of enemies based on logical progressive distance from start
  *  More tiered item randomization
  *  More randomized zone transitions
+ *  Randomize item effects/costs
+ *  Randomize enemy weaknesses/resistances
+ *  Randomize attack animations
 
 ## Quirks to note
  *  Right now the Ancient Books just list the name of the enemy. This is just for convenience while testing and will be changed later.
