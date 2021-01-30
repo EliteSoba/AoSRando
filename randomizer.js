@@ -175,7 +175,7 @@ function doRandomization(data, settings = {}) {
   // PRIORITY: DONE, improvable
   randomizeShop(data, random);
 
-  const postProcessor = new PostProcessor(data);
+  const postProcessor = new PostProcessor(data, areas);
 
   // Update books
   // PRIORITY: DONE
@@ -222,6 +222,12 @@ function doRandomization(data, settings = {}) {
     postProcessor.removeBreakableWalls();
   }
 
+  // Remove boss doors from where they aren't necessary and add boss doors where they are
+  // PRIORITY: DONE
+  if (settings.randomizeRooms) {
+    postProcessor.relocateBossDoors();
+  }
+
   // Remove one-way obstacles. Another logic simplification thing that might get added back later
   // PRIORITY: MEDIUM
   // DIFFICULTY: LOW
@@ -233,11 +239,6 @@ function doRandomization(data, settings = {}) {
   // PRIORITY: LOW
   // DIFFICULTY: MEDIUM
   'correctVerticalConnectors(data);'
-
-  // Remove boss doors from where they aren't necessary and add boss doors where they are
-  // PRIORITY: MEDIUM
-  // DIFFICULTY: MEDIUM
-  'relocateBossDoors(data);'
 
   // Super low priority, but only place wooden doors next to transition rooms
   // PRIORITY: LOW
@@ -269,8 +270,10 @@ function main() {
       return;
     }
 
+    // Note: seed 2 provides an unsolvable seed by making no sphere 0 items accessible
+    // I'll leave this here for now to worry about how to handle it in logic later.
     const settings = {
-      seed: 2,
+      seed: 4,
       randomizeRooms: true,
       randomizeItems: true,
       writeFile: true,

@@ -1067,6 +1067,10 @@ function getFreshAreas() {
               "access": {
                 "doors": [
                   {
+                    "door": 0,
+                    "locks": [Locks.SKULA]
+                  },
+                  {
                     "door": 1,
                     "locks": [[Locks.FLIGHT, Locks.SKULA], [Locks.MALPHAS, Locks.UNDINE, Locks.SKULA]]
                   }

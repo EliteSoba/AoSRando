@@ -1,18 +1,8 @@
 const DataUtils = require('../utils/DataUtils');
 
 const {
-  writeEntity,
+  writeEmptyEntity,
 } = DataUtils;
-
-const EMPTY_ENTITY = {
-  "address": 0,
-  "xPos": 0,
-  "yPos": 0,
-  "type": 0,
-  "subtype": 0,
-  "varA": 0,
-  "varB": 0
-};
 
 // Walls that are breakable by attacks
 const BREAKABLE_WALL_ADDRESSES = [
@@ -41,14 +31,8 @@ const IRREGULAR_WALL_ADDRESSES = [
  * @param  {Byte[]} data - The game data to update
  */
 function removeBreakableWalls(data) {
-  [...BREAKABLE_WALL_ADDRESSES, ...IRREGULAR_WALL_ADDRESSES].forEach((address) => {
-    const zeroedEntity = {
-      ...EMPTY_ENTITY,
-      address,
-    };
-
-    writeEntity(data, zeroedEntity);
-  });
+  [...BREAKABLE_WALL_ADDRESSES, ...IRREGULAR_WALL_ADDRESSES]
+    .forEach(address => writeEmptyEntity(data, address));
 }
 
 module.exports = removeBreakableWalls;

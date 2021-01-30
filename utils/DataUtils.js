@@ -3,25 +3,15 @@ const {
   writeData,
 } = FileUtils;
 
-/**
- * Helper function that writes the 0xFF7FFF7F0000000000000000 entity list indicator
- * to the given address
- * @param  {Byte[]} data - The game data to modify
- * @param  {uint_32} address - The address to start writing at
- */
-function writeEndOfEntityList(data, address) {
-  const correctedAddress = address - 0x08000000;
-
-  let curAddress = correctedAddress;
-  const pushData = (size, content) => {
-    writeData(data, curAddress, size, content);
-    curAddress += size;
-  }
-  pushData(2, 0x7FFF);
-  pushData(2, 0x7FFF);
-  pushData(4, 0);
-  pushData(4, 0);
-}
+const EMPTY_ENTITY = {
+  "address": 0,
+  "xPos": 0,
+  "yPos": 0,
+  "type": 0,
+  "subtype": 0,
+  "varA": 0,
+  "varB": 0
+};
 
 /**
  * Helper function to write an entity into data at the correct address.
@@ -55,6 +45,41 @@ function writeEntity(data, entity) {
   }
   pushData(2, entity.varA);
   pushData(2, entity.varB);
+}
+
+/**
+ * Helper function to write a zeroed out entity to a given address.
+ * Effectively deletes an entity
+ * @param  {Byte[]} data - The game data to modify
+ * @param  {uint_32} address - The address to write the entity to
+ * @return {[type]}
+ */
+function writeEmptyEntity(data, address) {
+  const emptyEntity = {
+    ...EMPTY_ENTITY,
+    address
+  }
+  writeEntity(data, emptyEntity);
+}
+
+/**
+ * Helper function that writes the 0xFF7FFF7F0000000000000000 entity list indicator
+ * to the given address
+ * @param  {Byte[]} data - The game data to modify
+ * @param  {uint_32} address - The address to start writing at
+ */
+function writeEndOfEntityList(data, address) {
+  const correctedAddress = address - 0x08000000;
+
+  let curAddress = correctedAddress;
+  const pushData = (size, content) => {
+    writeData(data, curAddress, size, content);
+    curAddress += size;
+  }
+  pushData(2, 0x7FFF);
+  pushData(2, 0x7FFF);
+  pushData(4, 0);
+  pushData(4, 0);
 }
 
 /**
@@ -111,8 +136,9 @@ function updateDataWithAreaInfo(data, areas) {
 }
 
 const DataUtils = {
-  writeEndOfEntityList,
   writeEntity,
+  writeEmptyEntity,
+  writeEndOfEntityList,
   writeEnemy,
   writeDoor,
   updateDataWithAreaInfo,

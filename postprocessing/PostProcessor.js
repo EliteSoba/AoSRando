@@ -4,6 +4,7 @@ const updateDraculaSouls = require('./updateDraculaSouls');
 const writeStartingRoom = require('./writeStartingRoom');
 const writeChronomageDestination = require('./writeChronomageDestination');
 const removeBreakableWalls = require('./removeBreakableWalls');
+const relocateBossDoors = require('./relocateBossDoors');
 
 /**
  * Provides additional enhancements outside of the basic randomization features.
@@ -11,9 +12,10 @@ const removeBreakableWalls = require('./removeBreakableWalls');
  * and also ensures that certain operations run in a specific order
  */
 class PostProcessor {
-  constructor(data) {
+  constructor(data, areas) {
     this._freeSpaceStart = 0x00651170;
     this._data = data;
+    this._areas = areas;
     this._red;
     this._blue;
     this._yellow;
@@ -23,13 +25,12 @@ class PostProcessor {
     this._relocateDoorLists = false;
     this._addSafetyZips = false;
 
-    this._relocateStartingEntities = false;
-    this._addStartingSave = false;
     this._addDebugItems = false;
 
     this._startingRoomIndex = null;
     this._chronomageDestination = null;
     this._removeBreakableWalls = false;
+    this._relocateBossDoors = false;
   }
 
   /**
@@ -98,6 +99,15 @@ class PostProcessor {
     return this;
   }
 
+  /**
+   * Removes boss doors that don't directly lead to boss rooms
+   * and adds boss doors to doors that do
+   */
+  relocateBossDoors() {
+    this._relocateBossDoors = true;
+    return this;
+  }
+
   execute() {
     if (this._addCutsceneSkip) {
       writeCutsceneSkip(this._data);
@@ -128,6 +138,10 @@ class PostProcessor {
 
     if (this._removeBreakableWalls) {
       removeBreakableWalls(this._data);
+    }
+
+    if (this._relocateBossDoors) {
+      this._freeSpaceStart = relocateBossDoors(this._data, this._areas, this._freeSpaceStart);
     }
 
     return this._data;

@@ -40,6 +40,7 @@ For now there's no meaningful user interface. Usage involves downloading the sou
  *  Removes all weird/breakable walls when randomizing entrances.
  *  Shuffles enemy item drops/souls.
  *  Randomizes Hammer's shop offerings. For now doesn't guarantee healing or breakable wall progression.
+ *  Adds boss doors in front of doors that lead to boss rooms and removes the boss doors that don't. Only in room randomizer
 
 ## Up Next
  *  ~~Randomization of Shop items~~
@@ -47,7 +48,7 @@ For now there's no meaningful user interface. Usage involves downloading the sou
  *  ~~Randomization of Enemy item drops~~
  *  ~~Correction of Chronomage's teleport destination to the room right before the Chronomage room in logic~~
  *  ~~Removal of breakable walls~~
- *  Relocation of boss doors to more accurate locations
+ *  ~~Relocation of boss doors to more accurate locations~~
  *  Relocation of wooden doors to be next to area transitions
  *  Correction of Soma's positional offsets when going through doors
  *  More interesting text for the Ancient Books
