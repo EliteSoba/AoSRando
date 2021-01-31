@@ -273,7 +273,7 @@ function main() {
     // Note: seed 2 provides an unsolvable seed by making no sphere 0 items accessible
     // I'll leave this here for now to worry about how to handle it in logic later.
     const settings = {
-      seed: 4,
+      seed: 5,
       randomizeRooms: true,
       randomizeItems: true,
       writeFile: true,

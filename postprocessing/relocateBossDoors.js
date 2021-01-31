@@ -211,6 +211,7 @@ function relocateBossDoors(data, areas, freeSpaceStart) {
         }
         allRoomEntities.push({ ...newBossDoorEntity, uniqueId: freeId });
 
+        // TODO: seed 5: loading was off in red minotaur hall after balore when reentering from right
         writeData(data, curRoom.address + 20 - 0x08000000, 4, freeSpace);
 
         freeSpace += writeEntityList(data, freeSpace, allRoomEntities);

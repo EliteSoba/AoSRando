@@ -270,6 +270,9 @@ function FirstDraftEntranceShuffle(areas, random, startingRoom) {
     newConnections = newConnections.concat(areaConnections);
   });
 
+  // TODO: seed 5: inaccessible exit got connected to dead end room (arena top room)
+  // also in reservoir, and top floor
+
   newConnections.forEach(({ source, destination }) => {
     // TODO: destXOffset/destYOffset (or maybe destX/YPos?) shouldn't be blindly copied
     // because they're very connector-specific.

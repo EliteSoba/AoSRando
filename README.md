@@ -75,3 +75,5 @@ For now there's no meaningful user interface. Usage involves downloading the sou
     *  The save room in the pre-Julius fight area is unchanged because it's a weird room transition that's in the middle of a room instead of at the edges
  * A decent number of jumps can be made with Black Panther alone. I'm not sure how much I like this, so I'm not sure if I'll keep it in logic.
  * The starting room is always a save room to allow for immediate access to suspends. This means the beginning cutscene doesn't activate until you find the correct room, so Soma doesn't "start" with the Winged Skeleton Soul. This is because save points don't work well in rooms larger than 1x1.
+ * While every seed is guaranteed (I hope) to be solvable, not every seed is guaranteed to be hundoable. Some exits which are only accessible one way (like the bottom half of the staircase room in Top Floor) will get connected to a dead end.
+    * Actually, there might be an exception. Graham might not be accessible except via zips if the Top Floor rooms get placed in an unfortunate way.

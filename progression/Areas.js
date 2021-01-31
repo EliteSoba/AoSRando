@@ -14906,7 +14906,15 @@ function getFreshAreas() {
               "direction": 6,
               "sourceRoom": 139586104,
               "complement": 139587032,
-              "isSpecialWall": true // idk how else to phrase this
+              "isSpecialWall": true, // idk how else to phrase this
+              "access": {
+                  "doors": [
+                    {
+                      "door": 1,
+                      "locks": [Locks.BAT] // You can bat over the hole TODO: should I mandate this?
+                    }
+                  ]
+              }
             }
           ],
           "items": []
