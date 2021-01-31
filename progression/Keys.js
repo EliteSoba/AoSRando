@@ -18,6 +18,9 @@ const Keys = {
   DEVIL: 'DEVIL',
   PANTHER: 'BLACK PANTHER',
   GALAMOTH: 'GALAMOTH',
+  GRAHAM: 'GRAHAM',
+  HAMMER: 'HAMMER',
+  SHOP: 'SHOP'
 };
 
 module.exports = Keys;

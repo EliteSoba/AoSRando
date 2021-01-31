@@ -1,4 +1,5 @@
 const Locks = require('../progression/Locks');
+const Keys = require('../progression/Keys');
 const getFreshProgressionDrops = require('../progression/ProgressionDrops');
 const determineAccess = require('../progression/determineAccess');
 
@@ -8,7 +9,7 @@ const DebugLevels = require('../debug/DebugLevels');
 const SPECIAL_DOOR_LOCKS = [
   {
     key: "isJuliusDoor",
-    locks: [Locks.DRACULA]
+    locks: [Locks.GRAHAM]
   },
   {
     key: "isWeirdAnnoyingOneWayTopFloorRoom",
@@ -17,6 +18,21 @@ const SPECIAL_DOOR_LOCKS = [
   {
     key: "isWeirdAnnoyingOneWayForbiddenAreaRoom",
     locks: [Locks.INACCESSIBLE]
+  }
+];
+
+const SPECIAL_KEY_ROOMS = [
+  {
+    key: "isGrahamRoom",
+    progression: Keys.GRAHAM
+  },
+  {
+    key: "isHammerRoom",
+    progression: Keys.HAMMER
+  },
+  {
+    key: "isShopRoom",
+    progression: Keys.SHOP
   }
 ];
 
@@ -245,19 +261,29 @@ function isSolvable(
 
       // Find out if these new items provide any progression
       let newItems = availableItems;
-      while (newItems.length > 0) {
+
+      // Certain rooms trigger events that effectively act as keys
+      let bonusRoomKeys = SPECIAL_KEY_ROOMS
+        .filter(({ key }) => curRoom[key])
+        .map(({ progression }) => progression);
+
+      while (newItems.length > 0 || bonusRoomKeys.length > 0) {
         // "Pick up" each accessible item
         newItems.forEach(item => heldItems.add(item.address));
 
         // Check every new item to see if any of them match any progression
         // and get the associated Keys if they do
-        const newKeys = Object.keys(progression).filter(key =>
+        let newKeys = Object.keys(progression).filter(key =>
           availableItems.some(item => item.subtype === progression[key].subtype && item.varB === progression[key].id))
+
+        newKeys = newKeys.concat(bonusRoomKeys);
+        bonusRoomKeys = [];
 
         // TODO: also check rooms for access
         // room access includes: access to graham, access to hammer, access to shop
         newItems = [];
         if (newKeys.length > 0) {
+          Logger.log(`Keys found this round: ${JSON.stringify(newKeys)}`, DebugLevels.MARKER);
           // If new keys were gotten, find what we unlock
           newKeys.forEach(key => heldKeys.add(key));
           curAccess = determineAccess([...heldKeys]);

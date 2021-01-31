@@ -76,7 +76,8 @@ function getFreshAreas() {
               "varB": 38
             }
           ],
-          "isBeginningRoom": true
+          "isBeginningRoom": true,
+          "isShopRoom": true
         },
         {
           "_area": 0,
@@ -3942,7 +3943,8 @@ function getFreshAreas() {
               "varA": 3,
               "varB": 3
             }
-          ]
+          ],
+          "isHammerRoom": true
         },
         {
           "_area": 2,
@@ -15853,7 +15855,8 @@ function getFreshAreas() {
             }
           ],
           "items": [],
-          "isBossRoom": true
+          "isBossRoom": true,
+          "isGrahamRoom": true
         },
         {
           "_area": 9,
@@ -16716,7 +16719,8 @@ function getFreshAreas() {
               "destYPos": 256,
               "direction": 4,
               "sourceRoom": 139593536,
-              "complement": 139592448
+              "complement": 139592448,
+              "isWeirdAnnoyingOneWayTopFloorRoom": true
             },
             {
               "_door": 1,
@@ -16733,8 +16737,7 @@ function getFreshAreas() {
               "complement": 139594472
             }
           ],
-          "items": [],
-          "isWeirdAnnoyingOneWayTopFloorRoom": true
+          "items": []
         },
         {
           "_area": 9,
@@ -17300,11 +17303,11 @@ function getFreshAreas() {
               "destYPos": 0,
               "direction": 2,
               "sourceRoom": 139597072,
-              "complement": 139597192
+              "complement": 139597192,
+              "isWeirdAnnoyingOneWayForbiddenAreaRoom": true
             }
           ],
-          "items": [],
-          "isWeirdAnnoyingOneWayForbiddenAreaRoom": true
+          "items": []
         },
         {
           "_area": 10,

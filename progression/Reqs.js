@@ -103,6 +103,18 @@ const Reqs = [
       [Keys.BAT],
       [Keys.HIPPOGRYPH]
     ]
+  },
+  {
+    lock: Locks.GRAHAM,
+    keys: [
+      [Keys.GRAHAM]
+    ]
+  },
+  {
+    lock: Locks.SHOP,
+    keys: [
+      [Keys.HAMMER, Keys.SHOP]
+    ]
   }
 ];
 
