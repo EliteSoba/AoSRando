@@ -13,8 +13,9 @@ const {
 } = AoSParsingUtils;
 
 const {
-  deleteEntity,
+  sortEntityList,
   writeEntityList,
+  deleteEntity,
 } = DataUtils;
 
 const {
@@ -211,10 +212,12 @@ function relocateBossDoors(data, areas, freeSpaceStart) {
         }
         allRoomEntities.push({ ...newBossDoorEntity, uniqueId: freeId });
 
-        // TODO: seed 5: loading was off in red minotaur hall after balore when reentering from right
+        // The entity list has to be sorted for the game to properly load entities
+        const sortedEntities = sortEntityList(allRoomEntities, curRoom);
+
         writeData(data, curRoom.address + 20 - 0x08000000, 4, freeSpace);
 
-        freeSpace += writeEntityList(data, freeSpace, allRoomEntities);
+        freeSpace += writeEntityList(data, freeSpace, sortedEntities);
       });
     });
 

@@ -14908,12 +14908,12 @@ function getFreshAreas() {
               "complement": 139587032,
               "isSpecialWall": true, // idk how else to phrase this
               "access": {
-                  "doors": [
-                    {
-                      "door": 1,
-                      "locks": [Locks.BAT] // You can bat over the hole TODO: should I mandate this?
-                    }
-                  ]
+                "doors": [
+                  {
+                    "door": 1,
+                    "locks": [Locks.BAT] // You can bat over the wall TODO: should I mandate this?
+                  }
+                ]
               }
             }
           ],

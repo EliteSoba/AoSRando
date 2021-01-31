@@ -254,6 +254,8 @@ function isSolvable(
         const newKeys = Object.keys(progression).filter(key =>
           availableItems.some(item => item.subtype === progression[key].subtype && item.varB === progression[key].id))
 
+        // TODO: also check rooms for access
+        // room access includes: access to graham, access to hammer, access to shop
         newItems = [];
         if (newKeys.length > 0) {
           // If new keys were gotten, find what we unlock
