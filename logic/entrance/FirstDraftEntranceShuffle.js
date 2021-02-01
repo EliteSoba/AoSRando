@@ -212,9 +212,24 @@ function updateDoor(door, replacement) {
   keysToReplace.forEach(key => door[key] = replacement[key]);
 }
 
+// There's a door that you can't appear to exit from in garden normally,
+// so mock a door that properly goes to it
+const UNMATCHED_GARDEN_DOOR = {
+  "address": -4,
+  "destination": 139556448,
+  "destXOffset": 0,
+  "destYOffset": 0,
+  "destXPos": 0x201,
+  "destYPos": 0,
+  "complement": -4
+};
+
 function FirstDraftEntranceShuffle(areas, random, startingRoom) {
   let allDoors = {};
-  let deepDoorCopiesByComplement = {};
+
+  // Keep deep copies of all rooms to properly reference old connections
+  let deepCopies = {};
+  deepCopies[-4] = {...UNMATCHED_GARDEN_DOOR};
   areas.forEach(area => {
     area.rooms.forEach(room => {
       room.doors.forEach(door => {
@@ -225,11 +240,7 @@ function FirstDraftEntranceShuffle(areas, random, startingRoom) {
             isTransitionRoom: room.isTransitionRoom,
           };
         }
-        deepDoorCopiesByComplement[door.complement] = {...door};
-        if (door.complement2) {
-          // Shoutouts to Floating Garden again
-          deepDoorCopiesByComplement[door.complement2] = {...door};
-        }
+        deepCopies[door.address] = {...door};
       });
     });
   });
@@ -276,7 +287,12 @@ function FirstDraftEntranceShuffle(areas, random, startingRoom) {
   newConnections.forEach(({ source, destination }) => {
     // TODO: destXOffset/destYOffset (or maybe destX/YPos?) shouldn't be blindly copied
     // because they're very connector-specific.
-    updateDoor(source, deepDoorCopiesByComplement[destination.address]);
+
+    // When swapping door destinations, we look at the address of the new destination, and from there
+    // look at the which door is the complement of that door. That complement is the door that sends Soma
+    // to the correct location so it looks like he's coming out of that door.
+    const originalDoor = deepCopies[deepCopies[destination.address].complement];
+    updateDoor(source, originalDoor);
   });
 
   return areas;

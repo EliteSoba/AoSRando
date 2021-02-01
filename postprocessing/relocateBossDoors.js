@@ -166,7 +166,7 @@ function relocateBossDoors(data, areas, freeSpaceStart) {
   BOSS_ROOMS.filter(({ skipThisBoss }) => !skipThisBoss)
     .map(bossRoom => ({ bossRoomInfo: bossRoom, room: allRoomsByAddress[bossRoom.address] }))
     .forEach(({ bossRoomInfo, room }) => {
-      Logger.log(`Adding boss doors for boss ${bossRoomInfo.boss}`, DebugLevels.MARKER);
+      Logger.log(`Adding boss doors for boss ${bossRoomInfo.boss}`, DebugLevels.LOG);
 
       // Find the rooms that lead into this boss room
       const neighboringRooms = room.doors.map(door => ({
@@ -192,11 +192,11 @@ function relocateBossDoors(data, areas, freeSpaceStart) {
         if (relevantDoor.isBossDoor) {
           // Because there's only one boss per area, we don't need to worry about
           // if it's the boss door for the right boss for now
-          Logger.log(`Room ${curRoom.address.toString(16)} already has a boss door in the correct location`, DebugLevels.MARKER);
+          Logger.log(`Room ${curRoom.address.toString(16)} already has a boss door in the correct location`, DebugLevels.LOG);
           return;
         }
 
-        Logger.log(`Adding new boss door to room ${curRoom.address.toString(16)} for door ${JSON.stringify(relevantDoor)}`, DebugLevels.MARKER);
+        Logger.log(`Adding new boss door to room ${curRoom.address.toString(16)} for door ${relevantDoor.address.toString(16)}`, DebugLevels.LOG);
         const newBossDoorEntity = generateBossDoorEntity(bossRoomInfo.bossFlag, relevantDoor);
 
         // Relocate all entities to free space to ensure we can fit the new door in
@@ -235,7 +235,7 @@ function relocateBossDoors(data, areas, freeSpaceStart) {
           roomEntities.forEach((entity) => {
             // Thankfully max one boss per area
             if (entity.type === 2 && entity.subtype === 2) {
-              Logger.log(`Removing excessive boss door from room ${room.address.toString(16)}`, DebugLevels.MARKER);
+              Logger.log(`Removing excessive boss door from room ${room.address.toString(16)}`, DebugLevels.LOG);
               deleteEntity(data, entity);
             }
           });

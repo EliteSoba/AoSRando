@@ -74,7 +74,7 @@ function getAvailableExits(room, entryDoorAddress, access) {
 
   // If we can't find the entry door's entry, return an empty list.
   if (!entryDoor) {
-    // TODO: maybe add a debug message here?
+    Logger.log(`Couldn't find entry door ${door.address.toString(16)} in room ${room.address.toString(16)}`, DebugLevels.WARN);
     return [];
   };
 
@@ -86,7 +86,8 @@ function getAvailableExits(room, entryDoorAddress, access) {
   // but every room is with these weird conditions is fully unlocked otherwise
   doors.forEach(door => {
     const specialLock = SPECIAL_DOOR_LOCKS.find(({ key }) => door[key]);
-    if (specialLock) {
+    if (specialLock && door.address !== entryDoor.address) {
+      // For any door trying to access this weirdly locked door _other_ than the door itself
       restrictedAccess.push({ door: door._door, locks: specialLock.locks });
     }
   });
@@ -96,7 +97,7 @@ function getAvailableExits(room, entryDoorAddress, access) {
   if (restrictedAccess.length > 0) {
     // Look for doors that have locks and filter for only those we don't have keys for yet
     lockedDoors = restrictedAccess
-      .filter((door) => !canAccess(door.locks, access))
+      .filter(door => !canAccess(door.locks, access))
       .map(door => ({ ...doors.find(d => d._door === door.door), locks: door.locks }));
   }
 
@@ -183,10 +184,11 @@ function isSolvable(
   endRoom = ENDING_ROOM_ADDRESS,
   fullSearch = false,
 ) {
+  Logger.log(`Determining solvability for this setup. fullSearch=${fullSearch}`, DebugLevels.MARKER);
   // Some preliminary setup. Get a list of all the rooms and subsequently all the door
   const rooms = areas.map(a => a.rooms);
   const flattenedRooms = [].concat(...rooms);
-  const allDoors = [].concat(...flattenedRooms.map(r => r.doors));
+  const allDoors = [].concat(...flattenedRooms.map(room => room.doors));
   const solution = [];
   let preChronomageRoom = null;
   let isSolvable = false;
@@ -206,7 +208,7 @@ function isSolvable(
   // Keep track of doors/items that have already been visited/picked up.
   // Anything not immediately accessible from this door will be recorded and will
   // be "accessed" once the appropriate Keys are picked up
-  const visitedDoors = new Set();
+  const unvisitedDoors = new Set(allDoors.map(door => door.address));
   const heldItems = new Set();
 
     // Keep track of the current "inventory" that will get updated as various drops are "found"
@@ -239,7 +241,7 @@ function isSolvable(
     }
 
     // Skip doors we've already gone through
-    if (!visitedDoors.has(curDoor.address)) {
+    if (unvisitedDoors.has(curDoor.address)) {
       // Find the doors and items that are currently accessible from this starting door
       const roomDoors = getAvailableExits(curRoom, curDoor.address, curAccess);
       const roomItems = getAvailableItems(curRoom, curDoor.address, curAccess);
@@ -279,11 +281,9 @@ function isSolvable(
         newKeys = newKeys.concat(bonusRoomKeys);
         bonusRoomKeys = [];
 
-        // TODO: also check rooms for access
-        // room access includes: access to graham, access to hammer, access to shop
         newItems = [];
         if (newKeys.length > 0) {
-          Logger.log(`Keys found this round: ${JSON.stringify(newKeys)}`, DebugLevels.MARKER);
+          Logger.log(`Keys found this round: ${JSON.stringify(newKeys)}`, DebugLevels.LOG);
           // If new keys were gotten, find what we unlock
           newKeys.forEach(key => heldKeys.add(key));
           curAccess = determineAccess([...heldKeys]);
@@ -312,11 +312,11 @@ function isSolvable(
       }
 
       // For all the doors that can be accessed from this door,
-      // find all the doors that we haven't gone through or come out from.
+      // find all the doors that we haven't gone through.
       // For all these doors, find the destination room and the complementary door,
       // and add these to the queue.
       nextDoors
-        .filter(door => !visitedDoors.has(door.address) && !visitedDoors.has(door.complement))
+        .filter(door => unvisitedDoors.has(door.address))
         .forEach(door => {
           const destRoom = flattenedRooms.find(room => room.address === door.destination);
           if (!destRoom) {
@@ -334,15 +334,19 @@ function isSolvable(
             }
           }
         });
-      visitedDoors.add(curDoor.address);
+      unvisitedDoors.delete(curDoor.address);
     }
   }
 
-  // If we're out of visitable rooms, then we couldn't reach the destination.
+  if (fullSearch) {
+    Logger.log([...unvisitedDoors].map(door => door.toString(16)), DebugLevels.MARKER);
+  }
+  // Out of rooms to search. Return the results of the search
   return {
     isSolvable,
     solution,
     preChronomageRoom,
+    fullySolvable: unvisitedDoors.size === 0
   };
 }
 

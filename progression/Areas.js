@@ -8415,7 +8415,8 @@ function getFreshAreas() {
               "destYPos": 512,
               "direction": 4,
               "sourceRoom": 139556448,
-              "complement": 139556248
+              "complement": 139556248,
+              "complement2": 139557192
             },
             {
               "_door": 1,
@@ -8429,7 +8430,7 @@ function getFreshAreas() {
               "destYPos": 256,
               "direction": 6,
               "sourceRoom": 139556448,
-              "complement": 139557024
+              "complement": -4
             },
             {
               "_door": 2,
@@ -8610,8 +8611,7 @@ function getFreshAreas() {
               "destYPos": 256,
               "direction": 4,
               "sourceRoom": 139557056,
-              "complement": 139557192,
-              "complement2": 139556400, // this door has two different partners. TODO: consider splitting this field to entranceComplement and exitComplement?
+              "complement": 139556400,
               "access": {
                 "items": [
                   {
@@ -8701,7 +8701,7 @@ function getFreshAreas() {
               "destYPos": 0,
               "direction": 6,
               "sourceRoom": 139557208,
-              "complement": 139556384,
+              "complement": 139557024,
               "access": {
                 "items": [
                   {
@@ -15637,6 +15637,10 @@ function getFreshAreas() {
               "complement": 139592176,
               "access": {
                 "doors": [
+                  {
+                    "door": 0,
+                    "locks": [Locks.DRACULA] // Effectively don't let them until Drac
+                  },
                   {
                     "door": 1,
                     "locks": [Locks.INACCESSIBLE]
