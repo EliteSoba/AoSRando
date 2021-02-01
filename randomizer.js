@@ -14,6 +14,7 @@ const DataUtils = require('./utils/DataUtils');
 
 const ItemRandomizer = require('./logic/item/FullRandom');
 const EntranceRandomizer = require('./logic/entrance/FirstDraftEntranceShuffle');
+const updateAreasWithNewConnections = require('./logic/entrance/updateAreasWithNewConnections');
 
 const PostProcessor = require('./postprocessing/PostProcessor');
 const EnemyProcessor = require('./enemies/EnemyProcessor');
@@ -78,7 +79,12 @@ function shuffleMap(areas, random, startingRoom) {
   // Also for Chaotic, don't randomize the last three rooms for consistency
   //  (Chaos first room, door leading to that, and save room opposite Chaos)
   //shuffleCorridor(areas[0], random, startingRoom);
-  EntranceRandomizer(areas, random, startingRoom);
+  const newConnections = EntranceRandomizer(areas, random, startingRoom);
+  if (!newConnections) {
+    return false;
+  }
+  updateAreasWithNewConnections(areas, newConnections);
+  return true;
 }
 
 function placeItems(areas, requirements, random, startingRoom) {
@@ -92,7 +98,7 @@ function placeItems(areas, requirements, random, startingRoom) {
   //   pick a new location, weighing sphere 2 locations slightly heavier than sphere 1
   // repeat, continuously adding weight to higher spheres and lowering weight for lower spheres
   // exclude dracula books and souls from this, and place them all randomly after all progression has been placed
-  ItemRandomizer(areas, requirements, random, startingRoom);
+  return ItemRandomizer(areas, requirements, random, startingRoom);
 }
 
 function doRandomization(data, settings = {}) {
@@ -102,9 +108,8 @@ function doRandomization(data, settings = {}) {
   const seed = 'seed' in settings ? settings.seed : random.random_int31();
   random.init_seed(seed);
 
-  const areas = getFreshAreas();
+  let areas = getFreshAreas();
   const requirements = determineRequirements(random);
-  // console.log(requirements);
 
   // Change the starting room to one of the Corridor save rooms
   // This replaces the "add save statue to starting room" idea
@@ -118,41 +123,67 @@ function doRandomization(data, settings = {}) {
     startingRoom = pickStartingRoom(areas, random);
   }
 
-  // Shuffle doors
-  // PRIORITY: DONE, improvable
-  // DIFFICULTY: EXTREME
-  if (settings.randomizeRooms) {
-    shuffleMap(areas, random, startingRoom);
-  }
-
   Logger.log(`Starting at ${startingRoom.address.toString(16)}`, DebugLevels.LOG);
 
-  // Sanity check to ensure the end is even accessible
-  if (!isSolvable(areas, requirements, Object.values(Keys), startingRoom.address).isSolvable) {
-    Logger.log('Current map orientation isn\'t solvable even with all progression items', DebugLevels.FATAL);
-    return;
+  let solvableDistribution = false;
+  let solvabilityInfo;
+  for (let runs = 0; !solvableDistribution; runs++) {
+    if (runs >= 1000) {
+      Logger.log(`Couldn't generate both a map and a valid item distribution for that map in 1,000 tries`, DebugLevels.FATAL);
+      return;
+    }
+
+    // First randomize rooms if necessary and try to find an orientation
+    // where the end is properly connected to the start
+    if (settings.randomizeRooms) {
+      // Shuffle doors
+      // PRIORITY: DONE, improvable
+      // DIFFICULTY: EXTREME
+      let clearable = false;
+      let iterations;
+      for (iterations = 0; !clearable; iterations++) {
+        if (iterations >= 1000) {
+          Logger.log(`Couldn't generate a valid map in 1,000 tries.`, DebugLevels.FATAL);
+          return;
+        }
+        areas = getFreshAreas();
+        shuffleMap(areas, random, startingRoom);
+
+        const solvabilityConfig = {
+          progression: requirements.progression,
+          startingInventory: Object.values(Keys),
+          startRoom: startingRoom.address,
+          fullSearch: settings.ensureFullyClearable
+        };
+        const solvability = isSolvable(areas, solvabilityConfig);
+
+        clearable = settings.ensureFullyClearable ? solvability.fullyClearable : solvability.isSolvable;
+      }
+
+      Logger.log(`Attempts to generate a map layout: ${iterations}`, DebugLevels.LOG);
+    }
+
+    if (settings.randomizeItems) {
+      // Place items around the map
+      // PRIORITY: DONE, improvable
+      // DIFFICULTY: EXTREME
+      let itemPlacementSuccess = placeItems(areas, requirements, random, startingRoom);
+      if (!itemPlacementSuccess) {
+        // If we couldn't validly place the items, then skip this room distribution
+        // continue;
+      }
+    }
+
+    // Sanity check to ensure the items were placed logically
+    const solvableItemPlacementConfig = {
+      progression: requirements.progression,
+      startRoom: startingRoom.address,
+      fullSearch: true
+    }
+    solvabilityInfo = isSolvable(areas, solvableItemPlacementConfig);
+    solvableDistribution = settings.ensureFullyClearable ? solvabilityInfo.fullyClearable : solvabilityInfo.isSolvable;
   }
 
-  // Place items around the map
-  // PRIORITY: DONE, improvable
-  // DIFFICULTY: EXTREME
-  if (settings.randomizeItems) {
-    placeItems(areas, requirements, random, startingRoom);
-  }
-
-  // Sanity check to ensure the items were placed logically
-  const solvabilityInfo = isSolvable(
-    areas,
-    requirements.progression,
-    [],
-    startingRoom.address,
-    0x0852253C,
-    true
-  );
-  if (!solvabilityInfo.isSolvable) {
-    Logger.log('Current item distribution doesn\'t work', DebugLevels.FATAL);
-    return;
-  }
 
   // Write shuffled doors and items to file
   // PRIORITY: DONE
@@ -201,7 +232,7 @@ function doRandomization(data, settings = {}) {
   // left/right side
   // PRIORITY: DONE
   if (settings.randomizeRooms) {
-    postProcessor.setChronomageDestination(solvabilityInfo.preChronomageRoom.address);
+    //postProcessor.setChronomageDestination(solvabilityInfo.preChronomageRoom.address);
   }
 
   // If debugging, Add with Bat, Skula, Panther,  and Chaos Ring
@@ -258,7 +289,12 @@ function doRandomization(data, settings = {}) {
         Logger.log('Error writing file:', DebugLevels.ERROR);
         Logger.log(err, DebugLevels.ERROR);
       }
+      else {
+        Logger.log('Successfully wrote file', DebugLevels.MARKER);
+      }
     });
+
+    // fs.writeFile('areas.json', JSON.stringify(areas), () => {});
   }
 }
 
@@ -273,10 +309,11 @@ function main() {
     // Note: seed 2 provides an unsolvable seed by making no sphere 0 items accessible
     // I'll leave this here for now to worry about how to handle it in logic later.
     const settings = {
-      seed: 5,
+      seed: 1,
       randomizeRooms: true,
       randomizeItems: true,
       writeFile: true,
+      ensureFullyClearable: true,
     };
     doRandomization([...data], settings);
   });

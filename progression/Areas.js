@@ -11087,11 +11087,11 @@ function getFreshAreas() {
               "access": {
                 "doors": [
                   {
-                    "door": 1,
+                    "door": 0,
                     "locks": [Locks.SKULA]
                   },
                   {
-                    "door": 2,
+                    "door": 1,
                     "locks": [Locks.SKULA]
                   }
                 ]
@@ -11682,7 +11682,7 @@ function getFreshAreas() {
               "access": {
                 "doors": [
                   {
-                    "door": 0,
+                    "door": 1,
                     "locks": [Locks.SKULA]
                   }
                 ],

@@ -6,7 +6,7 @@ const DebugLevels = require('./DebugLevels');
 const INVERSE_LEVELS = {};
 Object.keys(DebugLevels).forEach(level => INVERSE_LEVELS[DebugLevels[level]] = level);
 
-const CURRENT_DEBUG_LEVEL = DebugLevels.ERROR;
+const CURRENT_DEBUG_LEVEL = DebugLevels.FATAL;
 
 /**
  * Helper class to just optionally print debug statements based on various levels of severity

@@ -73,7 +73,7 @@ function randomizeArea(area, random, doorsToSkip) {
   let availableRooms = rooms.filter(({ address }) => address !== firstRoom.address);
   for (let iterationCount = 0; availableRooms.length > 0; iterationCount++) {
     if (unmatchedDoors.length === 0) {
-      Logger.log('Something went wrong with the randomization and we\'re out of doors', DebugLevels.ERROR);
+      Logger.log('Something went wrong with the randomization and we\'re out of doors', DebugLevels.FATAL);
       return false;
     }
     if (iterationCount > 1000) {
@@ -120,18 +120,17 @@ function randomizeArea(area, random, doorsToSkip) {
         // zone transitions are ignored and are effectively treated as dead ends
         // this is fine because in the future some arbitrary doors can be chosen as transitions
         // (as long as the directionality ends up being the same)
+        // TODO: Need to stop counting inaccessible doors as valid.
+        //   The inaccessible doors will then be handled during the intraarea loops part of the logic
+        //   to ensure multiple entrances into the same room.
+        //   Will probably need to take note of them separately, to ensure no part of the graph
+        //   stays fully disconnected
         const validDoors = doors.filter(door => isValidDoor(door, doorsToSkip));
         const newAvailableDoors = validDoors.length + unmatchedDoors.length - 2;
         return newAvailableDoors === availableRooms.length - 1 || newAvailableDoors > 0;
       });
     const chosenRoom = random.pickFromArray(validRoomPartners).value;
     if (!chosenRoom) {
-      // TODO: come up with some way to ensure transitions are left-right
-      // isnt this just marking transition exits as being the ones not to randomize lol
-      // exclude transition room exits as being valid choices
-      // afterwards, add intra-area loops for all remaining connections
-      // this should resolve the issue of "adding a weirdly-connected room as the last room"
-      // hangingDoors.push(randomDoor);
       Logger.log(`No valid pairs for door ${randomDoor.address.toString(16)}`, DebugLevels.WARN);
       continue;
     }
@@ -207,29 +206,8 @@ function randomizeArea(area, random, doorsToSkip) {
   return pairings;
 }
 
-function updateDoor(door, replacement) {
-  const keysToReplace = ['destination', 'destXOffset', 'destYOffset', 'destXPos', 'destYPos', 'complement'];
-  keysToReplace.forEach(key => door[key] = replacement[key]);
-}
-
-// There's a door that you can't appear to exit from in garden normally,
-// so mock a door that properly goes to it
-const UNMATCHED_GARDEN_DOOR = {
-  "address": -4,
-  "destination": 139556448,
-  "destXOffset": 0,
-  "destYOffset": 0,
-  "destXPos": 0x201,
-  "destYPos": 0,
-  "complement": -4
-};
-
 function FirstDraftEntranceShuffle(areas, random, startingRoom) {
   let allDoors = {};
-
-  // Keep deep copies of all rooms to properly reference old connections
-  let deepCopies = {};
-  deepCopies[-4] = {...UNMATCHED_GARDEN_DOOR};
   areas.forEach(area => {
     area.rooms.forEach(room => {
       room.doors.forEach(door => {
@@ -240,7 +218,6 @@ function FirstDraftEntranceShuffle(areas, random, startingRoom) {
             isTransitionRoom: room.isTransitionRoom,
           };
         }
-        deepCopies[door.address] = {...door};
       });
     });
   });
@@ -273,7 +250,7 @@ function FirstDraftEntranceShuffle(areas, random, startingRoom) {
       }
       if (attempts >= 1000) {
         Logger.log(`Problem randomizing area: ${area.area}`, DebugLevels.MARKER);
-        return;
+        return false;
       }
       areaConnections = randomizeArea(area, random, doorsToSkip);
     }
@@ -284,18 +261,7 @@ function FirstDraftEntranceShuffle(areas, random, startingRoom) {
   // TODO: seed 5: inaccessible exit got connected to dead end room (arena top room)
   // also in reservoir, and top floor
 
-  newConnections.forEach(({ source, destination }) => {
-    // TODO: destXOffset/destYOffset (or maybe destX/YPos?) shouldn't be blindly copied
-    // because they're very connector-specific.
-
-    // When swapping door destinations, we look at the address of the new destination, and from there
-    // look at the which door is the complement of that door. That complement is the door that sends Soma
-    // to the correct location so it looks like he's coming out of that door.
-    const originalDoor = deepCopies[deepCopies[destination.address].complement];
-    updateDoor(source, originalDoor);
-  });
-
-  return areas;
+  return newConnections;
 }
 
 module.exports = FirstDraftEntranceShuffle;

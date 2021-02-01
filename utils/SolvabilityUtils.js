@@ -161,40 +161,54 @@ const ENDING_ROOM_ADDRESS = 0x0852253C;
 /** Vanilla progression item mapping. */
 const DEFAULT_PROGRESSION = getFreshProgressionDrops();
 
+/** Default config options for the solvability test */
+const DEFAULT_CONFIG = {
+  progression: DEFAULT_PROGRESSION,
+  startingInventory: [],
+  startRoom: STARTING_ROOM_ADDRESS,
+  endRoom: ENDING_ROOM_ADDRESS,
+  fullSearch: false
+};
+
 /**
  * Helper function that determines if it's possible to go from a given starting room
  * to a given destination based on the progression drops found along the way and an optional starting inventory
  * @param  {Areas} areas - The list of Areas, optionally modified with different entities and door destinations
- * @param  {Object} [progression=ProgressionDrops] - Mapping from keys to the drops that activate those keys
- * @param  {Keys[]} [startingInventory=[]] - A list of Keys to start with.
+ * @param  {Object} config - The configuration object for this solvability test
+ * @param    {Object} [config.progression=ProgressionDrops] - Mapping from keys to the drops that activate those keys
+ * @param    {Keys[]} [config.startingInventory=[]] - A list of Keys to start with.
  *   Most notably used with a full inventory to see if a map randomization is reasonable.
- * @param  {uint_32} [startRoom=0x0850EF9C] - The room to start from, defaulting to the normal AoS starting room
- * @param  {uint_32} [endRoom=0x0852253C] - The room to end at, defaulting to the first room of the Chaos boss fight
- * @param  {Boolean} [fullSearch=false] - If the search should go through every room, or just find the end
+ * @param    {uint_32} [config.startRoom=0x0850EF9C] - The room to start from, defaulting to the normal AoS starting room
+ * @param    {uint_32} [config.endRoom=0x0852253C] - The room to end at, defaulting to the first room of the Chaos boss fight
+ * @param    {Boolean} [config.fullSearch=false] - If the search should go through every room, or just find the end
  * @return {Object} - An object containing information about solvability and various key locations.
  *   {Boolean} Object.isSolvable - If the current room configuration provides a path from the start room to the end
  *   {Object[]} Object.solution - A list of the intended order of obtaining progression items and in what rooms. TODO, gotta figure out how I wanna do it nicely
  *   {uint_32} Object.preChronomageRoom - The address of the room leading into the Chronomage hall
  */
-function isSolvable(
-  areas,
-  progression = DEFAULT_PROGRESSION,
-  startingInventory = [],
-  startRoom = STARTING_ROOM_ADDRESS,
-  endRoom = ENDING_ROOM_ADDRESS,
-  fullSearch = false,
-) {
+function isSolvable(areas, config) {
+  const {
+    progression,
+    startingInventory,
+    startRoom,
+    endRoom,
+    fullSearch
+  } = Object.assign({}, DEFAULT_CONFIG, config);
+
   Logger.log(`Determining solvability for this setup. fullSearch=${fullSearch}`, DebugLevels.MARKER);
-  // Some preliminary setup. Get a list of all the rooms and subsequently all the door
+
+  // Some preliminary setup. Get a list of all the rooms and subsequently all the doors
   const rooms = areas.map(a => a.rooms);
   const flattenedRooms = [].concat(...rooms);
   const allDoors = [].concat(...flattenedRooms.map(room => room.doors));
+
+  // Additional information about the solution, such as intended path, which room leads to chronomage, etc.
   const solution = [];
   let preChronomageRoom = null;
   let isSolvable = false;
 
   // Get a starting room and starting door to start the search with.
-    // TODO: consider a fake entry door here too?
+  // TODO: consider a fake entry door here too?
   const firstRoom = flattenedRooms.find(({ address }) => address === startRoom);
   if (!firstRoom) {
     throw "Error: invalid starting room";
@@ -208,8 +222,12 @@ function isSolvable(
   // Keep track of doors/items that have already been visited/picked up.
   // Anything not immediately accessible from this door will be recorded and will
   // be "accessed" once the appropriate Keys are picked up
-  const unvisitedDoors = new Set(allDoors.map(door => door.address));
+  const visitedDoors = new Set();
   const heldItems = new Set();
+
+  // Due to Garden, we can't exit from all doors, but we can potentially enter all,
+  // so check that
+  const uncheckedDoors = new Set(allDoors.map(door => door.address));
 
     // Keep track of the current "inventory" that will get updated as various drops are "found"
   const heldKeys = new Set(startingInventory);
@@ -223,7 +241,7 @@ function isSolvable(
   // progression items are picked up.
   let curAccess = determineAccess([...heldKeys]);
 
-  // DFS
+  // BFS
   while (visitQueue.length > 0) {
     const curRoomInfo = visitQueue.shift();
     const curRoom = curRoomInfo.room;
@@ -241,7 +259,7 @@ function isSolvable(
     }
 
     // Skip doors we've already gone through
-    if (unvisitedDoors.has(curDoor.address)) {
+    if (!visitedDoors.has(curDoor.address)) {
       // Find the doors and items that are currently accessible from this starting door
       const roomDoors = getAvailableExits(curRoom, curDoor.address, curAccess);
       const roomItems = getAvailableItems(curRoom, curDoor.address, curAccess);
@@ -284,6 +302,7 @@ function isSolvable(
         newItems = [];
         if (newKeys.length > 0) {
           Logger.log(`Keys found this round: ${JSON.stringify(newKeys)}`, DebugLevels.LOG);
+
           // If new keys were gotten, find what we unlock
           newKeys.forEach(key => heldKeys.add(key));
           curAccess = determineAccess([...heldKeys]);
@@ -299,7 +318,7 @@ function isSolvable(
             }
             return true;
           });
-          lcokedItems = lockedItems.filter(item => {
+          lockedItems = lockedItems.filter(item => {
             if (canAccess(item.locks, curAccess)) {
               if (!heldItems.has(item.address)) {
                 newItems.push(item);
@@ -316,14 +335,18 @@ function isSolvable(
       // For all these doors, find the destination room and the complementary door,
       // and add these to the queue.
       nextDoors
-        .filter(door => unvisitedDoors.has(door.address))
+        .filter(door => !visitedDoors.has(door.address))
         .forEach(door => {
           const destRoom = flattenedRooms.find(room => room.address === door.destination);
           if (!destRoom) {
-            Logger.log(`Couldn't find destination room from door ${JSON.stringify(door)}`, DebugLevels.WARN);
+            Logger.log(`Couldn't find destination room from door ${JSON.stringify(door)}`, DebugLevels.ERROR);
           }
-          const destDoor = destRoom.doors.find(d => d.address === door.complement);
+          const destDoor = destRoom.doors.find(d => d.complement === door.address || d.complement2 === door.address);
+          if (!destDoor) {
+            Logger.log(`Couldn't find destination door from door ${JSON.stringify(door)}`, DebugLevels.ERROR);
+          }
           if (destRoom && destDoor) {
+            uncheckedDoors.delete(door.address);
             visitQueue.push({ room: destRoom, door: destDoor });
             if (destRoom.address === 0x08515C30 && !preChronomageRoom) {
               // If the destination is the Chronomage room, take note of it.
@@ -334,19 +357,15 @@ function isSolvable(
             }
           }
         });
-      unvisitedDoors.delete(curDoor.address);
+      visitedDoors.add(curDoor.address);
     }
-  }
-
-  if (fullSearch) {
-    Logger.log([...unvisitedDoors].map(door => door.toString(16)), DebugLevels.MARKER);
   }
   // Out of rooms to search. Return the results of the search
   return {
     isSolvable,
     solution,
     preChronomageRoom,
-    fullySolvable: unvisitedDoors.size === 0
+    fullyClearable: uncheckedDoors.size === 0
   };
 }
 
