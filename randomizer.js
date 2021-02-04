@@ -232,7 +232,7 @@ function doRandomization(data, settings = {}) {
   // left/right side
   // PRIORITY: DONE
   if (settings.randomizeRooms) {
-    //postProcessor.setChronomageDestination(solvabilityInfo.preChronomageRoom.address);
+    postProcessor.setChronomageDestination(solvabilityInfo.preChronomageRoom.address);
   }
 
   // If debugging, Add with Bat, Skula, Panther,  and Chaos Ring
