@@ -98,12 +98,12 @@ function randomizeShop(data, random) {
   const reasonableItems = availableItems.filter(item => item.price > 0);
 
   // Super lazy algo. Will add some item type enforcement later for overhead swing/healing item
-  const indices = availableItems.map(({ shopIndex }) => shopIndex);
+  const indices = reasonableItems.map(({ shopIndex }) => shopIndex);
 
   const shuffledIndices = random.shuffle(indices);
 
   shopLists.forEach((shopList) => {
-    const items = shuffledIndices.slice(0, shopList.defaultLength).sort();
+    const items = shuffledIndices.slice(0, shopList.defaultLength).sort((a, b) => indices.indexOf(a) - indices.indexOf(b));
     items.forEach((item, i) => {
       data[shopList.address + 1 + i] = item;
     });

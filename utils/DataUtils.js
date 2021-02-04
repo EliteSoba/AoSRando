@@ -48,9 +48,10 @@ function writeEntity(data, entity) {
  * @param  {Byte[]} data - The game data to modify
  * @param  {Item} item - The item data to write/update
  */
-writeItem(data, item) {
+function writeItem(data, item) {
   writeEntity(data, item);
   if (item.flag) {
+    let curAddress = item.flag;
     const pushData = (size, content) => {
       writeData(data, curAddress, size, content);
       curAddress += size;
@@ -58,6 +59,7 @@ writeItem(data, item) {
 
     pushData(1, item.type);
     pushData(1, item.subtype);
+    curAddress += 1; // Padding?
     pushData(2, item.varA);
     pushData(2, item.varB);
   }
