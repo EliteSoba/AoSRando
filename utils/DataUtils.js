@@ -12,7 +12,7 @@ const {
  * Helper function to write an entity into data at the correct address.
  * Primarily used for updating items
  * @param  {Byte[]} data - The game data to modify
- * @param  {Entity} entity - The item data to write/update
+ * @param  {Entity} entity - The entity data to write/update
  */
 function writeEntity(data, entity) {
   const correctedAddress = entity.address - 0x08000000;
@@ -40,6 +40,27 @@ function writeEntity(data, entity) {
   }
   pushData(2, entity.varA);
   pushData(2, entity.varB);
+}
+
+/**
+ * Special util function to write item data, because items also set a permanent
+ * flag so they can't be regotten
+ * @param  {Byte[]} data - The game data to modify
+ * @param  {Item} item - The item data to write/update
+ */
+writeItem(data, item) {
+  writeEntity(data, item);
+  if (item.flag) {
+    const pushData = (size, content) => {
+      writeData(data, curAddress, size, content);
+      curAddress += size;
+    }
+
+    pushData(1, item.type);
+    pushData(1, item.subtype);
+    pushData(2, item.varA);
+    pushData(2, item.varB);
+  }
 }
 
 /**
@@ -166,7 +187,7 @@ function updateDataWithAreaInfo(data, areas) {
     area.rooms.forEach((room) => {
       // For now just update items/doors.
       // Expand to update doorlist/entitylist locations?
-      room.items.forEach(item => writeEntity(data, item));
+      room.items.forEach(item => writeItem(data, item));
       room.doors.forEach(door => writeDoor(data, door));
     });
   });
@@ -174,6 +195,7 @@ function updateDataWithAreaInfo(data, areas) {
 
 const DataUtils = {
   writeEntity,
+  writeItem,
   writeEndOfEntityList,
   sortEntityList,
   writeEntityList,

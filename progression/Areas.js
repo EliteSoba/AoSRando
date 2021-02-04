@@ -73,7 +73,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 71,
-              "varB": 38
+              "varB": 38,
+              "flag": 0x5109DD
             }
           ],
           "isBeginningRoom": true,
@@ -179,7 +180,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 33,
-              "varB": 16
+              "varB": 16,
+              "flag": 0x510AF1
             },
             {
               "_item": 1,
@@ -189,7 +191,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 46,
-              "varB": 50
+              "varB": 50,
+              "flag": 0x510AFD
             }
           ]
         },
@@ -384,7 +387,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 17,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x510BF9
             },
             {
               "_item": 1,
@@ -394,7 +398,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 64,
-              "varB": 25
+              "varB": 25,
+              "flag": 0x510C11
             },
             {
               "_item": 2,
@@ -404,7 +409,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 8,
               "varA": 1,
-              "varB": 1
+              "varB": 1,
+              "flag": 0x510C1D
             }
           ]
         },
@@ -624,7 +630,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 18,
-              "varB": 45
+              "varB": 45,
+              "flag": 0x510DD9
             }
           ]
         },
@@ -704,7 +711,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 95,
-              "varB": 5
+              "varB": 5,
+              "flag": 0x510ED5
             }
           ]
         },
@@ -805,7 +813,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 90,
-              "varB": 0
+              "varB": 0,
+              "flag": 0x510F65
             }
           ]
         },
@@ -979,7 +988,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 92,
-              "varB": 0
+              "varB": 0,
+              "flag": 0x510FAD
             },
             {
               "_item": 1,
@@ -989,7 +999,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 50,
-              "varB": 9
+              "varB": 9,
+              "flag": 0x51103D
             }
           ]
         },
@@ -1094,7 +1105,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 6,
               "varA": 2,
-              "varB": 1
+              "varB": 1,
+              "flag": 0x511145
             }
           ]
         },
@@ -1605,7 +1617,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 39,
-              "varB": 32
+              "varB": 32,
+              "flag": 0x5114C9
             }
           ]
         },
@@ -2065,7 +2078,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 81,
-              "varB": 29
+              "varB": 29,
+              "flag": 0x511565
             }
           ]
         },
@@ -2248,7 +2262,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 62,
-              "varB": 21
+              "varB": 21,
+              "flag": 0x511619
             },
             {
               "_item": 1,
@@ -2258,7 +2273,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 93,
-              "varB": 0
+              "varB": 0,
+              "flag": 0x51163D
             }
           ]
         },
@@ -2304,7 +2320,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 51,
-              "varB": 10
+              "varB": 10,
+              "flag": 0x511715
             }
           ]
         },
@@ -2342,7 +2359,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 68,
-              "varB": 30
+              "varB": 30,
+              "flag": 0x511739
             }
           ]
         },
@@ -2380,7 +2398,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 157,
-              "varB": 4
+              "varB": 4,
+              "flag": 0x511769
             }
           ]
         },
@@ -2514,7 +2533,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 94,
-              "varB": 0
+              "varB": 0,
+              "flag": 0x51187D
             }
           ]
         }
@@ -2629,7 +2649,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 131,
-              "varB": 8
+              "varB": 8,
+              "flag": 0x5125CD
             }
           ]
         },
@@ -2747,7 +2768,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 105,
-              "varB": 6
+              "varB": 6,
+              "flag": 0x5125CD
             },
             {
               "_item": 1,
@@ -2757,7 +2779,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 141,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x5125D9
             },
             {
               "_item": 2,
@@ -2767,7 +2790,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 37,
-              "varB": 27
+              "varB": 27,
+              "flag": 0x512609
             },
             {
               "_item": 3,
@@ -2777,7 +2801,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 100,
-              "varB": 1
+              "varB": 1,
+              "flag": 0x512615
             },
             {
               "_item": 4,
@@ -2787,7 +2812,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 96,
-              "varB": 5
+              "varB": 5,
+              "flag": 0x512669
             }
           ]
         },
@@ -2987,7 +3013,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 143,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x51271D
             }
           ]
         },
@@ -3117,7 +3144,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 42,
-              "varB": 37
+              "varB": 37,
+              "flag": 0x5127A1
             }
           ],
           "isBossRoom": true
@@ -3156,7 +3184,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 20,
-              "varB": 40
+              "varB": 40,
+              "flag": 0x5128F1
             }
           ]
         },
@@ -3300,7 +3329,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 140,
-              "varB": 5
+              "varB": 5,
+              "flag": 0x512939
             },
             {
               "_item": 1,
@@ -3310,7 +3340,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 142,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x5129C9
             }
           ]
         },
@@ -3363,7 +3394,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 58,
-              "varB": 17
+              "varB": 17,
+              "flag": 0x512A05
             }
           ]
         },
@@ -3691,7 +3723,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 133,
-              "varB": 20
+              "varB": 20,
+              "flag": 0x513875
             },
             {
               "_item": 1,
@@ -3702,7 +3735,8 @@ function getFreshAreas() {
               "subtype": 3,
               "varA": 47,
               "varB": 51,
-              "isHardMode": true
+              "isHardMode": true,
+              "flag": 0x513881
             }
           ]
         },
@@ -3769,7 +3803,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 144,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x5138F9
             }
           ]
         },
@@ -3821,7 +3856,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 132,
-              "varB": 9
+              "varB": 9,
+              "flag": 0x513911
             }
           ]
         },
@@ -3941,7 +3977,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 8,
               "varA": 3,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x513AF1
             }
           ],
           "isHammerRoom": true
@@ -4077,7 +4114,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 41,
-              "varB": 34
+              "varB": 34,
+              "flag": 0x513BE1
             }
           ]
         },
@@ -4115,7 +4153,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 67,
-              "varB": 29
+              "varB": 29,
+              "flag": 0x513BF9
             }
           ]
         },
@@ -4205,7 +4244,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 19,
-              "varB": 18
+              "varB": 18,
+              "flag": 0x513C59
             }
           ]
         },
@@ -4243,7 +4283,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 22,
-              "varB": 5
+              "varB": 5,
+              "flag": 0x513C71
             }
           ]
         },
@@ -4451,7 +4492,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 78,
-              "varB": 26
+              "varB": 26,
+              "flag": 0x513D0D
             }
           ]
         },
@@ -4601,7 +4643,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 145,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x513DFD
             }
           ]
         },
@@ -4800,7 +4843,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 23,
-              "varB": 4
+              "varB": 4,
+              "flag": 0x513EBD
             }
           ]
         }
@@ -4892,7 +4936,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 57,
-              "varB": 16
+              "varB": 16,
+              "flag": 0x51515D
             }
           ]
         },
@@ -4971,7 +5016,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 146,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x5151A5
             }
           ]
         },
@@ -5280,7 +5326,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 21,
-              "varB": 42
+              "varB": 42,
+              "flag": 0x5152AD
             }
           ]
         },
@@ -5370,7 +5417,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 115,
-              "varB": 7
+              "varB": 7,
+              "flag": 0x5153F1
             }
           ]
         },
@@ -5470,7 +5518,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 101,
-              "varB": 1
+              "varB": 1,
+              "flag": 0x5154A5
             }
           ]
         },
@@ -5557,7 +5606,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 8,
               "varA": 4,
-              "varB": 2
+              "varB": 2,
+              "flag": 0x51554D
             }
           ]
         },
@@ -5636,7 +5686,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 147,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x5155D1
             }
           ]
         },
@@ -5873,7 +5924,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 74,
-              "varB": 42
+              "varB": 42,
+              "flag": 0x515781
             },
             {
               "_item": 1,
@@ -6449,7 +6501,7 @@ function getFreshAreas() {
               "complement": 139546664
             }
           ],
-          "items": [] // TODO: This has a candle that rando changes
+          "items": [] // TODO: This has a candle that rando changes at 0x515A09
         }
       ]
     },
@@ -6490,7 +6542,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 34,
-              "varB": 23
+              "varB": 23,
+              "flag": 0x516829
             },
             {
               "_item": 1,
@@ -6500,7 +6553,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 79,
-              "varB": 27
+              "varB": 27,
+              "flag": 0x516835
             }
           ]
         },
@@ -6689,7 +6743,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 106,
-              "varB": 6
+              "varB": 6,
+              "flag": 0x51696D
             }
           ]
         },
@@ -6913,7 +6968,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 102,
-              "varB": 1
+              "varB": 1,
+              "flag": 0x516ABD
             }
           ]
         },
@@ -7113,7 +7169,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 52,
-              "varB": 4
+              "varB": 4,
+              "flag": 0x516C9D
             }
           ]
         },
@@ -7163,7 +7220,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 26,
-              "varB": 9
+              "varB": 9,
+              "flag": 0x516D09
             },
             {
               "_item": 1,
@@ -7173,7 +7231,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 7,
               "varA": 6,
-              "varB": 1
+              "varB": 1,
+              "flag": 0x516D15
             }
           ]
         },
@@ -7598,7 +7657,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 97,
-              "varB": 5
+              "varB": 5,
+              "flag": 0x51714D
             }
           ]
         },
@@ -8303,7 +8363,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 82,
-              "varB": 31
+              "varB": 31,
+              "flag": 0x517D91
             }
           ]
         },
@@ -8379,7 +8440,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 155,
-              "varB": 5
+              "varB": 5,
+              "flag": 0x517E2D
             },
             {
               "_item": 1,
@@ -8389,7 +8451,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 156,
-              "varB": 5
+              "varB": 5,
+              "flag": 0x517F1D
             }
           ]
         },
@@ -8653,7 +8716,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 152,
-              "varB": 4
+              "varB": 4,
+              "flag": 0x518175
             }
           ]
         },
@@ -8721,7 +8785,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 153,
-              "varB": 4
+              "varB": 4,
+              "flag": 0x518235
             }
           ]
         },
@@ -8845,7 +8910,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 154,
-              "varB": 4
+              "varB": 4,
+              "flag": 0x518301
             }
           ]
         },
@@ -9057,7 +9123,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 53,
-              "varB": 6
+              "varB": 6,
+              "flag": 0x5199D1
             }
           ]
         },
@@ -9446,7 +9513,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 31,
-              "varB": 14
+              "varB": 14,
+              "flag": 0x519CAD
             }
           ]
         },
@@ -9840,7 +9908,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 7,
               "varA": 7,
-              "varB": 2
+              "varB": 2,
+              "flag": 0x519F7D
             }
           ]
         },
@@ -9989,7 +10058,8 @@ function getFreshAreas() {
               "subtype": 3,
               "varA": 43,
               "varB": 39,
-              "isHardMode": true
+              "isHardMode": true,
+              "flag": 0x519FF5
             }
           ]
         },
@@ -10104,7 +10174,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 151,
-              "varB": 6
+              "varB": 6,
+              "flag": 0x51A0FD
             }
           ]
         },
@@ -10228,7 +10299,8 @@ function getFreshAreas() {
               "subtype": 4,
               "varA": 60,
               "varB": 19,
-              "isHardMode": true
+              "isHardMode": true,
+              "flag": 0x51A1E1
             }
           ]
         },
@@ -10405,7 +10477,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 30,
-              "varB": 10
+              "varB": 10,
+              "flag": 0x51A3CD
             }
           ]
         },
@@ -10755,7 +10828,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 66,
-              "varB": 28
+              "varB": 28,
+              "flag": 0x51CBF5
             }
           ]
         },
@@ -10849,7 +10923,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 130,
-              "varB": 4
+              "varB": 4,
+              "flag": 0x51CD39
             }
           ]
         },
@@ -10887,7 +10962,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 59,
-              "varB": 18
+              "varB": 18,
+              "flag": 0x51CD5D
             }
           ]
         },
@@ -10933,7 +11009,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 27,
-              "varB": 11
+              "varB": 11,
+              "flag": 0x51CE05
             }
           ]
         },
@@ -11202,7 +11279,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 107,
-              "varB": 6
+              "varB": 6,
+              "flag": 0x51D015
             }
           ]
         },
@@ -11240,7 +11318,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 134,
-              "varB": 18
+              "varB": 18,
+              "flag": 0x51D051
             }
           ]
         },
@@ -11611,7 +11690,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 118,
-              "varB": 7
+              "varB": 7,
+              "flag": 0x51D1E9
             }
           ]
         },
@@ -11732,7 +11812,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 111,
-              "varB": 2
+              "varB": 2,
+              "flag": 0x51D32D
             }
           ]
         },
@@ -11770,7 +11851,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 110,
-              "varB": 2
+              "varB": 2,
+              "flag": 0x51D405
             }
           ]
         },
@@ -11932,7 +12014,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 25,
-              "varB": 8
+              "varB": 8,
+              "flag": 0x51D56D
             }
           ]
         },
@@ -12245,7 +12328,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 61,
-              "varB": 22
+              "varB": 22,
+              "flag": 0x51D801
             }
           ]
         },
@@ -12283,7 +12367,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 8,
               "varA": 9,
-              "varB": 6
+              "varB": 6,
+              "flag": 0x51D825
             }
           ]
         },
@@ -12362,7 +12447,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 45,
-              "varB": 49
+              "varB": 49,
+              "flag": 0x51D8E5
             }
           ]
         },
@@ -12469,7 +12555,7 @@ function getFreshAreas() {
               }
             }
           ],
-          "items": [ // TODO: This has a candle that rando changes
+          "items": [ // TODO: This has a candle that rando changes at 51D92D
             {
               "_item": 0,
               "address": 139581820,
@@ -12478,7 +12564,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 148,
-              "varB": 5
+              "varB": 5,
+              "flag": 0x51D981
             },
             {
               "_item": 1,
@@ -12488,7 +12575,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 48,
-              "varB": 55
+              "varB": 55,
+              "flag": 0x51D999
             }
           ]
         },
@@ -12609,7 +12697,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 80,
-              "varB": 28
+              "varB": 28,
+              "flag": 0x51DA7D
             }
           ]
         },
@@ -12833,7 +12922,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 149,
-              "varB": 6
+              "varB": 6,
+              "flag": 0x51DAD1
             }
           ]
         },
@@ -12929,7 +13019,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 73,
-              "varB": 41
+              "varB": 41,
+              "flag": 0x51DC2D
             }
           ]
         },
@@ -12975,7 +13066,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 38,
-              "varB": 29
+              "varB": 29,
+              "flag": 0x51DC75
             }
           ]
         },
@@ -13263,7 +13355,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 113,
-              "varB": 2
+              "varB": 2,
+              "flag": 0x51DCED
             },
             {
               "_item": 1,
@@ -13273,7 +13366,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 56,
-              "varB": 15
+              "varB": 15,
+              "flag": 0x51DD29
             }
           ]
         },
@@ -13311,7 +13405,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 1,
               "varA": 150,
-              "varB": 6
+              "varB": 6,
+              "flag": 0x51DD7D
             }
           ]
         },
@@ -14100,7 +14195,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 104,
-              "varB": 1
+              "varB": 1,
+              "flag": 0x51E25D
             }
           ]
         },
@@ -14272,7 +14368,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 75,
-              "varB": 43
+              "varB": 43,
+              "flag": 0x51E329
             }
           ]
         },
@@ -14356,7 +14453,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 6,
               "varA": 8,
-              "varB": 2
+              "varB": 2,
+              "flag": 0x51F1D1
             }
           ]
         },
@@ -14536,7 +14634,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 29,
-              "varB": 13
+              "varB": 13,
+              "flag": 0x51F285
             }
           ]
         },
@@ -14790,7 +14889,7 @@ function getFreshAreas() {
               "complement": 139584928
             }
           ],
-          "items": [] // TODO: rando candle
+          "items": [] // TODO: rando candle at 0x51F4A1
         },
         {
           "_area": 8,
@@ -14867,7 +14966,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 65,
-              "varB": 27
+              "varB": 27,
+              "flag": 0x51F1D1
             }
           ]
         },
@@ -15218,7 +15318,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 54,
-              "varB": 7
+              "varB": 7,
+              "flag": 0x51F8B5
             }
           ]
         },
@@ -15257,7 +15358,8 @@ function getFreshAreas() {
               "subtype": 3,
               "varA": 49,
               "varB": 56,
-              "isHardMode": true
+              "isHardMode": true,
+              "flag": 0x51F8D9
             },
             {
               "_item": 1,
@@ -15267,7 +15369,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 24,
-              "varB": 17
+              "varB": 17,
+              "flag": 0x51F8E5
             }
           ]
         },
@@ -15305,7 +15408,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 72,
-              "varB": 39
+              "varB": 39,
+              "flag": 0x51F909
             }
           ]
         },
@@ -15343,7 +15447,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 103,
-              "varB": 1
+              "varB": 1,
+              "flag": 0x51F945
             }
           ]
         },
@@ -15533,7 +15638,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 55,
-              "varB": 8
+              "varB": 8,
+              "flag": 0x520BB1
             },
             {
               "_item": 1,
@@ -15543,7 +15649,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 6,
               "varA": 10,
-              "varB": 3
+              "varB": 3,
+              "flag": 0x520BBD
             }
           ]
         },
@@ -15668,7 +15775,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 116,
-              "varB": 7
+              "varB": 7,
+              "flag": 0x520BD5
             },
             {
               "_item": 1,
@@ -15679,7 +15787,8 @@ function getFreshAreas() {
               "subtype": 4,
               "varA": 70,
               "varB": 37,
-              "isHardMode": true
+              "isHardMode": true,
+              "flag": 0x520C1D
             }
           ]
         },
@@ -15723,7 +15832,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 44,
-              "varB": 48
+              "varB": 48,
+              "flag": 0x520C35
             }
           ]
         },
@@ -15946,7 +16056,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 8,
               "varA": 5,
-              "varB": 5
+              "varB": 5,
+              "flag": 0x520D6D
             }
           ]
         },
@@ -16039,7 +16150,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 4,
               "varA": 69,
-              "varB": 36
+              "varB": 36,
+              "flag": 0x520E09
             }
           ]
         },
@@ -16670,7 +16782,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 117,
-              "varB": 7
+              "varB": 7,
+              "flag": 0x5211ED
             }
           ]
         },
@@ -16931,7 +17044,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 112,
-              "varB": 2
+              "varB": 2,
+              "flag": 0x521361
             }
           ]
         },
@@ -17151,7 +17265,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 32,
-              "varB": 15
+              "varB": 15,
+              "flag": 0x521385
             }
           ]
         },
@@ -17459,7 +17574,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 35,
-              "varB": 25
+              "varB": 25,
+              "flag": 0x521C5D
             }
           ]
         },
@@ -17597,7 +17713,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 3,
               "varA": 36,
-              "varB": 22
+              "varB": 22,
+              "flag": 0x521D05
             }
           ]
         },
@@ -18905,7 +19022,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 114,
-              "varB": 2
+              "varB": 2,
+              "flag": 0x523D99
             }
           ]
         },
@@ -19096,7 +19214,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 108,
-              "varB": 6
+              "varB": 6,
+              "flag": 0x523D99
             }
           ]
         },
@@ -19134,7 +19253,8 @@ function getFreshAreas() {
               "type": 4,
               "subtype": 2,
               "varA": 119,
-              "varB": 7
+              "varB": 7,
+              "flag": 0x523DBD
             }
           ]
         },

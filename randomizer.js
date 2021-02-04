@@ -160,7 +160,7 @@ function doRandomization(data, settings = {}) {
         clearable = settings.ensureFullyClearable ? solvability.fullyClearable : solvability.isSolvable;
       }
 
-      Logger.log(`Attempts to generate a map layout: ${iterations}`, DebugLevels.LOG);
+      Logger.log(`Attempts to generate a map layout: ${iterations}`, DebugLevels.DEBUG);
     }
 
     if (settings.randomizeItems) {
@@ -309,7 +309,7 @@ function main() {
     // Note: seed 2 provides an unsolvable seed by making no sphere 0 items accessible
     // I'll leave this here for now to worry about how to handle it in logic later.
     const settings = {
-      seed: 1,
+      seed: 3,
       randomizeRooms: true,
       randomizeItems: true,
       writeFile: true,
