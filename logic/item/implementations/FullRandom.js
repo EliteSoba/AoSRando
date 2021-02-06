@@ -1,16 +1,17 @@
-const SolvabilityUtils = require('../../utils/SolvabilityUtils');
-const Souls = require('../../items/Souls');
-const Money = require('../../items/Money');
-const Equipment = require('../../items/Equipment');
-const Consumables = require('../../items/Consumables');
+const SolvabilityUtils = require('../../../utils/SolvabilityUtils');
 
-const Logger = require('../../debug/Logger');
-const DebugLevels = require('../../debug/DebugLevels');
+const Souls = require('../../../items/Souls');
+const Money = require('../../../items/Money');
+const Equipment = require('../../../items/Equipment');
+const Consumables = require('../../../items/Consumables');
+
+const Logger = require('../../../debug/Logger');
+const DebugLevels = require('../../../debug/DebugLevels');
 
 const {
   Weapons,
   Armor,
-  Accessories
+  Accessories,
 } = Equipment;
 
 const {
@@ -18,10 +19,12 @@ const {
   MP,
   Status,
   Damage,
-  Unusable
+  Unusable,
 } = Consumables;
 
-const { isSolvable } = SolvabilityUtils;
+const {
+  isSolvable,
+} = SolvabilityUtils;
 
 const {
   Red,
@@ -33,7 +36,7 @@ const config = {
   decoySoulsMean: 8,
   decoySoulsStd: 1,
   equipmentRatioMean: 40,
-  equipmentRatioStd: 5
+  equipmentRatioStd: 5,
 };
 
 /**
@@ -44,14 +47,6 @@ const config = {
  * Main issue with this approach is that there's no tiering of equipment/progression strength,
  * so there's a decent probability of very strong equipment being available very early.
  * Also progression can feel very underwhelming if flight is found early or keys are frontloaded.
- *
- * Returns a boolean determining if it could find a valid item distribution.
- *
- * @param  {Areas} areas - The list of Areas
- * @param  {Requirements} requirements - Object containing the list of progression mappings and the Dracula soul info
- * @param  {Random} random - Shared pseudorandom number generator
- * @param  {Room} startingRoom - Object describing the starting room, to determine solvability
- * @return {Boolean} - If a valid item distribution was possible or not.
  */
 function FullRandom(areas, requirements, random, startingRoom) {
   // Shallow copies makes this rather straightforward
@@ -69,7 +64,7 @@ function FullRandom(areas, requirements, random, startingRoom) {
     decoySoulsMean,
     decoySoulsStd,
     equipmentRatioMean,
-    equipmentRatioStd
+    equipmentRatioStd,
   } = config;
 
   // lol imagine caring about a proper normal distribution in this logic
@@ -110,7 +105,7 @@ function FullRandom(areas, requirements, random, startingRoom) {
     ...Status,
     ...Damage,
     ...(Unusable.filter(item => !item.doNotUse && !item.isProgression)),
-    ...Money
+    ...Money,
   ];
 
   const equipmentRatio = vaguelyNormalDistribution(random, equipmentRatioMean, equipmentRatioStd);
@@ -127,11 +122,13 @@ function FullRandom(areas, requirements, random, startingRoom) {
 
   Logger.log('Attempting to place items', DebugLevels.MARKER);
   let iterations = 0;
+  let itemMapping = {};
   const solvabilityConfig = {
     progression: requirements.progression,
     startRoom: startingRoom.address
   };
-  while (!isSolvable(areas, solvabilityConfig).isSolvable) {
+  while (!isSolvable(areas, { ...solvabilityConfig, itemMapping }).isSolvable) {
+    itemMapping = {};
     if (iterations % 10 === 1) {
       Logger.log(`Attempt ${iterations}: Reattempting item randomization`, DebugLevels.MARKER);
     }
@@ -141,9 +138,12 @@ function FullRandom(areas, requirements, random, startingRoom) {
     const shuffledItems = random.shuffle(chosenItems);
     allItems.forEach((item, i) => {
       const replacement = shuffledItems[i];
-      item.type = 4;
-      item.subtype = replacement.subtype;
-      item.varB = replacement.id;
+      itemMapping[item.address] = {
+        ...item,
+        type: 4,
+        subtype: replacement.subtype,
+        varB: replacement.id,
+      };
     });
 
     if (++iterations >= 1000) {
@@ -154,7 +154,11 @@ function FullRandom(areas, requirements, random, startingRoom) {
 
   Logger.log(`Completed item placements in ${iterations} ${iterations === 1 ? 'try' : 'tries'}`, DebugLevels.MARKER);
 
-  return true;
+  return itemMapping;
 }
+
+FullRandom.displayName = 'Full Random Item Distribution';
+FullRandom.desc = 'Randomly places all progression items/souls and a random assortment of equipment/consumables'
+  + ' such that the seed is solvable, and no other logic beside that.'
 
 module.exports = FullRandom;

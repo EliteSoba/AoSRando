@@ -9,7 +9,7 @@ const SolvabilityUtils = require('./utils/SolvabilityUtils');
 const determineRequirements = require('./logic/determineRequirements');
 const pickStartingRoom = require('./logic/pickStartingRoom');
 const EntranceRandomizer = require('./logic/entrance/EntranceRandomizer');
-const ItemRandomizer = require('./logic/item/FullRandom');
+const ItemRandomizer = require('./logic/item/ItemRandomizer');
 
 const EnemyProcessor = require('./enemies/EnemyProcessor');
 const PostProcessor = require('./postprocessing/PostProcessor');
@@ -20,8 +20,6 @@ const DebugLevels = require('./debug/DebugLevels');
 
 const fs = require('fs');
 const Random = require('./utils/Random');
-
-const Areas = getFreshAreas();
 
 const {
   getOppositeDirection,
@@ -34,10 +32,6 @@ const {
   getAvailableExits,
   isSolvable,
 } = SolvabilityUtils;
-
-function placeItems(areas, requirements, random, startingRoom) {
-  return ItemRandomizer(areas, requirements, random, startingRoom);
-}
 
 function doRandomization(data, settings = {}) {
   // Set up the seed on the randomization for consistency
@@ -52,6 +46,8 @@ function doRandomization(data, settings = {}) {
 
   const entranceRandomizer = new EntranceRandomizer();
   entranceRandomizer.selectImplementation(1);
+  const itemRandomizer = new ItemRandomizer();
+  itemRandomizer.selectImplementation(1);
 
   // Determine the starting room. With entrance randomizer, this should be a save room
   // to allow for immediate suspends, but save points don't interact well with the
@@ -82,7 +78,7 @@ function doRandomization(data, settings = {}) {
         progression: requirements.progression,
         startingInventory: Object.values(Keys),
         startRoom: startingRoom.address,
-        fullSearch: settings.ensureFullyClearable
+        fullSearch: settings.ensureFullyClearable,
       };
       const solvabilityTest = (areas) => {
         const solvability = isSolvable(areas, solvabilityConfig);
@@ -102,7 +98,7 @@ function doRandomization(data, settings = {}) {
       // Right now I have pure random, but I want to implement my sphered progression placement logic,
       // which would look at locks to sphere 2, pick a random progression item, and place it in sphere 1
       // and then repeat for sphere 3, placing weights on distributing to more recent spheres.
-      let itemPlacementSuccess = placeItems(areas, requirements, random, startingRoom);
+      let itemPlacementSuccess = itemRandomizer.execute(areas, requirements, random, startingRoom);
       if (!itemPlacementSuccess) {
         // If we couldn't validly place the items, then skip this room distribution
         // Generally this happens if a map gets generated with no sphere 1 items
@@ -114,7 +110,7 @@ function doRandomization(data, settings = {}) {
     const solvableItemPlacementConfig = {
       progression: requirements.progression,
       startRoom: startingRoom.address,
-      fullSearch: true
+      fullSearch: true,
     }
     solvabilityInfo = isSolvable(areas, solvableItemPlacementConfig);
     solvableDistribution = settings.ensureFullyClearable ? solvabilityInfo.fullyClearable : solvabilityInfo.isSolvable;
@@ -147,7 +143,7 @@ function doRandomization(data, settings = {}) {
 
   // OPTIONAL: Relocate doors and add safety zips
   // TODO: port this logic over from old code
-  'relocateDoorLists(data, Areas);'
+  'relocateDoorLists(data, areas);'
   'writeSafetyZips(data);'
 
   // Allow cutscene skips without having beaten the game first

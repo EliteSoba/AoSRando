@@ -6,6 +6,7 @@ This folder contains all entrance randomization implementations. An entrance ran
   1. `areas` - The list of Area information used throughout the randomizer, which contains zone and room (and door and item) information.
   1. `random` - The seeded pseudorandom number generator that used throughout the randomizer.
   1. `startingRoom` (optional) - The room where Soma starts. This information is provided because it may be valuable for destination selection logic, but it is not necessary to use this information to generate a fully solvable configuration.
+
 The randomizer should then return an Array of Objects, with each entry being a pairing of doors:
 ```
   {
@@ -13,6 +14,8 @@ The randomizer should then return an Array of Objects, with each entry being a p
     destination {Door} - The door object describing the door Soma should appear to exit when entering the source door.
   }
 ```
+The randomizer should return a falsy value if the randomization failed.
+
 Note that it's not necessary for the destination of a source door's destination door to be that same source door. Put more simply, Door A -> Door B does not mean that Door B -> Door A. It would actually be impossible to enforce this because Floating Garden has an odd number of doors such that at least two doors must end up having the same destination.
 
 ### VanillaEntrances

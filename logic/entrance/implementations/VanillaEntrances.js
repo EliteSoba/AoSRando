@@ -3,7 +3,7 @@
  * Also serves as a template for future entrance randomizer implementations.
  */
 function VanillaEntrances(areas, random, startingRoom) {
-  return [];
+  return {};
 }
 
 VanillaEntrances.displayName = 'Vanilla';

@@ -167,7 +167,8 @@ const DEFAULT_CONFIG = {
   startingInventory: [],
   startRoom: STARTING_ROOM_ADDRESS,
   endRoom: ENDING_ROOM_ADDRESS,
-  fullSearch: false
+  fullSearch: false,
+  itemMapping: {},
 };
 
 /**
@@ -181,6 +182,7 @@ const DEFAULT_CONFIG = {
  * @param    {uint_32} [config.startRoom=0x0850EF9C] - The room to start from, defaulting to the normal AoS starting room
  * @param    {uint_32} [config.endRoom=0x0852253C] - The room to end at, defaulting to the first room of the Chaos boss fight
  * @param    {Boolean} [config.fullSearch=false] - If the search should go through every room, or just find the end
+ * @param    {Object} [config.itemMapping] - A mapping from addresses to items, so an item randomizer can mock placing items and see if the configuration works
  * @return {Object} - An object containing information about solvability and various key locations.
  *   {Boolean} Object.isSolvable - If the current room configuration provides a path from the start room to the end
  *   {Object[]} Object.solution - A list of the intended order of obtaining progression items and in what rooms. TODO, gotta figure out how I wanna do it nicely
@@ -192,7 +194,8 @@ function isSolvable(areas, config) {
     startingInventory,
     startRoom,
     endRoom,
-    fullSearch
+    fullSearch,
+    itemMapping,
   } = Object.assign({}, DEFAULT_CONFIG, config);
 
   Logger.log(`Determining solvability for this setup. fullSearch=${fullSearch}`, DebugLevels.MARKER);
@@ -293,8 +296,11 @@ function isSolvable(areas, config) {
 
         // Check every new item to see if any of them match any progression
         // and get the associated Keys if they do
-        let newKeys = Object.keys(progression).filter(key =>
-          availableItems.some(item => item.subtype === progression[key].subtype && item.varB === progression[key].id))
+        let newKeys = Object.keys(progression).filter(
+          key => availableItems
+            .map(item => itemMapping[item.address] || item)
+            .some(item => item.subtype === progression[key].subtype && item.varB === progression[key].id)
+        );
 
         newKeys = newKeys.concat(bonusRoomKeys);
         bonusRoomKeys = [];
