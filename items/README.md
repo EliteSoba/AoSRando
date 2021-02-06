@@ -1,5 +1,5 @@
 # Items
-This folder contains information about every drop that can be placed. Every drop at the very least has a subtype and an id, which can be written to the Entity list of a room to cause that drop to spawn there. Items also all have names and most have descriptions. Most non-soul drops also have prices, which determines how much they'd sell for in Hammer's shop and is slightly indicative of their relative strength.
+This folder contains information about every drop that can be placed. Every drop at the very least has a subtype and an id, which can be written to the Entity list of a room to cause that drop to spawn there. Further, items have itemIds, which is the value that enemy data looks at (or rather itemId + 1) to determine what they drop. Items also all have names and most have descriptions. Most non-soul drops also have prices, which determines how much they'd sell for in Hammer's shop and is slightly indicative of their relative strength.
 
 ## Consumables
 A list of all "Consumable" items, although some can't actually be used. Divided into 5 subgroups of HP, MP, Status, Damage, and Unusable. All of these items are subtype 2.

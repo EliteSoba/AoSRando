@@ -15,7 +15,7 @@ function getFreshEnemies() {
       "attack": 6,
       "defense": 0,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 1,
@@ -30,7 +30,7 @@ function getFreshEnemies() {
       "attack": 9,
       "defense": 1,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 2,
@@ -45,7 +45,7 @@ function getFreshEnemies() {
       "attack": 12,
       "defense": 0,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 3,
@@ -60,7 +60,7 @@ function getFreshEnemies() {
       "attack": 9,
       "defense": 3,
       "weaknesses": 4,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 4,
@@ -75,7 +75,7 @@ function getFreshEnemies() {
       "attack": 15,
       "defense": 8,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 5,
@@ -90,7 +90,7 @@ function getFreshEnemies() {
       "attack": 13,
       "defense": 5,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 6,
@@ -105,7 +105,7 @@ function getFreshEnemies() {
       "attack": 11,
       "defense": 2,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 7,
@@ -120,7 +120,7 @@ function getFreshEnemies() {
       "attack": 12,
       "defense": 1,
       "weaknesses": 4,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 8,
@@ -135,7 +135,7 @@ function getFreshEnemies() {
       "attack": 19,
       "defense": 15,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 9,
@@ -150,7 +150,7 @@ function getFreshEnemies() {
       "attack": 12,
       "defense": 0,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 10,
@@ -165,7 +165,7 @@ function getFreshEnemies() {
       "attack": 13,
       "defense": 0,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 11,
@@ -180,7 +180,7 @@ function getFreshEnemies() {
       "attack": 17,
       "defense": 1,
       "weaknesses": 16,
-      "resistances": 40
+      "resistances": 40,
     },
     {
       "id": 12,
@@ -195,7 +195,7 @@ function getFreshEnemies() {
       "attack": 14,
       "defense": 5,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 13,
@@ -210,7 +210,7 @@ function getFreshEnemies() {
       "attack": 17,
       "defense": 8,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 14,
@@ -225,7 +225,7 @@ function getFreshEnemies() {
       "attack": 12,
       "defense": 2,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 15,
@@ -240,7 +240,7 @@ function getFreshEnemies() {
       "attack": 22,
       "defense": 2,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 16,
@@ -255,7 +255,7 @@ function getFreshEnemies() {
       "attack": 15,
       "defense": 0,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 17,
@@ -270,7 +270,7 @@ function getFreshEnemies() {
       "attack": 17,
       "defense": 5,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 18,
@@ -285,7 +285,7 @@ function getFreshEnemies() {
       "attack": 22,
       "defense": 10,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 19,
@@ -300,7 +300,7 @@ function getFreshEnemies() {
       "attack": 18,
       "defense": 1,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 20,
@@ -315,7 +315,7 @@ function getFreshEnemies() {
       "attack": 14,
       "defense": 1,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 21,
@@ -330,7 +330,7 @@ function getFreshEnemies() {
       "attack": 25,
       "defense": 12,
       "weaknesses": 0,
-      "resistances": 16
+      "resistances": 16,
     },
     {
       "id": 22,
@@ -345,7 +345,7 @@ function getFreshEnemies() {
       "attack": 15,
       "defense": 10,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 23,
@@ -360,7 +360,7 @@ function getFreshEnemies() {
       "attack": 18,
       "defense": 13,
       "weaknesses": 1024,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 24,
@@ -375,7 +375,7 @@ function getFreshEnemies() {
       "attack": 13,
       "defense": 1,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 25,
@@ -390,7 +390,7 @@ function getFreshEnemies() {
       "attack": 22,
       "defense": 15,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 26,
@@ -405,7 +405,7 @@ function getFreshEnemies() {
       "attack": 20,
       "defense": 12,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 27,
@@ -420,7 +420,7 @@ function getFreshEnemies() {
       "attack": 17,
       "defense": 5,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 28,
@@ -435,7 +435,7 @@ function getFreshEnemies() {
       "attack": 27,
       "defense": 20,
       "weaknesses": 0,
-      "resistances": 8
+      "resistances": 8,
     },
     {
       "id": 29,
@@ -450,7 +450,7 @@ function getFreshEnemies() {
       "attack": 20,
       "defense": 1,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 30,
@@ -465,7 +465,7 @@ function getFreshEnemies() {
       "attack": 22,
       "defense": 14,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 31,
@@ -480,7 +480,7 @@ function getFreshEnemies() {
       "attack": 23,
       "defense": 16,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 32,
@@ -495,7 +495,7 @@ function getFreshEnemies() {
       "attack": 22,
       "defense": 13,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 33,
@@ -511,7 +511,7 @@ function getFreshEnemies() {
       "defense": 10,
       "weaknesses": 16,
       "resistances": 2,
-      "isKindaBoss": true
+      "isKindaBoss": true,
     },
     {
       "id": 34,
@@ -526,7 +526,7 @@ function getFreshEnemies() {
       "attack": 29,
       "defense": 30,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 35,
@@ -541,7 +541,7 @@ function getFreshEnemies() {
       "attack": 30,
       "defense": 25,
       "weaknesses": 1024,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 36,
@@ -556,7 +556,7 @@ function getFreshEnemies() {
       "attack": 23,
       "defense": 25,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 37,
@@ -571,7 +571,7 @@ function getFreshEnemies() {
       "attack": 30,
       "defense": 30,
       "weaknesses": 1040,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 38,
@@ -586,7 +586,7 @@ function getFreshEnemies() {
       "attack": 28,
       "defense": 10,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 39,
@@ -601,7 +601,7 @@ function getFreshEnemies() {
       "attack": 30,
       "defense": 10,
       "weaknesses": 1040,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 40,
@@ -616,7 +616,7 @@ function getFreshEnemies() {
       "attack": 30,
       "defense": 0,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 41,
@@ -631,7 +631,7 @@ function getFreshEnemies() {
       "attack": 28,
       "defense": 25,
       "weaknesses": 32,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 42,
@@ -646,7 +646,7 @@ function getFreshEnemies() {
       "attack": 25,
       "defense": 20,
       "weaknesses": 2,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 43,
@@ -661,7 +661,7 @@ function getFreshEnemies() {
       "attack": 26,
       "defense": 15,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 44,
@@ -676,7 +676,7 @@ function getFreshEnemies() {
       "attack": 28,
       "defense": 0,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 45,
@@ -691,7 +691,7 @@ function getFreshEnemies() {
       "attack": 29,
       "defense": 0,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 46,
@@ -706,7 +706,7 @@ function getFreshEnemies() {
       "attack": 35,
       "defense": 30,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 47,
@@ -721,7 +721,7 @@ function getFreshEnemies() {
       "attack": 33,
       "defense": 30,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 48,
@@ -736,7 +736,7 @@ function getFreshEnemies() {
       "attack": 38,
       "defense": 30,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 49,
@@ -751,7 +751,7 @@ function getFreshEnemies() {
       "attack": 29,
       "defense": 20,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 50,
@@ -766,7 +766,7 @@ function getFreshEnemies() {
       "attack": 33,
       "defense": 30,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 51,
@@ -781,7 +781,7 @@ function getFreshEnemies() {
       "attack": 35,
       "defense": 45,
       "weaknesses": 0,
-      "resistances": 8
+      "resistances": 8,
     },
     {
       "id": 52,
@@ -796,7 +796,7 @@ function getFreshEnemies() {
       "attack": 35,
       "defense": 25,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 53,
@@ -811,7 +811,7 @@ function getFreshEnemies() {
       "attack": 40,
       "defense": 40,
       "weaknesses": 4095,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 54,
@@ -827,7 +827,7 @@ function getFreshEnemies() {
       "defense": 24,
       "weaknesses": 0,
       "resistances": 0,
-      "isKindaBoss": true
+      "isKindaBoss": true,
     },
     {
       "id": 55,
@@ -842,7 +842,7 @@ function getFreshEnemies() {
       "attack": 32,
       "defense": 15,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 56,
@@ -857,7 +857,7 @@ function getFreshEnemies() {
       "attack": 33,
       "defense": 20,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 57,
@@ -872,7 +872,7 @@ function getFreshEnemies() {
       "attack": 28,
       "defense": 10,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 58,
@@ -887,7 +887,7 @@ function getFreshEnemies() {
       "attack": 35,
       "defense": 25,
       "weaknesses": 1,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 59,
@@ -902,7 +902,7 @@ function getFreshEnemies() {
       "attack": 32,
       "defense": 28,
       "weaknesses": 8,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 60,
@@ -918,7 +918,7 @@ function getFreshEnemies() {
       "defense": 25,
       "weaknesses": 0,
       "resistances": 0,
-      "isKindaBoss": true
+      "isKindaBoss": true,
     },
     {
       "id": 61,
@@ -933,7 +933,7 @@ function getFreshEnemies() {
       "attack": 32,
       "defense": 1,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 62,
@@ -948,7 +948,7 @@ function getFreshEnemies() {
       "attack": 38,
       "defense": 3,
       "weaknesses": 0,
-      "resistances": 65520
+      "resistances": 65520,
     },
     {
       "id": 63,
@@ -963,7 +963,7 @@ function getFreshEnemies() {
       "attack": 38,
       "defense": 0,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 64,
@@ -979,7 +979,7 @@ function getFreshEnemies() {
       "defense": 35,
       "weaknesses": 0,
       "resistances": 0,
-      "canBeABossButNeverIs": true
+      "canBeABossButNeverIs": true,
     },
     {
       "id": 65,
@@ -994,7 +994,7 @@ function getFreshEnemies() {
       "attack": 48,
       "defense": 40,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 66,
@@ -1009,7 +1009,7 @@ function getFreshEnemies() {
       "attack": 43,
       "defense": 30,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 67,
@@ -1024,7 +1024,7 @@ function getFreshEnemies() {
       "attack": 43,
       "defense": 35,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 68,
@@ -1039,7 +1039,7 @@ function getFreshEnemies() {
       "attack": 42,
       "defense": 30,
       "weaknesses": 5,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 69,
@@ -1054,7 +1054,7 @@ function getFreshEnemies() {
       "attack": 55,
       "defense": 15,
       "weaknesses": 1024,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 70,
@@ -1069,7 +1069,7 @@ function getFreshEnemies() {
       "attack": 45,
       "defense": 38,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 71,
@@ -1084,7 +1084,7 @@ function getFreshEnemies() {
       "attack": 43,
       "defense": 5,
       "weaknesses": 0,
-      "resistances": 65520
+      "resistances": 65520,
     },
     {
       "id": 72,
@@ -1099,7 +1099,7 @@ function getFreshEnemies() {
       "attack": 46,
       "defense": 35,
       "weaknesses": 1040,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 73,
@@ -1114,7 +1114,7 @@ function getFreshEnemies() {
       "attack": 44,
       "defense": 30,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 74,
@@ -1129,7 +1129,7 @@ function getFreshEnemies() {
       "attack": 42,
       "defense": 3,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 75,
@@ -1144,7 +1144,7 @@ function getFreshEnemies() {
       "attack": 45,
       "defense": 30,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 76,
@@ -1159,7 +1159,7 @@ function getFreshEnemies() {
       "attack": 40,
       "defense": 20,
       "weaknesses": 18,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 77,
@@ -1174,7 +1174,7 @@ function getFreshEnemies() {
       "attack": 53,
       "defense": 50,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 78,
@@ -1189,7 +1189,7 @@ function getFreshEnemies() {
       "attack": 45,
       "defense": 30,
       "weaknesses": 2,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 79,
@@ -1204,7 +1204,7 @@ function getFreshEnemies() {
       "attack": 65,
       "defense": 0,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 80,
@@ -1219,7 +1219,7 @@ function getFreshEnemies() {
       "attack": 47,
       "defense": 25,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 81,
@@ -1234,7 +1234,7 @@ function getFreshEnemies() {
       "attack": 30,
       "defense": 25,
       "weaknesses": 1024,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 82,
@@ -1249,7 +1249,7 @@ function getFreshEnemies() {
       "attack": 52,
       "defense": 40,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 83,
@@ -1264,7 +1264,7 @@ function getFreshEnemies() {
       "attack": 40,
       "defense": 30,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 84,
@@ -1279,7 +1279,7 @@ function getFreshEnemies() {
       "attack": 45,
       "defense": 35,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 85,
@@ -1294,7 +1294,7 @@ function getFreshEnemies() {
       "attack": 44,
       "defense": 35,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 86,
@@ -1309,7 +1309,7 @@ function getFreshEnemies() {
       "attack": 50,
       "defense": 1,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 87,
@@ -1324,7 +1324,7 @@ function getFreshEnemies() {
       "attack": 46,
       "defense": 20,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 88,
@@ -1339,7 +1339,7 @@ function getFreshEnemies() {
       "attack": 58,
       "defense": 50,
       "weaknesses": 0,
-      "resistances": 16
+      "resistances": 16,
     },
     {
       "id": 89,
@@ -1354,7 +1354,7 @@ function getFreshEnemies() {
       "attack": 45,
       "defense": 35,
       "weaknesses": 1040,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 90,
@@ -1369,7 +1369,7 @@ function getFreshEnemies() {
       "attack": 80,
       "defense": 45,
       "weaknesses": 1024,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 91,
@@ -1384,7 +1384,7 @@ function getFreshEnemies() {
       "attack": 47,
       "defense": 30,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 92,
@@ -1399,7 +1399,7 @@ function getFreshEnemies() {
       "attack": 75,
       "defense": 50,
       "weaknesses": 1040,
-      "resistances": 2
+      "resistances": 2,
     },
     {
       "id": 93,
@@ -1414,7 +1414,7 @@ function getFreshEnemies() {
       "attack": 55,
       "defense": 35,
       "weaknesses": 16,
-      "resistances": 65504
+      "resistances": 65504,
     },
     {
       "id": 94,
@@ -1429,7 +1429,7 @@ function getFreshEnemies() {
       "attack": 52,
       "defense": 42,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 95,
@@ -1444,7 +1444,7 @@ function getFreshEnemies() {
       "attack": 54,
       "defense": 40,
       "weaknesses": 1040,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 96,
@@ -1459,7 +1459,7 @@ function getFreshEnemies() {
       "attack": 53,
       "defense": 25,
       "weaknesses": 1040,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 97,
@@ -1474,7 +1474,7 @@ function getFreshEnemies() {
       "attack": 70,
       "defense": 40,
       "weaknesses": 16,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 98,
@@ -1489,7 +1489,7 @@ function getFreshEnemies() {
       "attack": 60,
       "defense": 50,
       "weaknesses": 32,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 99,
@@ -1504,7 +1504,7 @@ function getFreshEnemies() {
       "attack": 45,
       "defense": 40,
       "weaknesses": 1024,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 100,
@@ -1519,7 +1519,7 @@ function getFreshEnemies() {
       "attack": 65,
       "defense": 38,
       "weaknesses": 0,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 101,
@@ -1534,7 +1534,7 @@ function getFreshEnemies() {
       "attack": 70,
       "defense": 255,
       "weaknesses": 4095,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 102,
@@ -1549,7 +1549,7 @@ function getFreshEnemies() {
       "attack": 78,
       "defense": 45,
       "weaknesses": 1040,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 103,
@@ -1564,7 +1564,7 @@ function getFreshEnemies() {
       "attack": 75,
       "defense": 50,
       "weaknesses": 4095,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 104,
@@ -1579,7 +1579,7 @@ function getFreshEnemies() {
       "attack": 55,
       "defense": 35,
       "weaknesses": 1042,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 105,
@@ -1594,7 +1594,7 @@ function getFreshEnemies() {
       "attack": 85,
       "defense": 45,
       "weaknesses": 1041,
-      "resistances": 0
+      "resistances": 0,
     },
     {
       "id": 106,
@@ -1610,7 +1610,7 @@ function getFreshEnemies() {
       "defense": 40,
       "weaknesses": 1040,
       "resistances": 0,
-      "isBoss": true
+      "isBoss": true,
     },
     {
       "id": 107,
@@ -1626,7 +1626,7 @@ function getFreshEnemies() {
       "defense": 20,
       "weaknesses": 1040,
       "resistances": 0,
-      "isBoss": true
+      "isBoss": true,
     },
     {
       "id": 108,
@@ -1642,7 +1642,7 @@ function getFreshEnemies() {
       "defense": 25,
       "weaknesses": 1040,
       "resistances": 0,
-      "isBoss": true
+      "isBoss": true,
     },
     {
       "id": 109,
@@ -1658,7 +1658,7 @@ function getFreshEnemies() {
       "defense": 60,
       "weaknesses": 1024,
       "resistances": 0,
-      "isBoss": true
+      "isBoss": true,
     },
     {
       "id": 110,
@@ -1674,7 +1674,7 @@ function getFreshEnemies() {
       "defense": 80,
       "weaknesses": 4064,
       "resistances": 0,
-      "isBoss": true
+      "isBoss": true,
     },
     {
       "id": 111,
@@ -1690,7 +1690,7 @@ function getFreshEnemies() {
       "defense": 80,
       "weaknesses": 4032,
       "resistances": 65504,
-      "isBoss": true
+      "isBoss": true,
     },
     {
       "id": 112,
@@ -1706,8 +1706,8 @@ function getFreshEnemies() {
       "defense": 120,
       "weaknesses": 1040,
       "resistances": 0,
-      "isBoss": true
-    }
+      "isBoss": true,
+    },
   ];
 }
 
