@@ -1,4 +1,3 @@
-
 /**
  * Given a list of Enemy DNA, shuffles the regular drops among the enemies that normally drop items
  * @param  {Enemy[]} enemies - The list of Enemy DNA

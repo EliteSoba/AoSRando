@@ -1,5 +1,6 @@
 /** Returns a fresh list of enemies so that modification isn't as committal. */
 function getFreshEnemies() {
+  // TODO: enemy descriptions are located in Souls.js, but should probably go here (either instead or as well?).
   return [
     {
       "id": 0,

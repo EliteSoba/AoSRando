@@ -6,6 +6,7 @@ const FirstDraftEntranceShuffle = require('./implementations/FirstDraftEntranceS
 const Logger = require('../../debug/Logger');
 const DebugLevels = require('../../debug/DebugLevels');
 
+/** The max number of entrance randomization attempts to try before giving up. */
 const MAX_ATTEMPTS = 1000;
 
 /**
@@ -82,15 +83,15 @@ class EntranceRandomizer {
     }
   }
 
-    /**
-     * Executes entrance randomization using the selected implementation,
-     * but keeps trying until it succeeds or hits ${MAX_ATTEMPTS} tries.
-     * @param  {function} getFreshAreas - Getter for a fresh list of areas, so multiple attempts can be tried
-     * @param  {Random} random - Shared pseudorandom number generator
-     * @param  {Room} startingRoom - Object describing the starting room
-     * @param  {function} solvabilityTest - Function that tests if the configuration is valid or not
-     * @return {boolean} - true if the randomization succeeded, false otherwise
-     */
+  /**
+   * Executes entrance randomization using the selected implementation,
+   * but keeps trying until it succeeds or hits ${MAX_ATTEMPTS} tries.
+   * @param  {function} getFreshAreas - Getter for a fresh list of areas, so multiple attempts can be tried
+   * @param  {Random} random - Shared pseudorandom number generator
+   * @param  {Room} startingRoom - Object describing the starting room
+   * @param  {function} solvabilityTest - Function that tests if the configuration is valid or not
+   * @return {boolean} - true if the randomization succeeded, false otherwise
+   */
   executeUntilSuccessful(getFreshAreas, random, startingRoom, solvabilityTest) {
     for (let attempts = 1; attempts <= MAX_ATTEMPTS; attempts++) {
       const areas = getFreshAreas();

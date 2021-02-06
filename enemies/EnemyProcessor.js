@@ -1,9 +1,13 @@
 const getFreshEnemies = require('./Enemies');
+
 const randomizeEnemySouls = require('./randomizeEnemySouls');
 const shuffleEnemyDrops = require('./shuffleEnemyDrops');
+
 const DataUtils = require('../utils/DataUtils');
+
 const DebugLevels = require('../debug/DebugLevels');
 const Logger = require('../debug/Logger');
+
 const {
   writeEnemy,
 } = DataUtils;
@@ -55,12 +59,15 @@ class EnemyProcessor {
     if (this._randomizeDrops && this._shuffleDrops) {
       Logger.log('Only one of randomizeDrops and shuffleDrops should be set. Prioritizing shuffle', DebugLevels.WARN);
     }
+
     if (this._shuffleDrops) {
       shuffleEnemyDrops(this._enemies, this._random);
     }
     else if (this._randomizeDrops) {
       // noop
+      // TODO: implement this
     }
+
     if (this._randomizeSouls) {
       randomizeEnemySouls(this._enemies, this._random);
     }

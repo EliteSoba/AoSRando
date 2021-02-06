@@ -1,8 +1,11 @@
-const Souls = require('../items/Souls');
 const Enemies = require('./Enemies');
+
+const Souls = require('../items/Souls');
+
 const DebugLevels = require('../debug/DebugLevels');
 const Logger = require('../debug/Logger');
 
+// TODO: Kicker skeleton is now kinda missing from the pool and should be added somehow
 const allSouls = [...Souls.Red, ...Souls.Blue, ...Souls.Yellow]
   .filter(soul => !soul.isProgression && !soul.isKindaProgression);
 
@@ -13,6 +16,8 @@ const allSouls = [...Souls.Red, ...Souls.Blue, ...Souls.Yellow]
  * @param  {Random} random - The seeded pseudorandom number generator
  */
 function randomizeEnemySouls(enemies, random) {
+  // We shuffle both the souls list and the enemies list to ensure that certain souls aren't
+  // always the duplicates and certain enemies don't always get paired as having the same soul
   const shuffledSouls = random.shuffle(allSouls);
   const shuffledEnemies = random.shuffle(enemies);
 
