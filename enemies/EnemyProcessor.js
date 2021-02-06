@@ -17,6 +17,11 @@ const {
  * object can be shared across multiple processes easily.
  */
 class EnemyProcessor {
+  /**
+   * Constructor. Generates a new EnemyProcessor for the given data/pseudorandom number generator
+   * @param {Byte[]} data - The game data to modify
+   * @param {Random} random - The shared pseudorandom number generator
+   */
   constructor(data, random) {
     this._data = data;
     this._random = random;

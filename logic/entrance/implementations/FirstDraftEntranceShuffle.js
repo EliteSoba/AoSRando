@@ -70,32 +70,71 @@ const DOORS_TO_TEMPORARILY_IGNORE = [
   139590520,
 ];
 
+/**
+ * Helper function to determine if a door should be randomized
+ * @param  {Door} door - The door to check
+ * @param  {uint_32[]} doorsToSkip - The list of door addresses to skip randomization for
+ * @return {Boolean} - If the door is valid or not
+ */
 function isValidDoor(door, doorsToSkip) {
   return !door.isFakeDoor && !doorsToSkip.find(d => d === door.address);
 }
 
+/**
+ * Helper function to get all the valid doors in a room
+ * @param  {Room} room - The room from which the door list should be pulled
+ * @param  {uint_32[]} doorsToSkip - The list of door addresses to skip
+ * @return {Door[]} - The list of doors that should be randomized
+ */
 function getRealDoors(room, doorsToSkip) {
   return room.doors.filter(door => isValidDoor(door, doorsToSkip));
 }
 
+/**
+ * Helper function to get all the valid rooms in an area which should be randomized
+ * @param  {Room[]} rooms - The list of rooms that should be filtered
+ * @return {Room[]} - The filtered list of rooms which should be randomized
+ */
 function getRealRooms(rooms) {
   return rooms.filter(room => !room.isWeirdChaoticRealmRoomDoNotModify && ROOMS_TO_SKIP_RANDOMIZATION.indexOf(room.address) === -1);
 }
 
+/**
+ * Randomize all the doors within a particular area. Note that since this randomization is happening
+ * on a per area basis, area transition doors have to be accounted for separately, due to spanning multiple areas.
+ * @param  {Area} area - The area information, most significantly containing a list of rooms in the area
+ * @param  {Random} random - The shared pseudorandom number generator
+ * @param  {Door[]} doorsToSkip - A list of doors to skip. In addition to the weird doors, this list
+ *   should also contain the area transition doors for the reason listed above
+ * @return {Object[]} - A list of Objects describing source doors and destination doors
+ */
 function randomizeArea(area, random, doorsToSkip) {
+  // Get all the rooms in an area that we want to randomize
   const rooms = getRealRooms(area.rooms);
+
+  // Pick a room at random to start with. It doesn't matter which because
+  // the area will be fully connected by the end anyway
   const firstRoom = rooms[0];
+
+  // Maintain a list of all the doors that still need partners, and update
+  // as we add new rooms
   let unmatchedDoors = getRealDoors(firstRoom, doorsToSkip);
+
+  // Maintain a list of all the new door pairings that have been decided
   const pairings = [];
 
+  // Logging check to see how many doors each area has and in what directions they point
   let doorCounts = {};
   rooms.forEach(room => getRealDoors(room, doorsToSkip).forEach(door => doorCounts[door.direction] = ~~(doorCounts[door.direction]) + 1));
   Logger.log(`Number of doors for each direction: ${JSON.stringify(doorCounts)}`, DebugLevels.LOG);
 
-  // Keep track of the rooms we haven't picked yet.
+  // Keep track of the rooms we haven't picked yet
   let availableRooms = rooms.filter(({ address }) => address !== firstRoom.address);
   for (let iterationCount = 0; availableRooms.length > 0; iterationCount++) {
     if (unmatchedDoors.length === 0) {
+      // This will only happen if dead ends get assigned too early and there are no more doors left
+      // to assign multi-exit rooms to. This gets taken care of when filtering for valid destination rooms,
+      // so this branch should only occur if that logic has a serious flaw.
       Logger.log('Something went wrong with the randomization and we\'re out of doors', DebugLevels.FATAL);
       return false;
     }
@@ -115,10 +154,10 @@ function randomizeArea(area, random, doorsToSkip) {
       //     |
       // which leads to 4 unmatched doors.
       // This can happen on various scales. I don't know if there's a solution with this algorithm
-      // best bet is just to reroll
-      // another algorithm would be to take each "dead end" and attach it to a non-dead end room
-      // then repeat on any previously non-dead end room that has become a dead end due to losing an exit
-      // that can be in SecondDraftEntranceShuffle.
+      // so the best bet is just to reroll.
+      // Another algorithm would be to take each "dead end" and attach it to a non-dead end room
+      // then repeat on any previously non-dead end room that has become a dead end due to losing an exit.
+      // That can be in SecondDraftEntranceShuffle.
       // I don't know if areas with cycles will cause issues with that though.
       Logger.log(`Number of unmatched doors: ${unmatchedDoors.length}`, DebugLevels.ERROR);
       unmatchedDoors.forEach(door => Logger.log(`${door.sourceRoom.toString(16)}: ${door._door} - ${door.direction}`, DebugLevels.ERROR));
@@ -128,28 +167,39 @@ function randomizeArea(area, random, doorsToSkip) {
       return false;
     }
 
+    // Pick a random door in our list that still doesn't have a destination
     const {
       index: randomDoorIndex,
       value: randomDoor,
     } = random.pickFromArray(unmatchedDoors);
 
     if (DOORS_TO_TEMPORARILY_IGNORE.indexOf(randomDoor.address) !== -1) {
-      // Super lazy mode. For now, just skip picking a "forbidden" door as progression and leave it for looping.
+      // For now, just skip picking a "forbidden" door as progression and leave it for looping.
       // Doesn't forbid it from being the destination but in that case we can just reroll anyway.
       // This one check increases success rate by about 200x.
+      // Every attempt I make to also prevent the destination from being chosen just
+      // further reduces the success rate.
       continue;
     }
 
+    // Try to find a valid destination room for the chosen door
     Logger.log(`Choosing partner for door: ${randomDoor.address.toString(16)} - ${randomDoor.direction}`, DebugLevels.LOG);
     const oppositeDirection = getOppositeDirection(randomDoor.direction);
     const validRoomPartners = availableRooms
-      .filter(({ doors }) => doors.some(door => door.direction === oppositeDirection && isValidDoor(door, doorsToSkip))) // Find a door with the correct direction
-      .filter(({ doors }) => {
-        // ensure we always have more edges to work with.
-        // unless we're nearing the end in which case, we can stop.
-        // zone transitions are ignored and are effectively treated as dead ends
-        // this is fine because in the future some arbitrary doors can be chosen as transitions
-        // (as long as the directionality ends up being the same)
+      .filter((room) => {
+        const doors = room.doors;
+        if (!doors.some(door => door.direction === oppositeDirection && isValidDoor(door, doorsToSkip))) {
+          // Ignore all rooms that don't have any valid doors in the right direction
+          return false;
+        }
+        // Check to make sure that if we add this door, we still have more available doors to
+        // continue randomization with. This means that the number of available doors after
+        // adding this room and reserving the old door should be a positive number.
+        // The exception is when we approach the end of the area randomization and there are only
+        // a few rooms to work with. Put more simply, we don't need any more unmatched doors if
+        // the last room we're placing is a dead end.
+        // Zone transition doors are ignored when counting unmatched doors because their destinations
+        // are already set. This should still be fine even if zone transition doors become randomized.
         // TODO: Need to stop counting inaccessible doors as valid.
         //   The inaccessible doors will then be handled during the intraarea loops part of the logic
         //   to ensure multiple entrances into the same room.
@@ -166,19 +216,24 @@ function randomizeArea(area, random, doorsToSkip) {
       continue;
     }
 
-    // Too lazy to come up with a better way for this that won't result in O(n^2) runtime
-    availableRooms = availableRooms.filter(({ address }) => address !== chosenRoom.address);
-
     const partnerDoor = random.pickFromArray(chosenRoom.doors.filter(door => door.direction === oppositeDirection && isValidDoor(door, doorsToSkip))).value;
     pairings.push({ source: randomDoor, destination: partnerDoor });
     pairings.push({ source: partnerDoor, destination: randomDoor });
 
+    // Remove the chosen room from the list of available rooms
+    // We're already getting O(n) runtime inside the loop from finding valid room partners
+    // which I'm using to justify my laziness here instead of making availableRooms better.
+    availableRooms = availableRooms.filter(({ address }) => address !== chosenRoom.address);
+
+    // Remove the chosen door from the list of available unmatched doors
     unmatchedDoors.splice(randomDoorIndex, 1)
+
+    // Add all the other valid doors in the destination room as unmatched doors to consider
     unmatchedDoors = unmatchedDoors.concat(chosenRoom.doors.filter(door => door.address !== partnerDoor.address && isValidDoor(door, doorsToSkip)));
   }
 
-  // Sanity check. Every 8 should have a 2, 6 should have a 4, and vice versa.
   if (unmatchedDoors.length > 0) {
+    // Sanity check. Every 8 should have a 2, 6 should have a 4, and vice versa (except Floating Garden)
     let unmatchedDoorCounts = {};
     unmatchedDoors.forEach(door => unmatchedDoorCounts[door.direction] = ~~unmatchedDoorCounts[door.direction] + 1);
     Logger.log(`Number of unmatched doors in each direction: ${JSON.stringify(unmatchedDoorCounts)}`, DebugLevels.LOG);
@@ -190,7 +245,7 @@ function randomizeArea(area, random, doorsToSkip) {
     Logger.log('Current unmatched doors for this area:', DebugLevels.LOG);
     unmatchedDoors.forEach(door => Logger.log(`${door.sourceRoom.toString(16)}: ${door._door} - ${door.direction}`), DebugLevels.LOG);
 
-    // Pair up all the remaining doors.
+    // Pair up all the remaining doors
     // This generally only happens if there are cycles in the area
     while (unmatchedDoors.length > 0) {
       if (unmatchedDoors.length === 1) {
@@ -209,7 +264,7 @@ function randomizeArea(area, random, doorsToSkip) {
           "destYPos": 512,
           "direction": 4,
           "sourceRoom": 139556448,
-          "complement": 139556248
+          "complement": 139556248,
         };
         pairings.push({ source: unmatchedDoors[0], destination: partnerDoor });
         unmatchedDoors = [];
@@ -238,7 +293,12 @@ function randomizeArea(area, random, doorsToSkip) {
   return pairings;
 }
 
-function FirstDraftEntranceShuffle(areas, random, startingRoom) {
+/**
+ * First attempt at an entrance shuffler.
+ * Shuffles all the connections within a given area (with a few exceptions).
+ */
+function FirstDraftEntranceShuffle(areas, random) {
+  // Get a list of all the doors
   let allDoors = {};
   areas.forEach(area => {
     area.rooms.forEach(room => {
@@ -254,6 +314,9 @@ function FirstDraftEntranceShuffle(areas, random, startingRoom) {
     });
   });
 
+  // Figure out which doors to skip.
+  // In addition to the hardcoded doors listed above, this list should also include
+  // doors that transition across areas for now.
   const transitionDoors = [];
   Object.values(allDoors).forEach(door => {
     if (door.isTransitionRoom && door.area !== allDoors[door.door.complement].area) {
@@ -289,9 +352,6 @@ function FirstDraftEntranceShuffle(areas, random, startingRoom) {
     Logger.log(`Completed randomization of ${area.area}`, DebugLevels.MARKER);
     newConnections = newConnections.concat(areaConnections);
   });
-
-  // TODO: seed 5: inaccessible exit got connected to dead end room (arena top room)
-  // also in reservoir, and top floor
 
   return newConnections;
 }

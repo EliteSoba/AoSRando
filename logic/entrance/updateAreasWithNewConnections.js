@@ -33,6 +33,7 @@ function updateAreasWithNewConnections(areas, connections) {
   deepCopiesOfDoors[-4] = {...UNMATCHED_GARDEN_DOOR};
 
   // Don't ask. Apparently the connections aren't fully shallow copies, but I don't remember why
+  // Generate shallow copies to simplify modification
   const allDoors = {};
   areas.forEach((area) => {
     area.rooms.forEach((room) => {

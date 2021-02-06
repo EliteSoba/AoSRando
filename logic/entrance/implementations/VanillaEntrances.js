@@ -1,8 +1,6 @@
 /**
  * An entrance "randomizer" that doesn't do anything.
- * @param  {Areas} areas - The list of Areas
- * @param  {Random} random - Shared pseudorandom number generator
- * @param  {Room} startingRoom - Object describing the starting room
+ * Also serves as a template for future entrance randomizer implementations.
  */
 function VanillaEntrances(areas, random, startingRoom) {
   return [];
