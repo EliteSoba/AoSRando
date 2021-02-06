@@ -1,6 +1,6 @@
-const AoSUtils = require('../../utils/AosUtils');
-const Logger = require('../../debug/Logger');
-const DebugLevels = require('../../debug/DebugLevels');
+const AoSUtils = require('../../../utils/AosUtils');
+const Logger = require('../../../debug/Logger');
+const DebugLevels = require('../../../debug/DebugLevels');
 
 const {
   getOppositeDirection,
@@ -68,7 +68,7 @@ const DOORS_TO_TEMPORARILY_IGNORE = [
 
   // Top floor under Graham
   139590520,
-]
+];
 
 function isValidDoor(door, doorsToSkip) {
   return !door.isFakeDoor && !doorsToSkip.find(d => d === door.address);
@@ -295,5 +295,10 @@ function FirstDraftEntranceShuffle(areas, random, startingRoom) {
 
   return newConnections;
 }
+
+FirstDraftEntranceShuffle.displayName = 'First Draft Entrance Shuffle';
+FirstDraftEntranceShuffle.desc = 'Preliminary attempt at randomizing doors in an area by starting at a room'
+  + ' and continuing to connect unmatched doors to new rooms, matching all the hanging doors once there are'
+  + ' no more rooms to add. Doesn\'t randomize rooms surrounding Graham, Julius, and Chaos.'
 
 module.exports = FirstDraftEntranceShuffle;

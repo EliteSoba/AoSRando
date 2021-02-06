@@ -1,58 +1,39 @@
-const Locks = require('./progression/Locks');
-const Keys = require('./progression/Keys');
-const getFreshAreas = require('./progression/Areas');
 const determineAccess = require('./progression/determineAccess');
-const SolvabilityUtils = require('./utils/SolvabilityUtils');
+const getFreshAreas = require('./progression/Areas');
+const Keys = require('./progression/Keys');
+
 const AoSUtils = require('./utils/AosUtils');
+const DataUtils = require('./utils/DataUtils');
+const SolvabilityUtils = require('./utils/SolvabilityUtils');
+
 const determineRequirements = require('./logic/determineRequirements');
 const pickStartingRoom = require('./logic/pickStartingRoom');
+const EntranceRandomizer = require('./logic/entrance/EntranceRandomizer');
+const ItemRandomizer = require('./logic/item/FullRandom');
+
+const EnemyProcessor = require('./enemies/EnemyProcessor');
+const PostProcessor = require('./postprocessing/PostProcessor');
+const randomizeShop = require('./shop/randomizeShop');
 
 const Logger = require('./debug/Logger');
 const DebugLevels = require('./debug/DebugLevels');
 
-const DataUtils = require('./utils/DataUtils');
-
-const ItemRandomizer = require('./logic/item/FullRandom');
-const EntranceRandomizer = require('./logic/entrance/FirstDraftEntranceShuffle');
-const updateAreasWithNewConnections = require('./logic/entrance/updateAreasWithNewConnections');
-
-const PostProcessor = require('./postprocessing/PostProcessor');
-const EnemyProcessor = require('./enemies/EnemyProcessor');
-const randomizeShop = require('./shop/randomizeShop');
+const fs = require('fs');
+const Random = require('./utils/Random');
 
 const Areas = getFreshAreas();
 
-const {
-  canAccess,
-  getAvailableExits,
-  isSolvable,
-} = SolvabilityUtils;
 const {
   getOppositeDirection,
 } = AoSUtils;
 const {
   updateDataWithAreaInfo
 } = DataUtils;
-
-const fs = require('fs');
-
-const Random = require('./utils/Random');
-
-/** Hardcoded starting room address. */
-const STARTING_ROOM_ADDRESS = 0x0850EF9C;
-
-/** Hardcoded starting room object */
-const STARTING_ROOM_OBJECT = Areas[0].rooms[0];
-
-
-function shuffleMap(areas, random, startingRoom) {
-  const newConnections = EntranceRandomizer(areas, random, startingRoom);
-  if (!newConnections) {
-    return false;
-  }
-  updateAreasWithNewConnections(areas, newConnections);
-  return true;
-}
+const {
+  canAccess,
+  getAvailableExits,
+  isSolvable,
+} = SolvabilityUtils;
 
 function placeItems(areas, requirements, random, startingRoom) {
   return ItemRandomizer(areas, requirements, random, startingRoom);
@@ -68,6 +49,9 @@ function doRandomization(data, settings = {}) {
 
   let areas = getFreshAreas();
   const requirements = determineRequirements(random);
+
+  const entranceRandomizer = new EntranceRandomizer();
+  entranceRandomizer.selectImplementation(1);
 
   // Determine the starting room. With entrance randomizer, this should be a save room
   // to allow for immediate suspends, but save points don't interact well with the
@@ -94,30 +78,22 @@ function doRandomization(data, settings = {}) {
     if (settings.randomizeRooms) {
       // Shuffle doors
       // TODO: I want to improve my first draft and also work on a second draft eventually
-      let clearable = false;
-      let iterations;
-      for (iterations = 0; !clearable; iterations++) {
-        if (iterations >= 1000) {
-          // TODO: should this reattempting be part of the entrance shuffle logic instead?
-          // it is for the item randomization, so that'd probably be better.
-          Logger.log(`Couldn't generate a valid map in 1,000 tries.`, DebugLevels.FATAL);
-          return;
-        }
-        areas = getFreshAreas();
-        shuffleMap(areas, random, startingRoom);
-
-        const solvabilityConfig = {
-          progression: requirements.progression,
-          startingInventory: Object.values(Keys),
-          startRoom: startingRoom.address,
-          fullSearch: settings.ensureFullyClearable
-        };
+      const solvabilityConfig = {
+        progression: requirements.progression,
+        startingInventory: Object.values(Keys),
+        startRoom: startingRoom.address,
+        fullSearch: settings.ensureFullyClearable
+      };
+      const solvabilityTest = (areas) => {
         const solvability = isSolvable(areas, solvabilityConfig);
-
-        clearable = settings.ensureFullyClearable ? solvability.fullyClearable : solvability.isSolvable;
+        return settings.ensureFullyClearable ? solvability.fullyClearable : solvability.isSolvable;
       }
+      const entranceRandoSucceeded =
+        entranceRandomizer.executeUntilSuccessful(getFreshAreas, random, startingRoom, solvabilityTest);
 
-      Logger.log(`Attempts to generate a map layout: ${iterations}`, DebugLevels.DEBUG);
+      if (!entranceRandoSucceeded) {
+        return;
+      }
     }
 
     if (settings.randomizeItems) {
@@ -261,8 +237,6 @@ function doRandomization(data, settings = {}) {
         Logger.log('Successfully wrote file', DebugLevels.MARKER);
       }
     });
-
-    // fs.writeFile('areas.json', JSON.stringify(areas), () => {});
   }
 }
 
