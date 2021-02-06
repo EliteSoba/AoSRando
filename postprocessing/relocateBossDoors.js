@@ -159,6 +159,32 @@ function relocateBossDoors(data, areas, freeSpaceStart) {
     rooms.forEach(room => allRoomsByAddress[room.address] = room);
   });
 
+  Logger.log('Removing unused boss doors', DebugLevels.MARKER);
+
+  // Find every boss door that doesn't lead to a boss room, and delete it
+  // If a boss door is already in the correct room, but next to the wrong door,
+  // then this step will cause some unnecessary work for the next step, where the
+  // entity will be deleted and then the entire entity list will be moved in memory
+  // and another door is added, instead of just repositioning the existing door,
+  // but that's probably acceptable behavior.
+  areas.forEach(({ rooms }) => {
+    rooms.forEach((room) => {
+      room.doors.forEach((door) => {
+        if (door.isBossDoor && !BOSS_ROOMS.find(({ address }) => address === door.destination)) {
+          // Delete boss doors that don't lead to boss rooms
+          const roomEntities = getEntityList(data, getEntityListAddress(data, room.address));
+          roomEntities.forEach((entity) => {
+            // Thankfully max one boss per area
+            if (entity.type === 2 && entity.subtype === 2) {
+              Logger.log(`Removing excessive boss door from room ${room.address.toString(16)}`, DebugLevels.LOG);
+              deleteEntity(data, entity);
+            }
+          });
+        }
+      });
+    });
+  });
+
   Logger.log('Adding new boss doors', DebugLevels.MARKER);
 
   // For all relevant boss rooms, find the neighboring rooms,
@@ -170,7 +196,8 @@ function relocateBossDoors(data, areas, freeSpaceStart) {
 
       // Find the rooms that lead into this boss room
       const neighboringRooms = room.doors.map(door => ({
-        room: allRoomsByAddress[door.destination], door: door.complement
+        room: allRoomsByAddress[door.destination],
+        door: door.complement,
       }));
       neighboringRooms.forEach((neighboringRoom) => {
         const {
@@ -220,29 +247,6 @@ function relocateBossDoors(data, areas, freeSpaceStart) {
         freeSpace += writeEntityList(data, freeSpace, sortedEntities);
       });
     });
-
-  Logger.log('Removing unused boss doors', DebugLevels.MARKER);
-
-  // Find every boss door that doesn't lead to a boss room, and delete it
-  // Note that this involves reparsing the entity list which can somewhat
-  // double dip the work of the previous step, but that's okay for now.
-  areas.forEach(({ rooms }) => {
-    rooms.forEach((room) => {
-      room.doors.forEach((door) => {
-        if (door.isBossDoor && !BOSS_ROOMS.find(({ address }) => address === door.destination)) {
-          // Delete boss doors that don't lead to boss rooms
-          const roomEntities = getEntityList(data, getEntityListAddress(data, room.address));
-          roomEntities.forEach((entity) => {
-            // Thankfully max one boss per area
-            if (entity.type === 2 && entity.subtype === 2) {
-              Logger.log(`Removing excessive boss door from room ${room.address.toString(16)}`, DebugLevels.LOG);
-              deleteEntity(data, entity);
-            }
-          });
-        }
-      });
-    });
-  });
 
   return freeSpace;
 }

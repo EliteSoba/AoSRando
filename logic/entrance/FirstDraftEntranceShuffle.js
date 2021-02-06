@@ -47,6 +47,29 @@ const DOORS_TO_SKIP = [
   139556416,
 ];
 
+// These are effectively dead ends but they're inside other rooms
+// which makes logic silly sometimes. For now we skip and readd access
+// when adding intra-area loops
+const DOORS_TO_TEMPORARILY_IGNORE = [
+  // Chapel hidden room
+  139534100,
+
+  // Reservoir boat room
+  139572860,
+
+  // Reservoir waterfall room
+  139574476,
+
+  // Reservoir long hall
+  139570596,
+
+  // Arena Laevatain
+  139584944,
+
+  // Top floor under Graham
+  139590520,
+]
+
 function isValidDoor(door, doorsToSkip) {
   return !door.isFakeDoor && !doorsToSkip.find(d => d === door.address);
 }
@@ -110,6 +133,13 @@ function randomizeArea(area, random, doorsToSkip) {
       value: randomDoor,
     } = random.pickFromArray(unmatchedDoors);
 
+    if (DOORS_TO_TEMPORARILY_IGNORE.indexOf(randomDoor.address) !== -1) {
+      // Super lazy mode. For now, just skip picking a "forbidden" door as progression and leave it for looping.
+      // Doesn't forbid it from being the destination but in that case we can just reroll anyway.
+      // This one check increases success rate by about 200x.
+      continue;
+    }
+
     Logger.log(`Choosing partner for door: ${randomDoor.address.toString(16)} - ${randomDoor.direction}`, DebugLevels.LOG);
     const oppositeDirection = getOppositeDirection(randomDoor.direction);
     const validRoomPartners = availableRooms
@@ -125,6 +155,7 @@ function randomizeArea(area, random, doorsToSkip) {
         //   to ensure multiple entrances into the same room.
         //   Will probably need to take note of them separately, to ensure no part of the graph
         //   stays fully disconnected
+        //   for now just skip those doors and readd them during the looping
         const validDoors = doors.filter(door => isValidDoor(door, doorsToSkip));
         const newAvailableDoors = validDoors.length + unmatchedDoors.length - 2;
         return newAvailableDoors === availableRooms.length - 1 || newAvailableDoors > 0;
@@ -134,7 +165,6 @@ function randomizeArea(area, random, doorsToSkip) {
       Logger.log(`No valid pairs for door ${randomDoor.address.toString(16)}`, DebugLevels.WARN);
       continue;
     }
-    unmatchedDoors.splice(randomDoorIndex, 1)
 
     // Too lazy to come up with a better way for this that won't result in O(n^2) runtime
     availableRooms = availableRooms.filter(({ address }) => address !== chosenRoom.address);
@@ -142,6 +172,8 @@ function randomizeArea(area, random, doorsToSkip) {
     const partnerDoor = random.pickFromArray(chosenRoom.doors.filter(door => door.direction === oppositeDirection && isValidDoor(door, doorsToSkip))).value;
     pairings.push({ source: randomDoor, destination: partnerDoor });
     pairings.push({ source: partnerDoor, destination: randomDoor });
+
+    unmatchedDoors.splice(randomDoorIndex, 1)
     unmatchedDoors = unmatchedDoors.concat(chosenRoom.doors.filter(door => door.address !== partnerDoor.address && isValidDoor(door, doorsToSkip)));
   }
 

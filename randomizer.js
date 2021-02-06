@@ -42,43 +42,10 @@ const Random = require('./utils/Random');
 const STARTING_ROOM_ADDRESS = 0x0850EF9C;
 
 /** Hardcoded starting room object */
-// const STARTING_ROOM_OBJECT = Areas.find({ area } => area === 'Castle Corridor').rooms
-//   .find({ address } => address === STARTING_ROOM_ADDRESS);
 const STARTING_ROOM_OBJECT = Areas[0].rooms[0];
 
 
 function shuffleMap(areas, random, startingRoom) {
-  // noop for now
-  // For each area
-  // pick a starting room or get a default room for corridor/chaotic
-  // don't randomize garden for now
-  // create a list of new doors
-  // pick a door at random and have it go to a random room
-  //   unless the door is a transition to a new zone, then record this door
-  // add that new room's doors to the list
-  // once we're out of new rooms, the remaining doors should probably be
-  //  able to be connected together due to constant number of edges and vertices
-  // when connecting a new area to an old one, make sure the doors work
-  // ensure connections between:
-  //   Corridor - Reservoir x 2
-  //   Corridor - Chapel
-  //   Corridor - Dance Hall
-  //   Corridor - Inner Quarter
-  //   Corridor - Floating Garden
-  //   Corridor - Clock Tower
-  //   Corridor - Top Floor
-  //   Chapel - Study
-  //   Study - Forbidden
-  //   Dance Hall - Inner Quarter
-  //   Inner Quarter - Top Floor
-  //   Floating Garden - Clock Tower
-  //   Clock Tower - Top Floor
-  //   Reservoir - Arena
-  //   Reservoir - Forbidden
-  // Unsure of how to proceed with the Garden - Chaotic connection.
-  // Also for Chaotic, don't randomize the last three rooms for consistency
-  //  (Chaos first room, door leading to that, and save room opposite Chaos)
-  //shuffleCorridor(areas[0], random, startingRoom);
   const newConnections = EntranceRandomizer(areas, random, startingRoom);
   if (!newConnections) {
     return false;
@@ -88,22 +55,13 @@ function shuffleMap(areas, random, startingRoom) {
 }
 
 function placeItems(areas, requirements, random, startingRoom) {
-  // noop for now
-  // Approach one is place every single item randomly and then check for completability
-  // Approach two is more nuanced and my personal favorite:
-  // Starting from the beginning, find all sphere 1 items,
-  // find all room/item locks, and pick a random progression item that unlocks stuff
-  //   place this progression item randomly
-  // find all sphere 2 items, and do the same thing for finding the next progression item
-  //   pick a new location, weighing sphere 2 locations slightly heavier than sphere 1
-  // repeat, continuously adding weight to higher spheres and lowering weight for lower spheres
-  // exclude dracula books and souls from this, and place them all randomly after all progression has been placed
   return ItemRandomizer(areas, requirements, random, startingRoom);
 }
 
 function doRandomization(data, settings = {}) {
   // Set up the seed on the randomization for consistency
-  // PRIORITY: DONE
+  // TODO: I also want to add the option to seed the item and entrance randos independently,
+  // in case someone finds a good random map and wants to try different item placements on that.
   const random = new Random();
   const seed = 'seed' in settings ? settings.seed : random.random_int31();
   random.init_seed(seed);
@@ -111,13 +69,9 @@ function doRandomization(data, settings = {}) {
   let areas = getFreshAreas();
   const requirements = determineRequirements(random);
 
-  // Change the starting room to one of the Corridor save rooms
-  // This replaces the "add save statue to starting room" idea
-  // because save statues seem to be really finnicky.
-  // The idea will roughly be to swap the address of the save room
-  // with that of the starting room in the room list (around the 0x0050E9AC range)
-  // The actual writing should probably occur in postprocessing
-  // PRIORITY: DONE
+  // Determine the starting room. With entrance randomizer, this should be a save room
+  // to allow for immediate suspends, but save points don't interact well with the
+  // vanilla starting room, I suspect due to it being larger than 1x1.
   let startingRoom = areas[0].rooms[0];
   if (settings.randomizeRooms) {
     startingRoom = pickStartingRoom(areas, random);
@@ -125,6 +79,8 @@ function doRandomization(data, settings = {}) {
 
   Logger.log(`Starting at ${startingRoom.address.toString(16)}`, DebugLevels.LOG);
 
+  // First attempt to generate a reasonable map, then try to make sure that items
+  // can be placed on that map in a solvable manner.
   let solvableDistribution = false;
   let solvabilityInfo;
   for (let runs = 0; !solvableDistribution; runs++) {
@@ -137,12 +93,13 @@ function doRandomization(data, settings = {}) {
     // where the end is properly connected to the start
     if (settings.randomizeRooms) {
       // Shuffle doors
-      // PRIORITY: DONE, improvable
-      // DIFFICULTY: EXTREME
+      // TODO: I want to improve my first draft and also work on a second draft eventually
       let clearable = false;
       let iterations;
       for (iterations = 0; !clearable; iterations++) {
         if (iterations >= 1000) {
+          // TODO: should this reattempting be part of the entrance shuffle logic instead?
+          // it is for the item randomization, so that'd probably be better.
           Logger.log(`Couldn't generate a valid map in 1,000 tries.`, DebugLevels.FATAL);
           return;
         }
@@ -165,12 +122,15 @@ function doRandomization(data, settings = {}) {
 
     if (settings.randomizeItems) {
       // Place items around the map
-      // PRIORITY: DONE, improvable
-      // DIFFICULTY: EXTREME
+      // TODO: I want to add different item distribution logic choices.
+      // Right now I have pure random, but I want to implement my sphered progression placement logic,
+      // which would look at locks to sphere 2, pick a random progression item, and place it in sphere 1
+      // and then repeat for sphere 3, placing weights on distributing to more recent spheres.
       let itemPlacementSuccess = placeItems(areas, requirements, random, startingRoom);
       if (!itemPlacementSuccess) {
         // If we couldn't validly place the items, then skip this room distribution
-        // continue;
+        // Generally this happens if a map gets generated with no sphere 1 items
+        continue;
       }
     }
 
@@ -186,85 +146,93 @@ function doRandomization(data, settings = {}) {
 
 
   // Write shuffled doors and items to file
-  // PRIORITY: DONE
   updateDataWithAreaInfo(data, areas);
 
   const enemyProcessor = new EnemyProcessor(data, random);
 
   // No logic necessary here, just shuffle all the enemy souls
-  // PRIORITY: DONE
   enemyProcessor.randomizeSouls();
 
-  // Minimal logic here. Change drops and make sure to exclude books/skull key
-  // PRIORITY: HIGH
-  // DIFFICULTY: MEDIUM
+  // Shuffle all enemy drops amongst each other, which is an easy way to ensure
+  // that some of the stronger items aren't available in the drop pool.
+  // TODO: finish the true random drops logic
   enemyProcessor.shuffleDrops();
 
   enemyProcessor.execute();
 
   // Updates the shop to sell different things
-  // PRIORITY: DONE, improvable
+  // TODO: add some logic for the item pool here
   randomizeShop(data, random);
 
   const postProcessor = new PostProcessor(data, areas);
 
-  // Update books
-  // PRIORITY: DONE
+  // Update books to describe the newly chosen Dracula souls
   postProcessor.updateRequiredSouls(requirements.red, requirements.blue, requirements.yellow);
 
   // OPTIONAL: Relocate doors and add safety zips
-  // PRIORITY: DONE
+  // TODO: port this logic over from old code
   'relocateDoorLists(data, Areas);'
   'writeSafetyZips(data);'
 
   // Allow cutscene skips without having beaten the game first
-  // PRIORITY: DONE
   postProcessor.addCutsceneSkip();
 
-  // Shadow door unlocks when Graham is beaten.
-  // Replace the pre-Chaos door with it and remove the one in Floating Garden
-  // PRIORITY: MEDIUM
+  // Right now, the pre-Julius shadow door is a major bottleneck in terms of progression
+  // such that Chaotic Realm will rarely get progression. However, access to Chaotic Realm
+  // can't be granted early because it would defeat the purpose of collecting the Dracula souls, etc.
+  // This change would move the shadow door from in front of Julius to in front of Chaos,
+  // which would allos Julius to be an earlier boss fight (likely to the dismay of many) and allow
+  // Chaotic Realm to hold key progression.
+  // This would lead to potentially very challenging/painful seeds because Julius is such a difficult
+  // fight and there are no teleporters to easily get in/out of Chaotic Realm. Thus, this is a
+  // lower priority task, but I think it'd be an interesting toggle.
+  // PRIORITY: LOW
   // DIFFICULTY: MEDIUM
   'relocateShadowDoor(data);'
 
   // Chronomage destination room is hardcoded so update that to the preceeding room in logic
-  // If that doesn't work due to room coordinates, then change it to be the same room but on the
-  // left/right side
-  // PRIORITY: DONE
+  // Unfortunately, the code for the Chronomage warp function is rather complicated, and by default
+  // seems to be hardcoded to send Soma to x tile coordinate 0 and y tile coordinate 1 (modulo room height)
+  // and changing those to more accurately match the preceeding door is a bit more complicated.
+  // For now, since this room is always in Inner Quarters, I can safely say that sending to (0, 1)
+  // should never move Soma to a location that would be out of logic otherwise, due to the general
+  // simplicity of the rooms in the area.
   if (settings.randomizeRooms) {
     postProcessor.setChronomageDestination(solvabilityInfo.preChronomageRoom.address);
   }
 
-  // If debugging, Add with Bat, Skula, Panther,  and Chaos Ring
+  // If debugging, Add with Bat, Gravekeeper, Skula, Panther, Claimh, and Chaos Ring
+  // TODO: actually port this code over
   if ('settings.enableDebugDrops') {
-    // PRIORITY: DONE
     'writeDebugDrops(data);'
   }
 
-  // Actually register the starting room
-  // PRIORITY: DONE
+  // Update the starting room
   if (settings.randomizeRooms) {
     postProcessor.setStartingRoom(startingRoom);
   }
 
   // Remove breakable walls. They might be added back later but for now they complicate logic too much
-  // PRIORITY: DONE
+  // Main concern is that they can lead to a very unsettling user experience where it's not obvious
+  // what happened in the room transition.
   if (settings.randomizeRooms) {
     postProcessor.removeBreakableWalls();
   }
 
   // Remove boss doors from where they aren't necessary and add boss doors where they are
-  // PRIORITY: DONE
+  // TODO: See the comment in relocateBossDoors about how this is slightly broken
   if (settings.randomizeRooms) {
     postProcessor.relocateBossDoors();
   }
 
   // Remove one-way obstacles. Another logic simplification thing that might get added back later
+  // The ones in question are the Top Floor <-> Clock Tower connection, the Forbidden Area <-> Study connection,
+  // and possibly the Arena DDR room
   // PRIORITY: MEDIUM
   // DIFFICULTY: LOW
   'removeOneWayObstacles(data);'
 
-  // Place Soma slightly higher when going up through a connector, to ensure he always makes it through
+  // Place Soma slightly higher when going up through a connector, to ensure he always makes it through.
   // The ground to jump off to go through vertical connectors varies a lot, so the logic only cares if
   // Soma can get through the transition in the first place, and not if he can clear the ledge afterwards
   // PRIORITY: LOW
