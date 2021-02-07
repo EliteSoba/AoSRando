@@ -1,6 +1,6 @@
 const MersenneTwister = require('../external/mersenne-twister/mersenne-twister');
 
-/** Simple wrapper class for MersenneTwister that adds a pickFromArray function */
+/** Simple wrapper class for MersenneTwister that adds extra functions */
 class Random {
   constructor(seed) {
     this._random = new MersenneTwister(seed);

@@ -12,6 +12,11 @@ const relocateBossDoors = require('./relocateBossDoors');
  * and also ensures that certain operations run in a specific order
  */
 class PostProcessor {
+  /**
+   * Constructor. Generates a new PostProcessor for the given data/area info
+   * @param {Byte[]} data - The game data to modify
+   * @param {Areas} areas - The randomized area info
+   */
   constructor(data, areas) {
     this._freeSpaceStart = 0x00651170;
     this._data = data;

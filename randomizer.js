@@ -28,8 +28,6 @@ const {
   updateDataWithAreaInfo
 } = DataUtils;
 const {
-  canAccess,
-  getAvailableExits,
   isSolvable,
 } = SolvabilityUtils;
 

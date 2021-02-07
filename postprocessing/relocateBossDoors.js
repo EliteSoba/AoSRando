@@ -2,6 +2,7 @@ const AoSParsingUtils = require('../processing/AoSParsingUtils');
 const DataUtils = require('../utils/DataUtils');
 const FileUtils = require('../utils/FileUtils');
 const AoSConstants = require('../utils/AoSConstants')
+const AoSUtils = require('../utils/AoSUtils');
 
 const Logger = require('../debug/Logger');
 const DebugLevels = require('../debug/DebugLevels');
@@ -13,7 +14,6 @@ const {
 } = AoSParsingUtils;
 
 const {
-  sortEntityList,
   writeEntityList,
   deleteEntity,
 } = DataUtils;
@@ -26,6 +26,10 @@ const {
 const {
   DIR,
 } = AoSConstants;
+
+const {
+  sortEntityList,
+} = AoSUtils;
 
 // List of boss room information to easily keep track of relevant boss flag information
 const BOSS_ROOMS = [
