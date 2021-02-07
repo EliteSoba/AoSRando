@@ -5933,17 +5933,17 @@ function getFreshAreas() {
               varB: 42,
               flag: 0x515781,
             },
-            {
-              _item: 1,
-              address: 139548552,
-              xPos: 80,
-              yPos: 191,
-              type: 1,
-              subtype: 60,
-              varA: 1,
-              varB: 0,
-              isMimic: true, // TODO: remember to deal with mimics, i guess?
-            },
+            // {
+            //   _item: 1,
+            //   address: 139548552,
+            //   xPos: 80,
+            //   yPos: 191,
+            //   type: 1,
+            //   subtype: 60,
+            //   varA: 1,
+            //   varB: 0,
+            //   isMimic: true, // TODO: remember to deal with mimics, i guess?
+            // },
           ],
         },
         {
@@ -6648,7 +6648,7 @@ function getFreshAreas() {
                 doors: [
                   {
                     door: 1,
-                    locks: [Locks.GALAMOTH], // TODO: Chronomage send address is hardcoded and should be updated
+                    locks: [Locks.GALAMOTH],
                   },
                 ],
               },
@@ -12586,7 +12586,7 @@ function getFreshAreas() {
             },
           ],
           items: [
-            // TODO: This has a candle that rando changes at 51D92D
+            // TODO: This has a candle that rando changes at 0x51D92D
             {
               _item: 0,
               address: 139581820,
@@ -16853,7 +16853,7 @@ function getFreshAreas() {
         },
         {
           _area: 9,
-          _room: 18, // TODO: This is a one-way room. Removing the wall entity is probably the best choice
+          _room: 18,
           address: 139593536,
           mapX: 157,
           mapY: 3,
@@ -17424,7 +17424,7 @@ function getFreshAreas() {
           items: [],
         },
         {
-          _area: 10, // TODO: Same as top floor one-way room
+          _area: 10,
           _room: 1,
           address: 139597072,
           mapX: 166,

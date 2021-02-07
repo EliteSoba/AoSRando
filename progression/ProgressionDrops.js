@@ -13,7 +13,6 @@ const {
   Unusable,
 } = Consumables;
 
-/** Effectively a mapping of Keys to the relevant drop. TODO: Why didn't I make this just a map-like Object? */
 /**
  * Gets a fresh mapping from Keys to the relevant drops associated with those keys.
  * The fresh mapping is valuable because it allows modifications to happen easily and non-committally.
