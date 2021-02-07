@@ -90,7 +90,7 @@ class EntranceRandomizer {
    * @param  {Random} random - Shared pseudorandom number generator
    * @param  {Room} startingRoom - Object describing the starting room
    * @param  {function} solvabilityTest - Function that tests if the configuration is valid or not
-   * @return {boolean} - true if the randomization succeeded, false otherwise
+   * @return {Areas} - The new list of randomized areas, or null if randomization failed
    */
   executeUntilSuccessful(getFreshAreas, random, startingRoom, solvabilityTest) {
     for (let attempts = 1; attempts <= MAX_ATTEMPTS; attempts++) {
@@ -100,7 +100,7 @@ class EntranceRandomizer {
         Logger.log(`Generated a successful map on attempt ${attempts}`, DebugLevels.DEBUG);
         if (solvabilityTest(areas)) {
           Logger.log('This map passed the solvability test.', DebugLevels.DEBUG);
-          return true;
+          return areas;
         }
         else {
           Logger.log('This map did not pass the solvability test. Rerandomizing...', DebugLevels.DEBUG);
@@ -108,7 +108,7 @@ class EntranceRandomizer {
       }
     }
     Logger.log(`Couldn't generate a proper map in ${MAX_ATTEMPTS} tries.`, DebugLevels.FATAL);
-    return false;
+    return null;
   }
 }
 

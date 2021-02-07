@@ -82,10 +82,9 @@ function doRandomization(data, settings = {}) {
         const solvability = isSolvable(areas, solvabilityConfig);
         return settings.ensureFullyClearable ? solvability.fullyClearable : solvability.isSolvable;
       }
-      const entranceRandoSucceeded =
-        entranceRandomizer.executeUntilSuccessful(getFreshAreas, random, startingRoom, solvabilityTest);
+      areas = entranceRandomizer.executeUntilSuccessful(getFreshAreas, random, startingRoom, solvabilityTest);
 
-      if (!entranceRandoSucceeded) {
+      if (!areas) {
         return;
       }
     }
