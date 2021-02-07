@@ -18,12 +18,18 @@ class PostProcessor {
    * @param {Areas} areas - The randomized area info
    */
   constructor(data, areas) {
-    this._freeSpaceStart = 0x00651170;
     this._data = data;
     this._areas = areas;
-    this._red;
-    this._blue;
-    this._yellow;
+  }
+
+  /**
+   * Resets all settings for the PostProcessor
+   */
+  reset() {
+    this._freeSpaceStart = 0x00651170;
+    this._red = null;
+    this._blue = null;
+    this._yellow = null;
 
     this._addCutsceneSkip = false;
 
@@ -113,9 +119,14 @@ class PostProcessor {
     return this;
   }
 
-  execute() {
+  /**
+   * Executes the specified postprocessing enhancements and updates the passed data
+   * @param {Byte[]} data - The game data to modify
+   * @param {Areas} areas - The randomized area info
+   */
+  execute(data, areas) {
     if (this._addCutsceneSkip) {
-      writeCutsceneSkip(this._data);
+      writeCutsceneSkip(data);
     }
     if (this._relocateDoorLists) {
       // etc.
@@ -129,27 +140,27 @@ class PostProcessor {
     }
 
     if (this._red && this._blue && this._yellow) {
-      updateDraculaSouls(this._data, this._red, this._blue, this._yellow);
-      updateAncientBooks(this._data, this._red, this._blue, this._yellow);
+      updateDraculaSouls(data, this._red, this._blue, this._yellow);
+      updateAncientBooks(data, this._red, this._blue, this._yellow);
     }
 
     if (this._startingRoom) {
-      writeStartingRoom(this._data, this._startingRoom);
+      writeStartingRoom(data, this._startingRoom);
     }
 
     if (this._chronomageDestination) {
-      writeChronomageDestination(this._data, this._chronomageDestination);
+      writeChronomageDestination(data, this._chronomageDestination);
     }
 
     if (this._removeBreakableWalls) {
-      removeBreakableWalls(this._data);
+      removeBreakableWalls(data);
     }
 
     if (this._relocateBossDoors) {
-      this._freeSpaceStart = relocateBossDoors(this._data, this._areas, this._freeSpaceStart);
+      this._freeSpaceStart = relocateBossDoors(data, areas, this._freeSpaceStart);
     }
 
-    return this._data;
+    return data;
   }
 }
 

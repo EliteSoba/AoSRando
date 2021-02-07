@@ -21,6 +21,13 @@ class EntranceRandomizer {
     this._registerImplementation(VanillaEntrances);
     this._registerImplementation(FirstDraftEntranceShuffle);
 
+    this.reset();
+  }
+
+  /**
+   * Resets all settings for the EntranceRandomizer
+   */
+  reset() {
     this._selection = -1;
   }
 

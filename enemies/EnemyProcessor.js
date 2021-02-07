@@ -17,16 +17,14 @@ const {
  * object can be shared across multiple processes easily.
  */
 class EnemyProcessor {
-  /**
-   * Constructor. Generates a new EnemyProcessor for the given data/pseudorandom number generator
-   * @param {Byte[]} data - The game data to modify
-   * @param {Random} random - The shared pseudorandom number generator
-   */
   constructor(data, random) {
-    this._data = data;
-    this._random = random;
-    this._enemies = getFreshEnemies();
+    this.reset();
+  }
 
+  /**
+   * Resets all settings for the EnemyProcessor
+   */
+  reset() {
     this._randomizeDrops = false;
     this._shuffleDrops = false;
     this._randomizeSouls = false;
@@ -60,13 +58,19 @@ class EnemyProcessor {
     return this;
   }
 
-  execute() {
+  /**
+   * Executes the specified transformations on the enemies lists and updates the passed data
+   * @param {Byte[]} data - The game data to modify
+   * @param {Random} random - The shared pseudorandom number generator
+   */
+  execute(data, random) {
+    const enemies = getFreshEnemies();
     if (this._randomizeDrops && this._shuffleDrops) {
       Logger.log('Only one of randomizeDrops and shuffleDrops should be set. Prioritizing shuffle', DebugLevels.WARN);
     }
 
     if (this._shuffleDrops) {
-      shuffleEnemyDrops(this._enemies, this._random);
+      shuffleEnemyDrops(enemies, random);
     }
     else if (this._randomizeDrops) {
       // noop
@@ -74,10 +78,10 @@ class EnemyProcessor {
     }
 
     if (this._randomizeSouls) {
-      randomizeEnemySouls(this._enemies, this._random);
+      randomizeEnemySouls(enemies, random);
     }
 
-    this._enemies.forEach(enemy => writeEnemy(this._data, enemy));
+    enemies.forEach(enemy => writeEnemy(data, enemy));
   }
 }
 

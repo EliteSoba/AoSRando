@@ -50,6 +50,11 @@ function updateAreasWithNewConnections(areas, connections) {
 
     // TODO: destXOffset/destYOffset (or maybe destX/YPos?) shouldn't be blindly copied
     // because they're very connector-specific.
+    // The problem is that some connectors are a half smalltile apart, meaning that
+    // most every vertical connector is 2 tiles wide, but some are tile aligned and some
+    // instead start on a half tile. The 4 wide pre-garden connector is a lost cause and cant be saved.
+    // the biggest problem is when going from a 1-wide to the middle of a plural-wide room because of how the camera affects things
+    // In contrast, every horizontal connector seems to always be 1.5 tiles wide and aligned the same way
 
     // The source door should be updated to end up at the new destination
     // This is done by replacing the source door's info with that of the door

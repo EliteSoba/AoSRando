@@ -18,6 +18,13 @@ class ItemRandomizer {
     this._registerImplementation(VanillaItems);
     this._registerImplementation(FullRandom);
 
+    this.reset();
+  }
+
+  /**
+   * Resets all settings for the ItemRandomizer
+   */
+  reset() {
     this._selection = -1;
   }
 

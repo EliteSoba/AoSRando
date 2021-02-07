@@ -49,10 +49,11 @@ For now there's no meaningful user interface. Usage involves downloading the sou
  *  ~~Correction of Chronomage's teleport destination to the room right before the Chronomage room in logic~~
  *  ~~Removal of breakable walls~~
  *  ~~Relocation of boss doors to more accurate locations~~
- *  Relocation of wooden doors to be next to area transitions
  *  Correction of Soma's positional offsets when going through doors
- *  More interesting text for the Ancient Books
+ *  Relocation of wooden doors to be next to area transitions
+ *  ~~Updating the written file's filename to be more descriptive of the randomizer configuration~~
  *  Actually adding a UI
+ *  More interesting text for the Ancient Books
 
 ## Further down the line
  *  Relocate the pre-Julius shadow door to right before Chaos. This will allow Chaotic Realm to be more in logic

@@ -24,6 +24,11 @@ const ROOMS_TO_SKIP_RANDOMIZATION = [
 ];
 
 const DOORS_TO_SKIP = [
+  // This connector is unusually wide, which makes pairing it awkward and often leads to zips.
+  // I messed up the logic here a bit though so it needs to get fixed
+  // 139524388,
+  // 139524548,
+
   // Chaos boss door and pre-chaos save
   139601196,
   139601516,
