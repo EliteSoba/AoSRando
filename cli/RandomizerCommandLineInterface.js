@@ -219,7 +219,7 @@ class RandomizerCommandLineInterface {
   /** Simple marker to denote the end of the CLI process */
   _end() {
     return new Promise((fulfill, reject) => {
-      this._abort();
+      this._rl.question('\nRandomization completed. Press enter to close...', _ => this._abort());
     });
   }
 

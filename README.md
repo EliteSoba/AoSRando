@@ -30,7 +30,7 @@ The key new feature of this project is the ability to shuffle all door destinati
 With these codes on, by pressing L+R+A+Start and then suspending, you get sent back to the starting room (which has been changed to always be a save room in Castle Corridor)
 
 ## Usage
-For now, there's just a rough command line interface. Usage involves downloaded NodeJS (unsure of what minimum version is supported) and running:
+For now, there's just a rough command line interface. Either download and run the appropriate binary or download NodeJS (unsure of what minimum version is supported) and run:
 ```
 node randomizer.js
 ```
