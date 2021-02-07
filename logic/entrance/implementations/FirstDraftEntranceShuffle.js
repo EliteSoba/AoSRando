@@ -24,11 +24,9 @@ const ROOMS_TO_SKIP_RANDOMIZATION = [
 ];
 
 const DOORS_TO_SKIP = [
-  // This connector is unusually wide, which makes pairing it awkward and often leads to zips.
-  // I messed up the logic here a bit though so it needs to get fixed
-  // For these connectors, I effectively want to treat the rooms as a single unit
-  // 139524388,
-  // 139524548,
+  // The pre-garden vertical connector is unusually wide, which makes pairing it awkward and often leads to zips.
+  139524388,
+  139524548,
 
   // Chaos boss door and pre-chaos save
   139601196,
@@ -74,6 +72,13 @@ const DOORS_TO_TEMPORARILY_IGNORE = [
 
   // Top floor under Graham
   139590520,
+];
+
+// Rooms that should always be paired and act as a single building block
+// The only one that matters is the corridor pre-garden connector because the other
+// skipped doors are just dead ends anyway.
+const ROOM_GROUPINGS = [
+  [0x0850F944, 0x0850F9D4],
 ];
 
 /**
@@ -226,16 +231,33 @@ function randomizeArea(area, random, doorsToSkip) {
     pairings.push({ source: randomDoor, destination: partnerDoor });
     pairings.push({ source: partnerDoor, destination: randomDoor });
 
-    // Remove the chosen room from the list of available rooms
-    // We're already getting O(n) runtime inside the loop from finding valid room partners
-    // which I'm using to justify my laziness here instead of making availableRooms better.
-    availableRooms = availableRooms.filter(({ address }) => address !== chosenRoom.address);
-
     // Remove the chosen door from the list of available unmatched doors
     unmatchedDoors.splice(randomDoorIndex, 1)
 
     // Add all the other valid doors in the destination room as unmatched doors to consider
-    unmatchedDoors = unmatchedDoors.concat(chosenRoom.doors.filter(door => door.address !== partnerDoor.address && isValidDoor(door, doorsToSkip)));
+    // If the room is part of a grouping, treat all the rooms as being added and all the doors as new valid choices
+    const newRooms = [chosenRoom];
+    ROOM_GROUPINGS.forEach((grouping) => {
+      if (grouping.some(address => address === chosenRoom.address)) {
+        newRooms.push(
+          ...grouping
+            .filter(address => address !== chosenRoom.address)
+            .map(address => rooms.find(room => room.address === address))
+            .filter(room => room)
+        );
+      }
+    });
+
+    // Remove the chosen rooms from the list of available rooms
+    // We're already getting O(n) runtime inside the loop from finding valid room partners
+    // which I'm using to justify my laziness here instead of making availableRooms better.
+    availableRooms = availableRooms.filter(({ address }) =>
+      newRooms.findIndex(room => room.address === address) === -1
+    );
+
+    newRooms.forEach((room) => {
+      unmatchedDoors = unmatchedDoors.concat(room.doors.filter(door => door.address !== partnerDoor.address && isValidDoor(door, doorsToSkip)));
+    });
   }
 
   // All rooms have been placed, so now work on matching all the doors that still don't have partners.
