@@ -30,7 +30,10 @@ The key new feature of this project is the ability to shuffle all door destinati
 With these codes on, by pressing L+R+A+Start and then suspending, you get sent back to the starting room (which has been changed to always be a save room in Castle Corridor)
 
 ## Usage
-For now there's no meaningful user interface. Usage involves downloading the source code, downloading NodeJS, and manually updating the files with the location of the unmodified Aria of Sorrow GBA ROM.
+For now, there's just a rough command line interface. Usage involves downloaded NodeJS (unsure of what minimum version is supported) and running:
+```
+node randomizer.js
+```
 
 ## Current Features
  *  Randomization of door destinations within an area.
