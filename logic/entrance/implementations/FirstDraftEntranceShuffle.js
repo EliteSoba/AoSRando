@@ -26,6 +26,7 @@ const ROOMS_TO_SKIP_RANDOMIZATION = [
 const DOORS_TO_SKIP = [
   // This connector is unusually wide, which makes pairing it awkward and often leads to zips.
   // I messed up the logic here a bit though so it needs to get fixed
+  // For these connectors, I effectively want to treat the rooms as a single unit
   // 139524388,
   // 139524548,
 
@@ -237,6 +238,8 @@ function randomizeArea(area, random, doorsToSkip) {
     unmatchedDoors = unmatchedDoors.concat(chosenRoom.doors.filter(door => door.address !== partnerDoor.address && isValidDoor(door, doorsToSkip)));
   }
 
+  // All rooms have been placed, so now work on matching all the doors that still don't have partners.
+  // This generally happens if areas have loops in them.
   if (unmatchedDoors.length > 0) {
     // Sanity check. Every 8 should have a 2, 6 should have a 4, and vice versa (except Floating Garden)
     let unmatchedDoorCounts = {};
@@ -339,26 +342,30 @@ function FirstDraftEntranceShuffle(areas, random) {
 
   // Maintain a list of every new door connection.
   let newConnections = [];
-  areas.forEach(area => {
-    Logger.log(`Beginning randomization of ${area.area}`, DebugLevels.MARKER);
+  const succeeded = areas.every(area => {
+    Logger.log(`Beginning randomization of ${area.area}`, DebugLevels.LOG);
 
     // Keep attempting to randomize the area layout until one of the layouts is properly connected.
     let areaConnections;
     for (let attempts = 0; !areaConnections; attempts++) {
       if (attempts !== 0) {
-        Logger.log(`Reattempting randomization of ${area.area}`, DebugLevels.MARKER);
+        Logger.log(`Reattempting randomization of ${area.area}`, DebugLevels.LOG);
       }
       if (attempts >= 1000) {
-        Logger.log(`Problem randomizing area: ${area.area}`, DebugLevels.MARKER);
+        // If a single area fails, it's really jarring to have the randomization continue with
+        // some subset of areas just not randomized. Thus failure of an area should mean
+        // failure of the whole algorithm
+        Logger.log(`Problem randomizing area: ${area.area}`, DebugLevels.FATAL);
         return false;
       }
       areaConnections = randomizeArea(area, random, doorsToSkip);
     }
     Logger.log(`Completed randomization of ${area.area}`, DebugLevels.MARKER);
     newConnections = newConnections.concat(areaConnections);
+    return true;
   });
 
-  return newConnections;
+  return succeeded && newConnections;
 }
 
 FirstDraftEntranceShuffle.displayName = 'First Draft Entrance Shuffle';

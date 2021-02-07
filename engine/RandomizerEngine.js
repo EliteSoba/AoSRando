@@ -272,6 +272,12 @@ class RandomizerEngine {
     'correctVerticalConnectors(data);'
 
     // Super low priority, but only place wooden doors next to transition rooms
+    // TODO: While there's definitely enough padding space to handle this, it feels rather wasteful
+    // to keep relocating entity lists if this and relocateBossDoors are ignorant of each other.
+    // One option is to maintain full entity lists for rooms that get modified and only do the rewriting
+    // once all the entity manipulations have finished. Then, entity lists with no net change in the number
+    // of entities don't need to be unnecessarily relocated and rooms with multiple entity additions
+    // don't need to be relocated multiple times.
     // PRIORITY: LOW
     // DIFFICULTY: MEDIUM
     'relocateWoodenDoors(data);'
