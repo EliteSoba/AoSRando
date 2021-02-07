@@ -104,13 +104,13 @@ class EntranceRandomizer {
       const areas = getFreshAreas();
       const succeeded = this.execute(areas, random, startingRoom);
       if (succeeded) {
-        Logger.log(`Generated a successful map on attempt ${attempts}`, DebugLevels.DEBUG);
+        Logger.log(`Generated a successful map on attempt ${attempts}`, DebugLevels.MARKER);
         if (solvabilityTest(areas)) {
-          Logger.log('This map passed the solvability test.', DebugLevels.DEBUG);
+          Logger.log('This map passed the solvability test.', DebugLevels.MARKER);
           return areas;
         }
         else {
-          Logger.log('This map did not pass the solvability test. Rerandomizing...', DebugLevels.DEBUG);
+          Logger.log('This map did not pass the solvability test. Rerandomizing...', DebugLevels.MARKER);
         }
       }
     }

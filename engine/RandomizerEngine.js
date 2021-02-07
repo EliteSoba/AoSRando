@@ -72,7 +72,7 @@ class RandomizerEngine {
    * @return {Object[]} - A list containing a name/description of each implementation choice, as well as the backend id
    */
   getEntranceRandomizerImplementationChoices() {
-    return this._entranceRandomizer.getImplementations;
+    return this._entranceRandomizer.getImplementations();
   }
 
   /**
@@ -80,7 +80,7 @@ class RandomizerEngine {
    * @return {Object[]} - A list containing a name/description of each implementation choice, as well as the backend id
    */
   getItemRandomizerImplementationChoices() {
-    return this._itemRandomizer.getImplementations;
+    return this._itemRandomizer.getImplementations();
   }
 
   /**
@@ -102,10 +102,12 @@ class RandomizerEngine {
       ...DEFAULT_CONFIG,
       ...config,
     }
+
     // Set up the seed on the randomization for consistency
     // TODO: I also want to add the option to seed the item and entrance randos independently,
     // in case someone finds a good random map and wants to try different item placements on that.
     const seed = 'seed' in resolvedConfig ? resolvedConfig.seed : this._random.random_int31();
+    Logger.log(`Using seed ${seed}`, DebugLevels.LOG);
     this._random.init_seed(seed);
 
     let areas = getFreshAreas();
@@ -138,7 +140,7 @@ class RandomizerEngine {
     // can be placed on that map in a solvable manner.
     let solvableDistribution = false;
     let solvabilityInfo;
-    let newItemMapping;
+    let newItemMapping = {};
     for (let runs = 0; !solvableDistribution; runs++) {
       if (runs >= 1000) {
         Logger.log(`Couldn't generate both a map and a valid item distribution for that map in 1,000 tries`, DebugLevels.FATAL);
@@ -167,7 +169,7 @@ class RandomizerEngine {
         }
       }
 
-      if (config.randomizeItems) {
+      if (resolvedConfig.randomizeItems) {
         // Place items around the map
         // TODO: I want to add different item distribution logic choices.
         // Right now I have pure random, but I want to implement my sphered progression placement logic,
@@ -187,14 +189,26 @@ class RandomizerEngine {
         }
       }
 
+      const doWeCareAboutSolvability = resolvedConfig.randomizeItems && resolvedConfig.itemRandomizerChoice !== 0;
+
       // Sanity check to ensure the items were placed logically
       const solvableItemPlacementConfig = {
         progression: requirements.progression,
         startRoom: startingRoom.address,
         fullSearch: true,
         itemMapping: newItemMapping,
+        startingInventory: doWeCareAboutSolvability ? [] : Object.values(Keys),
       }
       solvabilityInfo = isSolvable(areas, solvableItemPlacementConfig);
+
+      // We don't care about a solvable distribution if we don't have item randomization
+      // because item randomization is what makes seeds solvable to begin with.
+      // This doesn't really come up because it kinda defeats the purpose of the randomizer.
+      // TODO: Should door randomization enforce item randomization? Should disabling item randomization even be an option?
+      if (!doWeCareAboutSolvability) {
+        Logger.log('Item randomization is disabled. Turning off solvability checks', DebugLevels.WARN);
+        break;
+      }
       solvableDistribution = resolvedConfig.ensureFullyClearable ? solvabilityInfo.fullyClearable : solvabilityInfo.isSolvable;
     }
 
@@ -310,7 +324,7 @@ class RandomizerEngine {
 
     return {
       // TODO: generate a real filename
-      filename: generateFilename(config.originalFilename, seed, config),
+      filename: generateFilename(resolvedConfig.originalFilename, seed, resolvedConfig),
       data: data, // Buffer.from(data)?
     };
   }
