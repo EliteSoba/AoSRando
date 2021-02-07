@@ -1,5 +1,3 @@
-const updateAreasWithNewItems = require('./updateAreasWithNewItems');
-
 const VanillaItems = require('./implementations/VanillaItems');
 const FullRandom = require('./implementations/FullRandom');
 
@@ -66,9 +64,10 @@ class ItemRandomizer {
    * @param  {Requirements} requirements - Object containing the list of progression mappings and the Dracula soul info
    * @param  {Random} random - Shared pseudorandom number generator
    * @param  {Room} startingRoom - Object describing the starting room
-   * @return {boolean} - true if the randomization succeeded, false otherwise
+   * @param  {boolean} ensureFullyClearable - Whether or not to ensure the mapping is 100%able
+   * @return {Object} - The new item mapping if it succeeded, false otherwise
    */
-  execute(areas, requirements, random, startingRoom) {
+  execute(areas, requirements, random, startingRoom, ensureFullyClearable) {
     if (this._selection === -1) {
       Logger.log('No item randomization implementation selected. Leaving as default', DebugLevels.LOG);
     }
@@ -78,13 +77,7 @@ class ItemRandomizer {
     else {
       const chosenImpl = this._implementations[this._selection];
       Logger.log(`Using implementation ${chosenImpl.id}: ${chosenImpl.name}`, DebugLevels.LOG);
-      const itemMapping = chosenImpl.func(areas, requirements, random, startingRoom);
-      if (!itemMapping) {
-        return false;
-      }
-
-      updateAreasWithNewItems(areas, itemMapping);
-      return true;
+      return chosenImpl.func(areas, requirements, random, startingRoom, ensureFullyClearable);
     }
   }
 }

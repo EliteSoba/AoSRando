@@ -366,11 +366,16 @@ function isSolvable(areas, config) {
       visitedDoors.add(curDoor.address);
     }
   }
+
   // Out of rooms to search. Return the results of the search
   return {
     isSolvable,
     solution,
     preChronomageRoom,
+
+    // TODO: Full clearability only checks for all door access and not
+    // for the rare cases where an item is locked but the room is still accessible
+    // This should further check that all items are obtainable
     fullyClearable: uncheckedDoors.size === 0,
   };
 }

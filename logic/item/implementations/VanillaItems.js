@@ -2,8 +2,8 @@
  * An item "randomizer" that doesn't do anything.
  * Also serves as a template for future item randomizer implementations.
  */
-function VanillaItems(areas, requirements, random, startingRoom) {
-  return true;
+function VanillaItems(areas, requirements, random, startingRoom, ensureFullyClearable) {
+  return {};
 }
 
 VanillaItems.displayName = 'Vanilla';

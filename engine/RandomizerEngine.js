@@ -10,6 +10,7 @@ const determineRequirements = require('../logic/determineRequirements');
 const pickStartingRoom = require('../logic/pickStartingRoom');
 const EntranceRandomizer = require('../logic/entrance/EntranceRandomizer');
 const ItemRandomizer = require('../logic/item/ItemRandomizer');
+const updateAreasWithNewItems = require('../logic/item/updateAreasWithNewItems');
 
 const EnemyProcessor = require('../enemies/EnemyProcessor');
 const PostProcessor = require('../postprocessing/PostProcessor');
@@ -37,9 +38,12 @@ const DEFAULT_CONFIG = {
   randomizeDoors: false,
   randomizeItems: true,
   ensureFullyClearable: true,
+  entranceRandomizerChoice: -1,
   itemRandomizerChoice: 1,
   originalFilename: 'aos.gba',
 };
+
+const VERSION = '0.8';
 
 /**
  * Engine that handles the randomization process.
@@ -53,6 +57,14 @@ class RandomizerEngine {
     this._enemyProcessor = new EnemyProcessor();
     this._postProcessor = new PostProcessor();
     this._random = new Random();
+  }
+
+  /**
+   * Gets the version string
+   * @return {String} - Which version of the randomizer this is
+   */
+  getVersion() {
+    return VERSION;
   }
 
   /**
@@ -126,6 +138,7 @@ class RandomizerEngine {
     // can be placed on that map in a solvable manner.
     let solvableDistribution = false;
     let solvabilityInfo;
+    let newItemMapping;
     for (let runs = 0; !solvableDistribution; runs++) {
       if (runs >= 1000) {
         Logger.log(`Couldn't generate both a map and a valid item distribution for that map in 1,000 tries`, DebugLevels.FATAL);
@@ -160,8 +173,14 @@ class RandomizerEngine {
         // Right now I have pure random, but I want to implement my sphered progression placement logic,
         // which would look at locks to sphere 2, pick a random progression item, and place it in sphere 1
         // and then repeat for sphere 3, placing weights on distributing to more recent spheres.
-        let itemPlacementSuccess = this._itemRandomizer.execute(areas, requirements, this._random, startingRoom);
-        if (!itemPlacementSuccess) {
+        newItemMapping = this._itemRandomizer.execute(
+          areas,
+          requirements,
+          this._random,
+          startingRoom,
+          resolvedConfig.ensureFullyClearable
+        );
+        if (!newItemMapping) {
           // If we couldn't validly place the items, then skip this room distribution
           // Generally this happens if a map gets generated with no sphere 1 items
           continue;
@@ -173,12 +192,16 @@ class RandomizerEngine {
         progression: requirements.progression,
         startRoom: startingRoom.address,
         fullSearch: true,
+        itemMapping: newItemMapping,
       }
       solvabilityInfo = isSolvable(areas, solvableItemPlacementConfig);
       solvableDistribution = resolvedConfig.ensureFullyClearable ? solvabilityInfo.fullyClearable : solvabilityInfo.isSolvable;
     }
 
     // Write shuffled doors and items to file
+    // We update the item info here so that multiple item randomization runs don't
+    // interfere with each other without having to deep copy the randomized areas map each time.
+    updateAreasWithNewItems(areas, newItemMapping);
     updateDataWithAreaInfo(data, areas);
 
     /*** Update enemy info ***/

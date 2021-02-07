@@ -10,8 +10,8 @@ function generateFilename(originalFilename, seed, config) {
   let filename = originalFilename;
   let extension = '';
   if (splitFilename.length > 1) {
-    filename = splitFilename.splice(0, splitFilename.length - 1).join('.');
-    extension = `.${splitFilename[0]}`;
+    extension = `.${splitFilename.pop()}`;
+    filename = splitFilename.join('.');
   }
 
   return `${filename}-${seed}${extension}`;

@@ -48,7 +48,7 @@ const config = {
  * so there's a decent probability of very strong equipment being available very early.
  * Also progression can feel very underwhelming if flight is found early or keys are frontloaded.
  */
-function FullRandom(areas, requirements, random, startingRoom) {
+function FullRandom(areas, requirements, random, startingRoom, ensureFullyClearable) {
   const allItems = [];
   areas.forEach((area) => {
     area.rooms.forEach((room) => {
@@ -125,8 +125,10 @@ function FullRandom(areas, requirements, random, startingRoom) {
   const solvabilityConfig = {
     progression: requirements.progression,
     startRoom: startingRoom.address,
+    fullSearch: ensureFullyClearable,
   };
-  while (!isSolvable(areas, { ...solvabilityConfig, itemMapping }).isSolvable) {
+  const solvabilityKey = ensureFullyClearable ? 'fullyClearable' : 'isSolvable';
+  while (!isSolvable(areas, { ...solvabilityConfig, itemMapping })[solvabilityKey]) {
     itemMapping = {};
     if (iterations % 10 === 1) {
       Logger.log(`Attempt ${iterations}: Reattempting item randomization`, DebugLevels.MARKER);
