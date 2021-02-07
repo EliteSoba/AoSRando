@@ -20,7 +20,7 @@ const allRelevantItems = [
   ...Unusable,
   ...Weapons,
   ...Armor,
-  ...Accessories
+  ...Accessories,
 ];
 
 const shopLists = [
@@ -53,7 +53,7 @@ const shopLists = [
     defaultLength: 38,
     maxLength: 43,
     reference: 0x526C74,
-  }
+  },
 ];
 
 const SHOP_ITEMS_START = 0x5269FC;

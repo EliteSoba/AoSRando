@@ -15,7 +15,7 @@ const Locks = {
   INACCESSIBLE: 'Inaccessible',
   SMALL: 'Small', // Lot of single-jump-inaccessible jumps can be accessed with Black Panther
   GRAHAM: 'Graham',
-  SHOP: 'Shop'
+  SHOP: 'Shop',
 }
 
 module.exports = Locks;

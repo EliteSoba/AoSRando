@@ -213,7 +213,7 @@ const ENEMY_NAMES = [
   "Balore",
   "Belmont",
   "Graham",
-  "Chaos"
+  "Chaos",
 ];
 
 const AoSConstants = {

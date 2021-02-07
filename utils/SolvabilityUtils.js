@@ -9,30 +9,30 @@ const DebugLevels = require('../debug/DebugLevels');
 const SPECIAL_DOOR_LOCKS = [
   {
     key: "isJuliusDoor",
-    locks: [Locks.GRAHAM]
+    locks: [Locks.GRAHAM],
   },
   {
     key: "isWeirdAnnoyingOneWayTopFloorRoom",
-    locks: [Locks.INACCESSIBLE]
+    locks: [Locks.INACCESSIBLE],
   },
   {
     key: "isWeirdAnnoyingOneWayForbiddenAreaRoom",
-    locks: [Locks.INACCESSIBLE]
+    locks: [Locks.INACCESSIBLE],
   }
 ];
 
 const SPECIAL_KEY_ROOMS = [
   {
     key: "isGrahamRoom",
-    progression: Keys.GRAHAM
+    progression: Keys.GRAHAM,
   },
   {
     key: "isHammerRoom",
-    progression: Keys.HAMMER
+    progression: Keys.HAMMER,
   },
   {
     key: "isShopRoom",
-    progression: Keys.SHOP
+    progression: Keys.SHOP,
   }
 ];
 
@@ -218,7 +218,7 @@ function isSolvable(areas, config) {
   }
   const firstDoor = firstRoom.doors[0];
   if (!firstDoor) {
-    throw "Error: starting room has no doors???????"
+    throw "Error: starting room has no doors???????";
   }
   const visitQueue = [{ room: firstRoom, door: firstDoor }];
 
@@ -371,7 +371,7 @@ function isSolvable(areas, config) {
     isSolvable,
     solution,
     preChronomageRoom,
-    fullyClearable: uncheckedDoors.size === 0
+    fullyClearable: uncheckedDoors.size === 0,
   };
 }
 

@@ -48,7 +48,7 @@ function parseEntity(data, address) {
     subtype,
     instaload,
     varA,
-    varB
+    varB,
   };
 }
 
@@ -98,7 +98,7 @@ function parseEnemy(data, address) {
     attack,
     defense,
     weaknesses,
-    resistances
+    resistances,
   };
 }
 
@@ -292,7 +292,7 @@ function parseRoom(data, address, allDoors) {
     mapHeight,
     doorList,
     doors,
-    items
+    items,
   };
 }
 

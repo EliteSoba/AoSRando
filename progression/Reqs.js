@@ -8,21 +8,21 @@ const Reqs = [
     keys: [
       [Keys.MALPHAS],
       [Keys.BAT],
-      [Keys.HIPPOGRYPH]
-    ]
+      [Keys.HIPPOGRYPH],
+    ],
   },
   {
     lock: Locks.SKULA,
     keys: [
       [Keys.SKULA]
-    ]
+    ],
   },
   {
     lock: Locks.FLIGHT,
     keys: [
       [Keys.BAT],
-      [Keys.HIPPOGRYPH]
-    ]
+      [Keys.HIPPOGRYPH],
+    ],
   },
   {
     lock: Locks.FLOAT,
@@ -31,8 +31,8 @@ const Reqs = [
       [Keys.PANTHER],
       [Keys.MALPHAS],
       [Keys.BAT],
-      [Keys.HIPPOGRYPH]
-    ]
+      [Keys.HIPPOGRYPH],
+    ],
   },
   {
     lock: Locks.LONG,
@@ -40,60 +40,60 @@ const Reqs = [
       [Keys.ARMOR, Keys.MALPHAS],
       [Keys.PANTHER, Keys.MALPHAS],
       [Keys.BAT],
-      [Keys.HIPPOGRYPH]
-    ]
+      [Keys.HIPPOGRYPH],
+    ],
   },
   {
     lock: Locks.UNDINE,
     keys: [
-      [Keys.UNDINE]
-    ]
+      [Keys.UNDINE],
+    ],
   },
   {
     lock: Locks.RUSH,
     keys: [
       [Keys.MANTICORE],
       [Keys.CURLY],
-      [Keys.DEVIL]
-    ]
+      [Keys.DEVIL],
+    ],
   },
   {
     lock: Locks.SLIDE,
     keys: [
       [Keys.SLIDE],
-      [Keys.BAT]
-    ]
+      [Keys.BAT],
+    ],
   },
   {
     lock: Locks.DRACULA,
     keys: [
-      [Keys.RED, Keys.BLUE, Keys.YELLOW, Keys.REDBOOK, Keys.BLUEBOOK, Keys.YELLOWBOOK]
-    ]
+      [Keys.RED, Keys.BLUE, Keys.YELLOW, Keys.REDBOOK, Keys.BLUEBOOK, Keys.YELLOWBOOK],
+    ],
   },
   {
     lock: Locks.GRAVEKEEPER,
     keys: [
-      [Keys.GRAVEKEEPER]
-    ]
+      [Keys.GRAVEKEEPER],
+    ],
   },
   {
     lock: Locks.GALAMOTH,
     keys: [
       // [Keys.CHRONOMAGE], // Using Chronomage Soul gets you past Chronomage but it's not in logic
-      [Keys.GALAMOTH]
-    ]
+      [Keys.GALAMOTH],
+    ],
   },
   {
-    lock: Locks.BAT, // lmao literally for the clock spike room and 3 items and two hard mode only
+    lock: Locks.BAT, // lmao literally for the clock spike room and 3 items and two are hard mode only
     keys: [
-      [Keys.BAT]
-    ]
+      [Keys.BAT],
+    ],
   },
   {
     lock: Locks.PANTHER,
     keys: [
-      [Keys.PANTHER]
-    ]
+      [Keys.PANTHER],
+    ],
   },
   {
     lock: Locks.SMALL,
@@ -101,20 +101,20 @@ const Reqs = [
       [Keys.MALPHAS],
       [Keys.PANTHER], // I'm not sure how I feel about this one. Don't like giving out Panther too early and it feels like weird logic.
       [Keys.BAT],
-      [Keys.HIPPOGRYPH]
-    ]
+      [Keys.HIPPOGRYPH],
+    ],
   },
   {
     lock: Locks.GRAHAM,
     keys: [
-      [Keys.GRAHAM]
-    ]
+      [Keys.GRAHAM],
+    ],
   },
   {
     lock: Locks.SHOP,
     keys: [
-      [Keys.HAMMER, Keys.SHOP]
-    ]
+      [Keys.HAMMER, Keys.SHOP],
+    ],
   }
 ];
 

@@ -7,15 +7,15 @@ const {
 const BOOK_DATA = {
   RED: {
     address: 0xF3F32,
-    length: 46 // There are 5 extra padding bits and idk what they do, but I'll avoid them for now
+    length: 46, // There are 5 extra padding bits and idk what they do, but I'll avoid them for now
   },
   BLUE: {
     address: 0xF3F66,
-    length: 42
+    length: 42,
   },
   YELLOW: {
     address: 0xF3F96,
-    length: 46
+    length: 46,
   }
 }
 

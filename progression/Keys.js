@@ -20,7 +20,7 @@ const Keys = {
   GALAMOTH: 'GALAMOTH',
   GRAHAM: 'GRAHAM',
   HAMMER: 'HAMMER',
-  SHOP: 'SHOP'
+  SHOP: 'SHOP',
 };
 
 module.exports = Keys;

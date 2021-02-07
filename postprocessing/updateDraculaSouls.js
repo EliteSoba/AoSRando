@@ -7,7 +7,7 @@ const {
 const MEMORY_ADDRESSES = {
   RED: 0xD4CF0,
   BLUE: 0xD4CF6,
-  YELLOW: 0xD4CFC
+  YELLOW: 0xD4CFC,
 };
 
 /**

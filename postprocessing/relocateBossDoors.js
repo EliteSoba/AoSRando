@@ -135,7 +135,7 @@ function generateBossDoorEntity(bossFlag, door) {
     subtype: 2,
     instaload: 1,
     varA: 0,
-    varB: bossFlag
+    varB: bossFlag,
   };
 }
 

@@ -6,11 +6,11 @@ const {
   Red,
   Blue,
   Yellow,
-  Ability
+  Ability,
 } = Souls;
 
 const {
-  Unusable
+  Unusable,
 } = Consumables;
 
 /** Effectively a mapping of Keys to the relevant drop. TODO: Why didn't I make this just a map-like Object? */

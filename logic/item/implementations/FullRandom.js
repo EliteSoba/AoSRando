@@ -49,7 +49,6 @@ const config = {
  * Also progression can feel very underwhelming if flight is found early or keys are frontloaded.
  */
 function FullRandom(areas, requirements, random, startingRoom) {
-  // Shallow copies makes this rather straightforward
   const allItems = [];
   areas.forEach((area) => {
     area.rooms.forEach((room) => {
@@ -125,7 +124,7 @@ function FullRandom(areas, requirements, random, startingRoom) {
   let itemMapping = {};
   const solvabilityConfig = {
     progression: requirements.progression,
-    startRoom: startingRoom.address
+    startRoom: startingRoom.address,
   };
   while (!isSolvable(areas, { ...solvabilityConfig, itemMapping }).isSolvable) {
     itemMapping = {};
