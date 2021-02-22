@@ -17,7 +17,7 @@ const UNMATCHED_GARDEN_DOOR = {
  */
 function updateDoor(door, replacement) {
   // These are the only keys that are related to the destination and need to be updated
-  const keysToReplace = ['destination', 'destXOffset', 'destYOffset', 'destXPos', 'destYPos'];
+  const keysToReplace = ['destination', /*'destXOffset',*/ 'destYOffset', 'destXPos', 'destYPos'];
   keysToReplace.forEach(key => door[key] = replacement[key]);
 }
 
@@ -32,11 +32,15 @@ function updateAreasWithNewConnections(areas, connections) {
   const deepCopiesOfDoors = {};
   deepCopiesOfDoors[-4] = {...UNMATCHED_GARDEN_DOOR};
 
+  // Keep references of all rooms to update destXOffsets as necessary
+  const allRooms = {};
+
   // Don't ask. Apparently the connections aren't fully shallow copies, but I don't remember why
   // Generate shallow copies to simplify modification
   const allDoors = {};
   areas.forEach((area) => {
     area.rooms.forEach((room) => {
+      allRooms[room.address] = room;
       room.doors.forEach((door) => {
         deepCopiesOfDoors[door.address] = {...door};
         allDoors[door.address] = door;
@@ -48,14 +52,6 @@ function updateAreasWithNewConnections(areas, connections) {
     const actualSource = allDoors[source.address];
     const actualDestination = allDoors[destination.address];
 
-    // TODO: destXOffset/destYOffset (or maybe destX/YPos?) shouldn't be blindly copied
-    // because they're very connector-specific.
-    // The problem is that some connectors are a half smalltile apart, meaning that
-    // most every vertical connector is 2 tiles wide, but some are tile aligned and some
-    // instead start on a half tile. The 4 wide pre-garden connector is a lost cause and cant be saved.
-    // the biggest problem is when going from a 1-wide to the middle of a plural-wide room because of how the camera affects things
-    // In contrast, every horizontal connector seems to always be 1.5 tiles wide and aligned the same way
-
     // The source door should be updated to end up at the new destination
     // This is done by replacing the source door's info with that of the door
     // that previously led to the destination door.
@@ -65,6 +61,46 @@ function updateAreasWithNewConnections(areas, connections) {
 
     // Update the source door's destination info with the previous complement's destination info
     updateDoor(actualSource, dataOfDoorThatLedToDestination);
+
+    // Vertical connectors get a bit weird due to some tile alignment issues.
+    // Rooms that are 1 macrotile wide don't seem to use the rightmost edge
+    // so they're effectively only 7 microtiles wide instead of 8.
+    // Rooms that are 2 or more macrotiles wide use the full 8 though.
+    // Given that doors are always center-aligned, this means that 1-wide rooms
+    // have vertical connectors centered around the 3.5 microtile mark whereas
+    // >=2-wide rooms have their connectors centered around the 4 microtile mark.
+    if (actualSource.direction === 2 || actualSource.direction === 8) {
+      // Align destination position on macrotile level so these calculations work
+      actualSource.destXPos &= 0xFF00;
+      const sourceRoom = allRooms[actualSource.sourceRoom];
+      const destRoom = allRooms[actualDestination.sourceRoom];
+
+      const sourceRoomWidth = sourceRoom.mapWidth;
+      const destRoomWidth = destRoom.mapWidth;
+
+      const sourceXPos = actualSource.xPos;
+      const destXPos = actualDestination.xPos;
+
+      if (sourceRoomWidth === 1 && destRoomWidth === 1) {
+        // If both source and destination rooms are 1 macrotile wide, connectors should be aligned
+        actualSource.destXOffset = 0;
+      }
+      else if (sourceRoomWidth > 1 && destRoomWidth > 1) {
+        // If both source and destination are plural macrotiles wide, connectors should be aligned
+        actualSource.destXOffset = 0;
+      }
+      else {
+        // One of the rooms is single wide and the other is multiwide
+        if (sourceRoomWidth === 1) {
+          // Going from a single wide to a multiwide. Need to add 0x0010
+          actualSource.destXOffset = 0x0010;
+        }
+        else {
+          // Going from a multiwide into a single wide. Need to subtract 0x0010
+          actualSource.destXOffset = 0xFFF0;
+        }
+      }
+    }
 
     // Since this source now leads to this destination, we can manually update the complement
     if (actualDestination.complementUpdated) {

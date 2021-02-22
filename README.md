@@ -52,7 +52,7 @@ node randomizer.js
  *  ~~Correction of Chronomage's teleport destination to the room right before the Chronomage room in logic~~
  *  ~~Removal of breakable walls~~
  *  ~~Relocation of boss doors to more accurate locations~~
- *  Correction of Soma's positional offsets when going through doors
+ *  ~~Correction of Soma's positional offsets when going through doors~~
  *  Relocation of wooden doors to be next to area transitions
  *  ~~Updating the written file's filename to be more descriptive of the randomizer configuration~~
  *  Actually adding a UI
